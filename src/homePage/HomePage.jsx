@@ -43,6 +43,36 @@ const LoadingOverlay = styled.div`
   z-index: 1000;
 `;
 
+const InstallPromptContainer = styled.div`
+  display: ${({ show }) => (show ? "flex" : "none")};
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #ffffff;
+  color: #000;
+  z-index: 1000;
+  padding: 20px;
+  text-align: center;
+`;
+
+const InstallButton = styled.button`
+  background-color: #0A5cA8;
+  color: #fff;
+  padding: 15px 50px;
+  font-size: 18px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 80%;
+  max-width: 300px;
+`;
+
 // Style for the push notification prompt
 const PushNotificationPromptContainer = styled.div`
   display: flex;
@@ -90,11 +120,13 @@ const BellIcon = styled.img`
 export default function HomePage() {
   const [showModal, setShowModal] = useState(false);
   const [isPWAInstalled, setIsPWAInstalled] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(null); // PWA 설치 프롬프트 저장
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false); // 설치 프롬프트 표시 여부
   const [isLoading, setIsLoading] = useState(false);
   const [bannerImages, setBannerImages] = useState([]);
   const [isIOS, setIsIOS] = useState(false); // iOS 장치 여부 상태 추가
   const [shouldShowPWAPrompt, setShouldShowPWAPrompt] = useState(false);
-  const [showPushNotificationPrompt, setShowPushNotificationPrompt] = useState(false); // State for showing push notification prompt
+  const [showPushNotificationPrompt, setShowPushNotificationPrompt] = useState(false);
   
   const navigate = useNavigate(); // useNavigate 훅 사용
   useEffect(() => {
@@ -145,7 +177,8 @@ export default function HomePage() {
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
       if (!isPWAInstalled) {
-        setShowModal(true);
+        setDeferredPrompt(e); // 이벤트 저장
+        setShowInstallPrompt(true); // 설치 프롬프트 표시
       }
     };
 
@@ -162,6 +195,21 @@ export default function HomePage() {
       setShouldShowPWAPrompt(true);
     }
   }, [isIOS]);
+
+  const handleInstallClick = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt(); // 설치 프롬프트 실행
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+        } else {
+          console.log('User dismissed the install prompt');
+        }
+        setDeferredPrompt(null); // 설치 후 초기화
+        setShowInstallPrompt(false);
+      });
+    }
+  };
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -200,6 +248,14 @@ export default function HomePage() {
           <HomeHotEvent/>
       </MainContentContainer>
       <NavigationBar />
+
+      {/* Android PWA 설치 프롬프트 */}
+      <InstallPromptContainer show={showInstallPrompt}>
+        <h1>AjouEvent를 설치하고 앱처럼 사용해보세요!</h1>
+        <InstallButton onClick={handleInstallClick}>설치</InstallButton>
+        <LaterOption onClick={() => setShowInstallPrompt(false)}>나중에 설치</LaterOption>
+      </InstallPromptContainer>
+
       {showModal && <DailyModal onClose={handleCloseModal} />}
       {/* iOS 장치라면 PWAPrompt 표시 */}
       {isIOS && (
