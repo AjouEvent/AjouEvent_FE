@@ -176,6 +176,7 @@ export default function HomePage() {
 
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
+      console.log("PWA 설치여부", isPWAInstalled);
       if (!isPWAInstalled) {
         setDeferredPrompt(e); // 이벤트 저장
         setShowInstallPrompt(true); // 설치 프롬프트 표시
