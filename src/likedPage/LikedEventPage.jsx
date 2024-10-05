@@ -10,9 +10,9 @@ import requestWithAccessToken from "../JWTToken/requestWithAccessToken";
 
 const AppContainer = styled.div`
   display: flex;
+  align-items: center;
   flex-direction: column;
   background-color: #ffffff;
-  height: 100vh;
 `;
 
 const Contaioner = styled.div`

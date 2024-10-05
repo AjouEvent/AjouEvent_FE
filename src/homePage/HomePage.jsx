@@ -12,11 +12,9 @@ import PWAPrompt from 'react-ios-pwa-prompt';
 
 const AppContainer = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-direction: column;
   background-color: #ffffff;
-  height: 100vh;
-  width: 100%;
 `;
 
 const MainContentContainer = styled.div`
@@ -41,6 +39,66 @@ const LoadingOverlay = styled.div`
   color: white;
   font-size: 24px;
   z-index: 1000;
+`;
+
+const InstallPromptContainer = styled.div`
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
+const ModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 20px;
+  font-family: "Pretendard Variable";
+`;
+
+const ModalBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 10px;
+  gap: 20px;
+`;
+
+const InstallButton = styled.button`
+  background-color: #0A5cA8;
+  color: #fff;
+  padding: 15px 50px;
+  font-size: 20px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  margin: 0 auto ;
+  width: 80%;
+  max-width: 300px;
+  display: block;
+  padding: 10px 20px;
+  background-color: #2366af;
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: bold;
+  text-align: center;
+
+  &:hover {
+    background-color: #1a4f8b;
+  }
 `;
 
 // Style for the push notification prompt
@@ -77,8 +135,12 @@ const PushNotificationPromptButton = styled.button`
 const LaterOption = styled.div`
   margin-top: 20px;
   color: #808080;
-  text-decoration: underline;
   cursor: pointer;
+  font-size: 12px;
+  display: block;
+  margin: 10px auto; 
+  text-align: center; 
+  color: rgba(0, 0, 0, 0.5);
 `;
 
 const BellIcon = styled.img`
@@ -87,14 +149,34 @@ const BellIcon = styled.img`
   margin-bottom: 20px;
 `;
 
+const LogoImage = styled.img`
+  width: 45%;
+`;
+
+const TitleText = styled.h2`
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: -5px;
+  text-align: center;
+`;
+
+const ParagraphText = styled.p`
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 20px;
+  text-align: center;
+`;
+
 export default function HomePage() {
   const [showModal, setShowModal] = useState(false);
   const [isPWAInstalled, setIsPWAInstalled] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(null); // PWA 설치 프롬프트 저장
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false); // 설치 프롬프트 표시 여부
   const [isLoading, setIsLoading] = useState(false);
   const [bannerImages, setBannerImages] = useState([]);
   const [isIOS, setIsIOS] = useState(false); // iOS 장치 여부 상태 추가
   const [shouldShowPWAPrompt, setShouldShowPWAPrompt] = useState(false);
-  const [showPushNotificationPrompt, setShowPushNotificationPrompt] = useState(false); // State for showing push notification prompt
+  const [showPushNotificationPrompt, setShowPushNotificationPrompt] = useState(false);
   
   const navigate = useNavigate(); // useNavigate 훅 사용
   useEffect(() => {
@@ -144,8 +226,10 @@ export default function HomePage() {
 
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
+      console.log("PWA 설치여부", isPWAInstalled);
       if (!isPWAInstalled) {
-        setShowModal(true);
+        setDeferredPrompt(e); // 이벤트 저장
+        setShowInstallPrompt(true); // 설치 프롬프트 표시
       }
     };
 
@@ -163,8 +247,24 @@ export default function HomePage() {
     }
   }, [isIOS]);
 
+  const handleInstallClick = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt(); // 설치 프롬프트 실행
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+        } else {
+          console.log('User dismissed the install prompt');
+        }
+        setDeferredPrompt(null); // 설치 후 초기화
+        setShowInstallPrompt(false);
+      });
+    } 
+  };
+
   const handleCloseModal = () => {
     setShowModal(false);
+    setShowInstallPrompt(false);  // showInstallPrompt 상태도 false로 설정
   };
 
   const handleAllowNotifications = () => {
@@ -175,7 +275,27 @@ export default function HomePage() {
 
   return (
     <AppContainer>
-      {/* {isLoading && <LoadingOverlay>알림 서비스 등록 중 ...</LoadingOverlay>} */}
+      {showInstallPrompt && (
+        <InstallPromptContainer>
+          <ModalContent>
+            <ModalBody>
+              <LogoImage
+                src={`${process.env.PUBLIC_URL}/logo196.png`}
+                alt="Modal"
+              />
+              <TitleText>
+                AjouEvent를 설치하고 <br /> 공지사항 알림을 받아보세요!
+              </TitleText>
+              <ParagraphText>
+                앱에서 공지사항, 키워드 구독을 통해 <br />푸시 알림을 받을 수 있어요.
+              </ParagraphText>
+            </ModalBody>
+            <InstallButton onClick={handleInstallClick}>설치</InstallButton>
+            <LaterOption onClick={handleCloseModal}>나중에 설치</LaterOption>
+          </ModalContent>
+        </InstallPromptContainer>
+      )}
+
       {showPushNotificationPrompt && (
         <PushNotificationPromptContainer>
           <BellIcon
@@ -192,27 +312,26 @@ export default function HomePage() {
           </LaterOption>
         </PushNotificationPromptContainer>
       )}
-      
+
       <MainContentContainer>
-          <HelpBox setIsLoading={setIsLoading} />
-          <HomeBanner images={bannerImages} />
-          <LocationBar location="이번주 인기글" />
-          <HomeHotEvent/>
+        <HelpBox setIsLoading={setIsLoading} />
+        <HomeBanner images={bannerImages} />
+        <LocationBar location="이번주 인기글" />
+        <HomeHotEvent />
       </MainContentContainer>
       <NavigationBar />
       {showModal && <DailyModal onClose={handleCloseModal} />}
-      {/* iOS 장치라면 PWAPrompt 표시 */}
       {isIOS && (
         <PWAPrompt 
-          promptOnVisit={1} 
+          promptOnVisit={1}
           timesToShow={1}
           copyTitle="AjouEvent 앱 설치하기 - 아이폰"
           copySubtitle="홈 화면에 앱을 추가하고 각종 공지사항, 키워드 알림을 받아보세요."
-          copyDescription="AjouEvent는 앱설치 없이 홈화면에 추가를 통해 사용할 수 있습니다. 홈화면에 추가된 앱을 실행한 뒤 알림 허용을 누르시면 됩니다!"
-          copyShareStep="하단 메뉴에서 '공유' 아이콘을 눌러주세요.(크롬은 상단)"
+          copyDescription="AjouEvent는 앱설치 없이 홈화면에 추가를 통해 사용할 수 있습니다."
+          copyShareStep="하단 메뉴에서 '공유' 아이콘을 눌러주세요."
           copyAddToHomeScreenStep="아래의 '홈 화면에 추가' 버튼을 눌러주세요."
           appIconPath="https://www.ajou.ac.kr/_res/ajou/kr/img/intro/img-symbol.png"
-          isShown={shouldShowPWAPrompt} 
+          isShown={shouldShowPWAPrompt}
         />
       )}
     </AppContainer>
