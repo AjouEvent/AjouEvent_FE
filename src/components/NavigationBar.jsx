@@ -1,6 +1,7 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
+import requestWithAccessToken from "../JWTToken/requestWithAccessToken"; // API 요청 함수
 
 const NavWrapper = styled.nav`
   z-index: 5;
@@ -37,6 +38,7 @@ const NavItem = styled.li`
   align-items: center;
   color: ${(props) => (props.active ? "#2366af" : "#b8bfc6")};
   cursor: pointer;
+  position: relative;
 `;
 
 const NavIcon = styled.img`
@@ -49,6 +51,16 @@ const NavIcon = styled.img`
 const NavLabel = styled.span`
   margin-top: 4px;
   color: inherit;
+`;
+
+const Badge = styled.div`
+  position: absolute;
+  top: 0;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
 `;
 
 const items = [
@@ -89,22 +101,49 @@ const items = [
   },
 ];
 
-
-
 function NavigationBar() {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
 
+  const [isSubscribedTabUnread, setIsSubscribedTabUnread] = useState(false);
+  const [isTopicTabUnread, setIsTopicTabUnread] = useState(false);
+  const [isKeywordTabUnread, setIsKeywordTabUnread] = useState(false);
+
   const handleNavItemClick = (link) => {
     navigate(link);
+    fetchMemberStatus();
   };
+
+  const fetchMemberStatus = async () => {
+      try {
+        const response = await requestWithAccessToken("get", `${process.env.REACT_APP_BE_URL}/api/users/readStatus`);
+        setIsTopicTabUnread(!response.data.isTopicTabRead);
+        setIsKeywordTabUnread(!response.data.isKeywordTabRead);
+
+        // 구독 탭의 뱃지는 토픽과 키워드 알림이 모두 읽혔을 때만 제거
+        if (!response.data.isTopicTabRead && !response.data.isKeywordTabRead) {
+          setIsSubscribedTabUnread(true); // 둘 중 하나라도 읽지 않음 상태라면 구독 탭 뱃지 표시
+        } else {
+          setIsSubscribedTabUnread(false); // 둘 다 읽음 상태면 구독 탭 뱃지 제거
+        }
+      } catch (error) {
+        console.error("사용자 읽음 상태 불러오기 오류:", error);
+      }
+    };
+  
+
+ // 사용자의 읽음 상태를 불러와 상태 업데이트
+  useEffect(() => {
+    fetchMemberStatus();
+  }, []);
 
   return (
     <NavWrapper>
       <NavItems>
         {items.map((item, index) => {
           const isActive = currentPath === item.link;
+
           return (
             <NavItem
               key={index}
@@ -117,6 +156,8 @@ function NavigationBar() {
                 active={isActive}
               />
               <NavLabel>{item.label}</NavLabel>
+              {/* 구독 탭에 뱃지 표시 */}
+              {item.label === "구독" && isSubscribedTabUnread && <Badge />}
             </NavItem>
           );
         })}

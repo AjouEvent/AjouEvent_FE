@@ -31,6 +31,16 @@ export default function KeywordTab() {
   const pageSize = 10;
   const bottomRef = useRef(null);
 
+  // 서버에서 읽음 상태를 받아와서 갱신하는 함수
+  const fetchReadStatus = async () => {
+    try {
+      const response = await requestWithAccessToken("get", `${process.env.REACT_APP_BE_URL}/api/users/readStatus`);
+      console.log("읽음 상태 받아옴:", response.data);
+    } catch (error) {
+      console.error("읽음 상태 갱신 오류:", error);
+    }
+  };
+
   const fetchEvents = useCallback(async (keyword) => {
     if (loading || !hasMore) return;
     setLoading(true);
@@ -81,11 +91,12 @@ export default function KeywordTab() {
     };
   }, [hasMore, fetchEvents]);
 
-  const handleKeywordSelect = (keyword) => {
+  const handleKeywordSelect = async (keyword) => {
     if (selectedKeyword && selectedKeyword.englishKeyword === keyword.englishKeyword) {
       setSelectedKeyword(null);
     } else {
       setSelectedKeyword(keyword);
+      fetchReadStatus(); // 키워드 선택 시 읽음 상태를 갱신
     }
     setEvents([]);
     setPage(0);

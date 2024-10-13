@@ -72,6 +72,18 @@ const ViewAllIcon = styled.img`
   object-fit: cover;
 `;
 
+const NotificationBadge = styled.div`
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  display: ${({ isRead }) => {
+    //console.log("키워드 isRead 값:", isRead); // isRead 값이 제대로 넘어오는지 확인
+    return isRead === false ? "inline-block" : "none";
+  }};
+`;
+
+
 const KeywordBar = ({ onKeywordSelect, selectedKeyword }) => {
   const [keywords, setKeywords] = useState([]);
   const navigate = useNavigate();
@@ -94,6 +106,14 @@ const KeywordBar = ({ onKeywordSelect, selectedKeyword }) => {
 
   const handleItemClick = (keyword) => {
     onKeywordSelect(keyword);
+   // 성공적으로 읽음 상태를 업데이트한 후, 구독 리스트에서 읽음 상태를 반영
+      setKeywords((prevItems) =>
+        prevItems.map((item) =>
+          item.englishKeyword === keyword.englishKeyword
+            ? { ...item, isRead: true }
+            : item
+        )
+      );
   };
 
   return (
@@ -111,6 +131,7 @@ const KeywordBar = ({ onKeywordSelect, selectedKeyword }) => {
               onClick={() => handleItemClick(item)}
             >
               {item.koreanKeyword}
+              <NotificationBadge isRead={item.isRead} />
             </MenuItem>
           ))}
         </MenuItemContainer>

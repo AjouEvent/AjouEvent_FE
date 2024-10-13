@@ -238,6 +238,17 @@ const CategoryTitle = styled.h2`
   cursor: pointer;
 `;
 
+const NotificationBadge = styled.div`
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  display: ${({ isRead }) => {
+    //console.log("isRead 값:", isRead); // isRead 값이 제대로 넘어오는지 확인
+    return isRead === false ? "inline-block" : "none";
+  }};
+`;
+
 const Toast = Swal.mixin({
   toast: true,
   position: "center-center",
@@ -259,13 +270,33 @@ const SubscribeBar = ( { onTopicSelect } ) => {
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [ringingTopics, setRingingTopics] = useState({}); 
 
-  const handleTopicClick = (topic) => {
+  // 서버에서 읽음 상태를 받아와서 갱신하는 함수
+  const fetchReadStatus = async () => {
+    try {
+      const response = await requestWithAccessToken("get", `${process.env.REACT_APP_BE_URL}/api/users/readStatus`);
+      console.log("읽음 상태 받아옴:", response.data);
+    } catch (error) {
+      console.error("읽음 상태 갱신 오류:", error);
+    }
+  };
+
+  const handleTopicClick = async (topic) => {
     if (selectedTopic === topic) {
       setSelectedTopic(null); 
       onTopicSelect(null);    
     } else {
       setSelectedTopic(topic); 
-      onTopicSelect(topic);  
+      onTopicSelect(topic);
+      // 서버에서 최신 읽음 상태를 받아옴
+      fetchReadStatus();
+
+      // 클릭한 토픽의 읽음 상태를 반영
+      setSubscribeItems((prevItems) =>
+      prevItems.map((item) =>
+        item.englishTopic === topic ? { ...item, isRead: true } : item
+      )
+    );
+    
     }
   };
 
@@ -433,18 +464,23 @@ const SubscribeBar = ( { onTopicSelect } ) => {
       </ViewAllButton>
       <MenuItemContainer>
         {Array.isArray(subscribeItems) ? (
-          subscribeItems.map((item) => (
-            <MenuItem
-              key={item.id}
-              onClick={() => handleTopicClick(item.englishTopic)}
-              isSelected={selectedTopic === item.englishTopic}
-            >
-              {item.koreanTopic}
-            </MenuItem>
-          ))
-        ) : (
-          <p>구독 항목이 없습니다</p>
-        )}
+  subscribeItems.map((item) => {
+    //console.log("item.englishTopic:", item.englishTopic); // englishTopic 확인
+    //console.log("넘기기전 isRead 값:", item.isRead); // isRead 값이 제대로 넘어오는지 확인
+    return (
+      <MenuItem
+        key={item.englishTopic}
+        onClick={() => handleTopicClick(item.englishTopic)}
+        isSelected={selectedTopic === item.englishTopic}
+      >
+        <span>{item.koreanTopic}</span>
+        <NotificationBadge isRead={item.isRead} />
+      </MenuItem>
+    );
+  })
+) : (
+  <p>구독 항목이 없습니다</p>
+)}
       </MenuItemContainer>
     </MenuBarContainer>
 
@@ -462,37 +498,37 @@ const SubscribeBar = ( { onTopicSelect } ) => {
           {Object.keys(categorizedItems).map((category) => (
             <div key={category}>
               <CategoryTitle onClick={() => handleCategoryClick(category)}>
-      {category}
-      <img
-        src={
-          openCategory === category
-            ? `${process.env.PUBLIC_URL}/icons/arrow_down.svg`
-            : `${process.env.PUBLIC_URL}/icons/arrow_right.svg`
-        }
-        alt="arrow"
-        style={{ width: '24px', height: '24px' }} 
-      />
-    </CategoryTitle>
+                {category}
+                <img
+                  src={
+                    openCategory === category
+                      ? `${process.env.PUBLIC_URL}/icons/arrow_down.svg`
+                      : `${process.env.PUBLIC_URL}/icons/arrow_right.svg`
+                  }
+                  alt="arrow"
+                  style={{ width: '24px', height: '24px' }} 
+                />
+              </CategoryTitle>
               {openCategory === category &&
                 categorizedItems[category].map((item) => (
                   <MenuItemInModal key={item.id}>
                     <div>{item.koreanTopic}</div>
                     <div>
-{item.subscribed ? (
-  <BellIcon
-    onClick={() => handleUnsubscribe(item)}
-    loading="lazy"
-    ringing={ringingTopics[item.id]} 
-  >
-    <IconImage src={`${process.env.PUBLIC_URL}/icons/alarm_filled.svg`} alt="구독중 아이콘" />
-    <span>구독중</span> 
-  </BellIcon>
-) : (
-  <SubscribeButton
-    onClick={() => handleSubscribe(item)}
-    loading="lazy"
-  >구독</SubscribeButton>
-                )}
+                      {item.subscribed ? (
+                        <BellIcon
+                          onClick={() => handleUnsubscribe(item)}
+                          loading="lazy"
+                          ringing={ringingTopics[item.id]} 
+                        >
+                          <IconImage src={`${process.env.PUBLIC_URL}/icons/alarm_filled.svg`} alt="구독중 아이콘" />
+                          <span>구독중</span> 
+                        </BellIcon>
+                      ) : (
+                        <SubscribeButton
+                          onClick={() => handleSubscribe(item)}
+                          loading="lazy"
+                        >구독</SubscribeButton>
+                      )}
                     </div>
                   </MenuItemInModal>
                 ))}
@@ -502,7 +538,7 @@ const SubscribeBar = ( { onTopicSelect } ) => {
       </>
     )}
   </Container>
-  );
+);
 };
 
 export default SubscribeBar;

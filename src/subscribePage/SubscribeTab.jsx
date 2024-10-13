@@ -31,6 +31,21 @@ export default function SubscribeTab() {
 
   const accessToken = localStorage.getItem("accessToken");
 
+     // 서버에서 읽음 상태를 받아와서 갱신하는 함수
+  const fetchReadStatus = async () => {
+    try {
+      const response = await requestWithAccessToken("get", `${process.env.REACT_APP_BE_URL}/api/users/readStatus`);
+      console.log("읽음 상태 받아옴:", response.data);
+    } catch (error) {
+      console.error("읽음 상태 갱신 오류:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchReadStatus(); // 컴포넌트 마운트 시 읽음 상태 확인
+  }, []);
+
+
   const fetchData = useCallback(async () => {
     if (loading || !hasMore || isError) return;
 
@@ -41,6 +56,7 @@ export default function SubscribeTab() {
         ? `${process.env.REACT_APP_BE_URL}/api/event/${encodeURIComponent(selectedTopic)}?page=${page}&size=${pageSize}&keyword=${keyword}`
         : `${process.env.REACT_APP_BE_URL}/api/event/subscribed?page=${page}&size=${pageSize}&keyword=${keyword}`;
 
+      console.log("호출하는 url", url);
       const response = await requestWithAccessToken("get", url);
       const newEvents = response.data.result;
 
@@ -117,6 +133,7 @@ export default function SubscribeTab() {
         setSelectedTopic(null);  
       } else {
         setSelectedTopic(topic); 
+        fetchReadStatus(); // 토픽을 선택할 때 읽음 상태를 갱신
       }
       setPage(0); 
       setEvents([]);
@@ -125,6 +142,7 @@ export default function SubscribeTab() {
 
   useEffect(() => {
     fetchData(selectedTopic); // Topic이나 페이지 변경 시 데이터 재로드
+    fetchReadStatus(); // 토픽을 선택할 때 읽음 상태를 갱신
   }, [selectedTopic]);
 
     return (
