@@ -121,7 +121,11 @@ export default function SearchEventPage() {
           option1={option1}
           setOption1={setOption1}
           option2={option2}
-          setOption2={setOption2}
+          setOption2={(newOption2) => {
+            setOption2(newOption2);
+            setPage(0);
+            setHasMore(true);
+          }}
           savedOption1={savedOption1}
           setSavedOption1={setSavedOption1}
           savedOption2={savedOption2}
