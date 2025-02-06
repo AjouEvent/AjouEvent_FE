@@ -48,18 +48,20 @@ const ArrowButton = styled.button`
 `;
 
 const PrevButton = styled(ArrowButton)`
-  left: 10px;
+  left: 7px;
   z-index: 10;
-  filter: invert(50%);
+  filter: invert(70%);
 `;
 
 const NextButton = styled(ArrowButton)`
-  right: 10px; 
+  right: 7px;
   z-index: 10;
+  filter: invert(70%);
 `;
 
 function ImageModal({ images, currentIndex, onClose }) {
   const [index, setIndex] = useState(currentIndex);
+  const [startX, setStartX] = useState(0);
 
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -75,9 +77,32 @@ function ImageModal({ images, currentIndex, onClose }) {
     setIndex((prevIndex) => (prevIndex < images.length - 1 ? prevIndex + 1 : 0));
   };
 
+  // 터치 시작
+  const handleTouchStart = (e) => {
+    setStartX(e.touches[0].clientX);
+  };
+
+  // 터치 끝
+  const handleTouchEnd = (e) => {
+    const endX = e.changedTouches[0].clientX;
+    const diffX = startX - endX;
+
+    // 왼쪽으로 스와이프한 경우 다음 이미지
+    if (diffX > 50) {
+      handleNext();
+    }
+    // 오른쪽으로 스와이프한 경우 이전 이미지
+    else if (diffX < -50) {
+      handlePrev();
+    }
+  };
+
   return (
     <ModalOverlay onClick={handleOverlayClick}>
-      <ModalContent>
+      <ModalContent
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <Image src={images[index]} alt={`Image ${index + 1}`} />
         {images.length > 1 && (
           <>
