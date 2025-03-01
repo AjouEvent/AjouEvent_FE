@@ -31,7 +31,7 @@ const UserInfo = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: start;
-  font-family: 'Pretendard Variable';
+  font-family: 'Pretendard Variable', serif;
   padding: 20px 40px 10px 40px;
   border-top: 1px solid rgba(0, 0, 0, 0.08);
   h3 {
@@ -66,7 +66,6 @@ const StyledLink = styled(Link)`
 
 const MenuList = styled.ul`
   list-style: none;
-  padding: 0;
   margin: 0;
   padding: 20px 0;
 `;
@@ -74,7 +73,7 @@ const MenuList = styled.ul`
 const MenuItem = styled.li`
   border-bottom: 1px solid #eee;
   padding: 10px 20px;
-  font-family: 'Pretendard Variable';
+  font-family: 'Pretendard Variable', serif;
   font-size: 1rem;
   display: flex;
   justify-content: space-between;
