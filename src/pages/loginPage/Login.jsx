@@ -199,8 +199,8 @@ const Login = () => {
     if (!fcmToken) {
       Swal.fire({
         icon: 'error',
-        title: '알림토큰 미등록',
-        text: '홈화면에 추가’를 통해 설치 / 알림 설정(허용)을 확인해주세요 ',
+        title: '알림 토큰 미등록',
+        text: '’홈화면에 추가’를 통해 설치 / 알림 설정(허용)을 확인해주세요 ',
       });
       return;
     }

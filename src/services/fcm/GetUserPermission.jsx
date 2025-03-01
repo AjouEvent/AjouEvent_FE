@@ -41,10 +41,6 @@ const GetUserPermission = async (setIsLoading) => {
         setIsLoading(true);
         await GetFCMToken();
         setIsLoading(false);
-        Toast.fire({
-          icon: 'success',
-          title: `알림 토큰 저장 성공`,
-        });
         let isFCMToken = localStorage.getItem('fcmToken');
         if (!isFCMToken) {
           setIsLoading(true);
