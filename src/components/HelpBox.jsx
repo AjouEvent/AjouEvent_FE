@@ -29,10 +29,10 @@ const TapIcon = styled.img`
   cursor: pointer;
 `;
 
-const Badge = styled.div`
+const Badge = styled.span`
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -4px;
+  right: -6px;
   background-color: red;
   color: white;
   font-size: 8px;
@@ -44,6 +44,8 @@ const Badge = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  font-family: 'Pretendard Variable';
 `;
 
 const HelpBox = () => {
@@ -70,7 +72,12 @@ const HelpBox = () => {
           src={`${process.env.PUBLIC_URL}/icons/notiOn.svg`}
           alt="bellIcon"
         />
-        {unreadNotificationCount > 0 && <Badge>{unreadNotificationCount}</Badge>}
+        {unreadNotificationCount > 0 &&
+          (unreadNotificationCount < 100 ? (
+            <Badge>{unreadNotificationCount}</Badge>
+          ) : (
+            <Badge>99+</Badge>
+          ))}
       </TapIconContainer>
 
       <TapIcon
