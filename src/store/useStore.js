@@ -120,16 +120,6 @@ const useStore = create((set) => ({
       }
     }),
 
-  updateTopicReadStatus: (topics) => {
-    const allTopicsRead = topics.every((topic) => topic.isRead);
-    set({ isTopicTabRead: allTopicsRead });
-  },
-
-  updateKeywordReadStatus: (keywords) => {
-    const allKeywordsRead = keywords.every((keyword) => keyword.isRead);
-    set({ isKeywordTabRead: allKeywordsRead });
-  },
-
   // 읽음 상태 업데이트
   setIsTopicTabRead: async (isRead) => {
     set({ isTopicTabRead: isRead });

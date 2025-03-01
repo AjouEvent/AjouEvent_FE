@@ -31,9 +31,12 @@ const UserInfo = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: start;
-  font-family: 'Pretendard Variable';
-  padding: 20px 40px;
+  font-family: 'Pretendard Variable', serif;
+  padding: 20px 40px 10px 40px;
   border-top: 1px solid rgba(0, 0, 0, 0.08);
+  h3 {
+    margin-bottom: 1.6rem;
+  }
 `;
 
 const LogoutBtnWapper = styled.div`
@@ -48,20 +51,21 @@ const StyledLink = styled(Link)`
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  background-color: ${(props) => props.bgcolor};
+  background-color: white;
   border-radius: 0.5rem;
-  border: 1px solid gray;
-  width: 6rem;
-  height: 1.4rem;
-  color: ${(props) => props.color};
+  padding: 8px;
+  border: 1px solid #b8b8b8;
+  width: 85%;
+  height: fit-content;
+  color: gray;
   font-size: 0.8rem;
   text-decoration: none;
-  margin: 0 1rem 0 1rem;
+  text-align: center;
+  font-family: 'Pretendard Variable';
 `;
 
 const MenuList = styled.ul`
   list-style: none;
-  padding: 0;
   margin: 0;
   padding: 20px 0;
 `;
@@ -69,7 +73,7 @@ const MenuList = styled.ul`
 const MenuItem = styled.li`
   border-bottom: 1px solid #eee;
   padding: 10px 20px;
-  font-family: 'Pretendard Variable';
+  font-family: 'Pretendard Variable', serif;
   font-size: 1rem;
   display: flex;
   justify-content: space-between;
@@ -120,6 +124,19 @@ const MyPage = () => {
     });
   };
 
+  const handleFrequentlyAskedQuestionsClick = () => {};
+
+  const handleFeedBackClick = () => {
+    window.open(
+      'https://docs.google.com/forms/d/e/1FAIpQLSfSyN05EK3L9N7DMfQlpAnrebcuIGzadeANgELlGqrdlKeeqg/viewform',
+      '_blank',
+    );
+  };
+
+  const handleNofificationClick = () => {};
+
+  const handleVersionClick = () => {};
+
   const handleLogoutBtnClick = () => {
     Swal.fire({
       icon: 'success',
@@ -144,7 +161,11 @@ const MyPage = () => {
           <p>전공: {user.major}</p>
           <p>이메일: {user.email}</p>
         </UserInfo>
-
+        <LogoutBtnWapper>
+          <StyledLink onClick={handleLogoutBtnClick} to="/login">
+            로그아웃
+          </StyledLink>
+        </LogoutBtnWapper>
         <MenuList>
           <MenuItem onClick={handleEditClick}>
             회원정보 수정 <ArrowIcon>›</ArrowIcon>
@@ -153,26 +174,16 @@ const MyPage = () => {
             자주묻는질문 <ArrowIcon>›</ArrowIcon>
           </MenuItem>
           <MenuItem>
-            FAQ <ArrowIcon>›</ArrowIcon>
-          </MenuItem>
-          <MenuItem>
             공지사항 <ArrowIcon>›</ArrowIcon>
           </MenuItem>
           <MenuItem>
             버전 <ArrowIcon>›</ArrowIcon>
           </MenuItem>
+          <MenuItem>
+            피드백 / 오류 제보
+            <ArrowIcon onClick={handleFeedBackClick}>›</ArrowIcon>
+          </MenuItem>
         </MenuList>
-
-        <LogoutBtnWapper>
-          <StyledLink
-            onClick={handleLogoutBtnClick}
-            bgcolor={'white'}
-            color={'black'}
-            to="/login"
-          >
-            로그아웃
-          </StyledLink>
-        </LogoutBtnWapper>
       </Container>
       <NavigationBar />
     </AppContainer>
