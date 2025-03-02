@@ -1,5 +1,5 @@
-import { firebaseApp } from "./firebase";
-import { getMessaging, getToken } from "firebase/messaging";
+import { firebaseApp } from './firebase';
+import { getMessaging, getToken } from 'firebase/messaging';
 
 const GetFCMToken = async () => {
   try {
@@ -8,7 +8,7 @@ const GetFCMToken = async () => {
       if (messaging) {
         resolve(messaging);
       } else {
-        reject(new Error("Messaging object is not available"));
+        reject(new Error('Messaging object is not available'));
       }
     });
 
@@ -18,17 +18,18 @@ const GetFCMToken = async () => {
     });
 
     if (currentToken) {
-      localStorage.setItem("fcmToken", currentToken);
+      localStorage.setItem('fcmToken', currentToken);
     } else {
       console.log(
-        "No registration token available. Request permission to generate one."
+        'No registration token available. Request permission to generate one.',
       );
     }
   } catch (error) {
     console.error(
-      "An error occurred while sending the token to the server:",
-      error
+      'An error occurred while sending the token to the server:',
+      error,
     );
+    throw error;
   }
 };
 

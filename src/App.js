@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RouteChangeTracker from './RouteChangeTracker';
 import { Analytics } from '@vercel/analytics/react';
 import useStore from './store/useStore';
 import HomePage from './pages/homePage/HomePage';
 import SearchEventPage from './pages/searchPage/SearchEventPage';
-import EventDetailPage from './pages/eventPage/EventDetailPage';
 import LoginPage from './pages/loginPage/LoginPage';
 import MyPage from './pages/myPage/MyPage';
 import LikedEventPage from './pages/likedPage/LikedEventPage';
@@ -19,6 +18,7 @@ import SignUpSelectPage from './pages/signupPage/SignUpSelectPage';
 import RegisterMemberInfoPage from './pages/signupPage/RegisterMebmerInfoPage';
 import PrivacyAgreementPage from './pages/signupPage/PrivacyAgreementPage';
 import NotificationPage from './pages/notificationPage/NotificationPage';
+import EventDetailPage from "./pages/eventPage/EventDetailPage";
 
 const ROUTER = createBrowserRouter([
   {
@@ -88,7 +88,11 @@ const ROUTER = createBrowserRouter([
 ]);
 
 function App() {
-  const { unreadNotificationCount, setUnreadNotificationCount } = useStore();
+  const { fetchMemberStatus, unreadNotificationCount, setUnreadNotificationCount } = useStore();
+
+  useEffect(() => {
+    fetchMemberStatus();
+  }, []);
 
   useEffect(() => {
     if ("serviceWorker" in navigator) {

@@ -27,7 +27,7 @@ const GetUserPermission = async (setIsLoading) => {
 
     if (!('Notification' in window)) {
       alert(
-        '알림 서비스를 원활하게 사용하시려면 바탕화면에 바로가기 추가 후, 홈페이지에 종모양아이콘 클릭하여 알림 허용을 해주세요.',
+        '알림 서비스를 원활하게 사용하시려면 홈화면에 추가 후, 알림 허용을 해주세요.',
       );
       return;
     }
@@ -47,11 +47,11 @@ const GetUserPermission = async (setIsLoading) => {
           await GetFCMToken();
           setIsLoading(false);
           Toast.fire({
-            icon: 'error',
-            title: `알림 토큰 저장 실패`,
+            icon: 'success',
+            title: `알림 토큰 저장 성공`,
           });
         } else {
-          console.log('token setting complete');
+          console.log('token already saved');
         }
       } catch {
         Toast.fire({

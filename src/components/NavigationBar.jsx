@@ -109,13 +109,13 @@ function NavigationBar() {
   const currentPath = location.pathname;
 
   // 전역 상태에서 읽음 상태 관리 (서버 변수명 그대로 사용)
-  const { isTopicTabRead, isKeywordTabRead, fetchMemberStatus } = useStore();
+  const { isSubscribedTabRead, fetchMemberStatus } = useStore();
 
   const [isIOS, setIsIOS] = useState(false);
   const [shouldShowPWAPrompt, setShouldShowPWAPrompt] = useState(false);
 
   useEffect(() => {
-    fetchMemberStatus(); // 페이지 로드 시 사용자 구독 상태 가져오기
+    // fetchMemberStatus(); // 페이지 로드 시 사용자 구독 상태 가져오기
     // iOS 장치인지 확인
     const isDeviceIOS =
       /iPad|iPhone|iPod/.test(window.navigator.userAgent) && !window.MSStream;
@@ -150,8 +150,7 @@ function NavigationBar() {
                 />
                 <NavLabel>{item.label}</NavLabel>
                 {/* 구독 탭에 뱃지 표시 */}
-                {item.label === '구독' &&
-                  (!isTopicTabRead || !isKeywordTabRead) && <Badge />}
+                {item.label === '구독' && isSubscribedTabRead === false && <Badge />}
               </NavItem>
             );
           })}

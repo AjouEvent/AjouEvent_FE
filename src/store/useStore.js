@@ -2,22 +2,42 @@ import { create } from 'zustand';
 import requestWithAccessToken from '../services/jwt/requestWithAccessToken';
 
 // useStore.js
-const useStore = create((set) => ({
+const useStore = create((set, get) => ({
   savedKeyword: '',
   savedOption1: '',
   savedOption2: '아주대학교-일반',
   isAuthorized: false,
   isTopicTabRead: true,
   isKeywordTabRead: true,
+  isSubscribedTabRead: true,
   unreadNotificationCount: 0, // 푸시 알림 배지 개수 상태
   topics: [], // 사용자가 구독한 topics
   subscribeItems: [], // 구독된 항목들을 저장하는 상태 추가
   keywords: [], // 사용자가 구독한 keywords
   subscribedKeywords: [], // 구독된 키워드들을 저장하는 상태 추가
 
-  setSubscribeItems: (items) => set({ subscribeItems: items }),
+  setSubscribeItems: (items) => {
+    set({ subscribeItems: items });
+    get().updateTabReadStatus(); 
+  },
 
-  setSubscribedKeywords: (keywords) => set({ subscribedKeywords: keywords }),
+  setSubscribedKeywords: (keywords) => {
+    set({ subscribedKeywords: keywords });
+    get().updateTabReadStatus();
+  },
+
+  // 상태 업데이트 로직 (전체 읽음 여부 체크)
+  updateTabReadStatus: () => {
+    const { subscribeItems, subscribedKeywords } = get();
+    const allTopicsRead = subscribeItems.every((item) => item.isRead);
+    const allKeywordsRead = subscribedKeywords.every((item) => item.isRead);
+
+    set({
+      isTopicTabRead: allTopicsRead,
+      isKeywordTabRead: allKeywordsRead,
+      isSubscribedTabRead: allTopicsRead && allKeywordsRead,
+    });
+  },
 
   setSavedKeyword: (savedKeyword) => {
     set({ savedKeyword });
@@ -60,11 +80,13 @@ const useStore = create((set) => ({
 
       // 모든 항목이 읽음 상태인지 확인하여 isTopicTabRead를 갱신
       const allTopicsRead = updatedItems.every((item) => item.isRead === true);
+      const allKeywordsRead = get().subscribedKeywords.every((item) => item.isRead === true);
 
       // 상태 업데이트
       set({
         subscribeItems: updatedItems,
         isTopicTabRead: allTopicsRead,
+        isSubscribedTabRead: allTopicsRead && allKeywordsRead,
       });
 
       // 모든 항목이 읽음 상태일 경우 서버에 읽음 상태 업데이트
@@ -96,11 +118,13 @@ const useStore = create((set) => ({
       const allKeywordsRead = updatedItems.every(
         (item) => item.isRead === true,
       );
+      const allTopicsRead = get().subscribeItems.every((item) => item.isRead === true);
 
       // 상태 업데이트
       set({
         subscribedKeywords: updatedItems,
         isKeywordTabRead: allKeywordsRead,
+        isSubscribedTabRead: allTopicsRead && allKeywordsRead, 
       });
 
       // 모든 항목이 읽음 상태일 경우 서버에 읽음 상태 업데이트
@@ -119,16 +143,6 @@ const useStore = create((set) => ({
         }
       }
     }),
-
-  updateTopicReadStatus: (topics) => {
-    const allTopicsRead = topics.every((topic) => topic.isRead);
-    set({ isTopicTabRead: allTopicsRead });
-  },
-
-  updateKeywordReadStatus: (keywords) => {
-    const allKeywordsRead = keywords.every((keyword) => keyword.isRead);
-    set({ isKeywordTabRead: allKeywordsRead });
-  },
 
   // 읽음 상태 업데이트
   setIsTopicTabRead: async (isRead) => {
@@ -151,7 +165,16 @@ const useStore = create((set) => ({
     }
   },
 
-  // setIsSubscribedTabRead: (isRead) => set({ isSubscribedTabRead: isRead }),
+  setIsSubscribedTabRead: (isRead) => set({ isSubscribedTabRead: isRead }),
+  
+  updateSubscribedTabRead: async () => {
+    try {
+      const response = await requestWithAccessToken('get', `${process.env.REACT_APP_BE_URL}/api/subscriptions/isSubscribedTabRead`);
+      set({ isSubscribedTabRead: response.data.isSubscribedTabRead });
+    } catch (error) {
+      console.error('Error updating isSubscribedTabRead:', error);
+    }
+  },
 
   // 모든 topic의 읽음 상태 확인 및 구독 탭 뱃지 업데이트
   updateTopicReadStatus: (topics) => {
@@ -169,12 +192,10 @@ const useStore = create((set) => ({
     try {
       const response = await requestWithAccessToken(
         'get',
-        `${process.env.REACT_APP_BE_URL}/api/event/readStatus`,
+        `${process.env.REACT_APP_BE_URL}/api/subscriptions/isSubscribedTabRead`,
       );
       set({
-        isTopicTabRead: response.data.isTopicTabRead,
-        isKeywordTabRead: response.data.isKeywordTabRead,
-        // isSubscribedTabRead: response.data.isTopicTabRead && response.data.isKeywordTabRead,
+        isSubscribedTabRead: response.data.subscribedTabRead,
       });
     } catch (error) {
       console.error('Error fetching read status', error);
@@ -203,6 +224,7 @@ const useStore = create((set) => ({
       );
       const keywords = response.data;
       set({ subscribedKeywords: keywords });
+      get().updateTabReadStatus();
     } catch (error) {
       console.error('Error fetching subscribed keywords', error);
     }
@@ -217,6 +239,7 @@ const useStore = create((set) => ({
       );
       const topics = response.data;
       set({ subscribeItems: topics });
+      get().updateTabReadStatus();
     } catch (error) {
       console.error('Error fetching subscribe items:', error);
     }

@@ -83,7 +83,7 @@ const SubscribeContainer = styled.div`
 
 export default function SubscribePage() {
   const location = useLocation();
-  const { isTopicTabRead, isKeywordTabRead, fetchMemberStatus } = useStore();
+  const { subscribeItems, subscribedKeywords, fetchSubscribeItems, fetchSubscribedKeywords } = useStore();
   const [activeTab, setActiveTab] = useState(
     location.state?.activeTab || 'subscribe',
   );
@@ -91,7 +91,8 @@ export default function SubscribePage() {
   const accessToken = localStorage.getItem('accessToken');
 
   useEffect(() => {
-    fetchMemberStatus();
+    // fetchSubscribeItems();
+    fetchSubscribedKeywords();
   }, []);
 
   const handleTabClick = async (tabName) => {
@@ -104,21 +105,17 @@ export default function SubscribePage() {
         <MainContentContaioner>
           <LocationBar location="구독" />
           <TabContainer>
-            <Tab
-              active={activeTab === 'subscribe'}
-              onClick={() => handleTabClick('subscribe')}
-            >
-              구독 알림
-              {!isTopicTabRead && <Badge />} {/* 읽지 않은 상태면 뱃지 표시 */}
-            </Tab>
-            <Tab
-              active={activeTab === 'keyword'}
-              onClick={() => handleTabClick('keyword')}
-            >
-              키워드 알림
-              {!isKeywordTabRead && <Badge />}{' '}
-              {/* 읽지 않은 상태면 뱃지 표시 */}
-            </Tab>
+              <Tab active={activeTab === 'subscribe'} 
+                onClick={() => setActiveTab('subscribe')}>
+                구독 알림
+                {subscribeItems.some((item) => !item.isRead) && <Badge />}
+              </Tab>
+
+              <Tab active={activeTab === 'keyword'} 
+                onClick={() => setActiveTab('keyword')}>
+                키워드 알림
+                {subscribedKeywords.some((item) => !item.isRead) && <Badge />}
+              </Tab>
           </TabContainer>
           {activeTab === 'subscribe' && (
             <SubscribeContainer>
