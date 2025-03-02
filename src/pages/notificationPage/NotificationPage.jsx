@@ -65,6 +65,22 @@ const StyledButton = styled.button`
   }
 `;
 
+const MarkAllAsReadButton = styled.button`
+  background-color: #0a5ca8;
+  color: #fff;
+  padding: 4px 14px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Pretendard Variable', serif;
+  font-weight: 500;
+  transition: background-color 0.3s ease-in-out;
+  &:hover {
+    background-color: #1a4f8b;
+  }
+`;
+
 const NotificationPage = () => {
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState('topic');
@@ -87,6 +103,24 @@ const NotificationPage = () => {
     fetchUserKeywords();
   }, []);
 
+  // 알림 모두 읽음 처리 함수 (백엔드 readAll API 호출)
+  const readAllNotifications = async () => {
+    if (!window.confirm('정말 모든 알림을 읽음 처리할까요?')) {
+      return;
+    }
+    try {
+      await requestWithAccessToken(
+        'post',
+        `${process.env.REACT_APP_BE_URL}/api/notification/readAll`
+      );
+      alert('모든 알림을 읽음 처리했습니다.');
+      window.location.reload(); // 새로고침으로 리스트 상태 동기화
+    } catch (error) {
+      console.error('Error reading all notifications:', error);
+      alert('알림 읽음 처리 중 오류가 발생했습니다.');
+    }
+  };
+
   // 탭 변경 핸들러
   const handleTabChange = (tab) => {
     setCurrentTab(tab);
@@ -99,7 +133,14 @@ const NotificationPage = () => {
 
   return (
     <AppContainer>
-      <TabBar Title="알림" />
+      <TabBar
+        Title="알림"
+        RightComponent={
+          <MarkAllAsReadButton onClick={readAllNotifications}>
+            모두 읽음
+          </MarkAllAsReadButton>
+        }
+      />
       <TabContainer>
         <TabButton
           $active={currentTab === 'topic'}
