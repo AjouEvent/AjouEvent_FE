@@ -88,7 +88,11 @@ const ROUTER = createBrowserRouter([
 ]);
 
 function App() {
-  const { unreadNotificationCount, setUnreadNotificationCount } = useStore();
+  const { fetchMemberStatus, unreadNotificationCount, setUnreadNotificationCount } = useStore();
+
+  useEffect(() => {
+    fetchMemberStatus();
+  }, []);
 
   useEffect(() => {
     if ("serviceWorker" in navigator) {

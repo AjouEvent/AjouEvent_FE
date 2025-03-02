@@ -94,7 +94,7 @@ const KeywordBar = ({ onKeywordSelect }) => {
   const [selectedKeyword, setSelectedKeyword] = useState(null);
 
   useEffect(() => {
-    fetchSubscribedKeywords();
+    // fetchSubscribedKeywords();
   }, []);
 
   useEffect(() => {
