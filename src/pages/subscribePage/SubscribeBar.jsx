@@ -15,12 +15,14 @@ const Container = styled.div`
 const MenuBarContainer = styled.div`
   width: 100%;
   display: flex;
+  align-items: center;
   overflow-x: auto;
   white-space: nowrap;
   background: #ffffff;
-  padding: 12px 10px 0px 16px;
+  padding: ${({ highlight }) => (highlight ? '18px 10px 18px 12px' : '12px 10px 0px 16px')};
   font-family: 'Pretendard Variable';
   font-weight: 600;
+  box-sizing: border-box;
 `;
 
 const MenuItemContainer = styled.div`
@@ -50,6 +52,12 @@ const MenuItem = styled.div`
   cursor: pointer;
 `;
 
+const ViewAllButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;  // 구독 설정과 툴팁 사이 여백
+`;
+
 const ViewAllButton = styled.div`
   display: flex;
   height: fit-content;
@@ -61,10 +69,38 @@ const ViewAllButton = styled.div`
   border: 2px solid #f7f7f7;
   background-color: #ffffff;
   cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+  box-sizing: border-box;
+  animation: ${({ highlight }) => highlight ? glowAnimation : 'none'} 1.5s infinite;
+
   background-color: ${(props) =>
     props.isSelected ? '#e0e0e0' : '#ffffff'}; /* 항상 회색 유지 */
   p {
-    margin: 0;
+    margin: 0
+`;
+
+const InlineTooltip = styled.div`
+  background-color: #0072ce;
+  color: #ffffff;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
+  white-space: nowrap;
+  line-height: 1.4;
+  display: ${({ show }) => (show ? 'block' : 'none')};
+  animation: fadeIn 0.5s ease-in-out;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-3px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 `;
 
@@ -262,7 +298,13 @@ const Toast = Swal.mixin({
   },
 });
 
-const SubscribeBar = ({ onTopicSelect }) => {
+const glowAnimation = keyframes`
+  0% { box-shadow: 0 0 8px rgba(0, 114, 206, 0.6); }
+  50% { box-shadow: 0 0 15px rgba(0, 114, 206, 0.9); }
+  100% { box-shadow: 0 0 8px rgba(0, 114, 206, 0.6); }
+`;
+
+const SubscribeBar = ({ onTopicSelect, showGuide }) => {
   const {
     isTopicTabRead,
     setIsTopicTabRead,
@@ -463,11 +505,16 @@ const SubscribeBar = ({ onTopicSelect }) => {
 
   return (
     <Container>
-      <MenuBarContainer>
-        <ViewAllButton isSelected={true} onClick={handleShowModal}>
-          <ViewAllIcon src={`${process.env.PUBLIC_URL}/icons/gear.svg`} />
-          <p>구독 설정</p>
-        </ViewAllButton>
+      <MenuBarContainer highlight={showGuide}>
+        <ViewAllButtonWrapper>
+          <ViewAllButton isSelected={true} onClick={handleShowModal} highlight={showGuide}>
+            <ViewAllIcon src={`${process.env.PUBLIC_URL}/icons/gear.svg`} />
+            <p>구독 설정</p>
+          </ViewAllButton>
+          <InlineTooltip show={showGuide}>
+            클릭해서 구독하기
+          </InlineTooltip>
+        </ViewAllButtonWrapper>
         <MenuItemContainer>
           {Array.isArray(subscribeItems) ? (
             subscribeItems.map((item) => (

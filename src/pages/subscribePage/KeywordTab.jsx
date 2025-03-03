@@ -35,7 +35,7 @@ const MessageContainer = styled.div`
   padding: 16px;
 `;
 
-export default function KeywordTab() {
+export default function KeywordTab({ showGuide }) {
   const { setIsKeywordTabRead } = useStore((state) => ({
     setIsKeywordTabRead: state.setIsKeywordTabRead,
   }));
@@ -114,7 +114,7 @@ export default function KeywordTab() {
 
   return (
     <AppContainer>
-      <KeywordBar onKeywordSelect={handleKeywordSelect} />
+      <KeywordBar onKeywordSelect={handleKeywordSelect} showGuide={showGuide} />
       <SearchBar setKeyword={setSelectedKeyword} />
       <KeywordListContainer>
         {events.map((event, index) => (
