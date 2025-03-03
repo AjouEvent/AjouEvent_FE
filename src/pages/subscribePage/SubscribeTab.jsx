@@ -13,7 +13,7 @@ const AppContainer = styled.div`
   background-color: #ffffff;
 `;
 
-export default function SubscribeTab() {
+export default function SubscribeTab({ showGuide }) {
   const { savedKeyword, setSavedKeyword } = useStore((state) => ({
     savedKeyword: state.savedKeyword,
     setSavedKeyword: state.setSavedKeyword,
@@ -106,7 +106,7 @@ export default function SubscribeTab() {
 
   return (
     <AppContainer>
-      <SubscribeBar onTopicSelect={handleTopicSelect} />
+      <SubscribeBar onTopicSelect={handleTopicSelect} showGuide={showGuide} />
       <SearchBar
         keyword={keyword}
         setKeyword={setKeyword}
