@@ -81,22 +81,84 @@ const SubscribeContainer = styled.div`
   width: 100%;
 `;
 
+const GuideMessage = styled.div`
+  width: 100%;
+  padding: 12px;
+  background-color: #f0f8ff;
+  font-size: 13px;
+  color: #0072ce;
+  text-align: center;
+  font-weight: 600;
+  line-height: 1.5; /* 줄 간격 확보 */
+  word-break: keep-all; /* 단어 단위로 줄바꿈 */
+  white-space: normal; /* 강제 줄바꿈 허용 */
+
+  @media (max-width: 375px) {  // iPhone SE 같은 작은 화면 대응
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  @media (max-width: 320px) {  // 더 작은 화면일 때
+    font-size: 11px;
+    padding: 6px;
+  }
+`;
+
 export default function SubscribePage() {
   const location = useLocation();
   const { subscribeItems, subscribedKeywords, fetchSubscribeItems, fetchSubscribedKeywords } = useStore();
   const [activeTab, setActiveTab] = useState(
     location.state?.activeTab || 'subscribe',
   );
+  const [showGuide, setShowGuide] = useState(false);
 
   const accessToken = localStorage.getItem('accessToken');
 
+  // 구독 아이템/키워드 변화 감지해 showGuide 판단
+  useEffect(() => {
+    if (activeTab === 'subscribe') {
+      setShowGuide(subscribeItems.length === 0);
+    } else if (activeTab === 'keyword') {
+      setShowGuide(subscribedKeywords.length === 0);
+    }
+  }, [subscribeItems, subscribedKeywords, activeTab]);
+
   useEffect(() => {
     // fetchSubscribeItems();
-    fetchSubscribedKeywords();
+    fetchSubscribedKeywords(); // 여기에서 가져와야 키워드 알림 탭의 뱃지를 보여줄 수 있음
   }, []);
 
   const handleTabClick = async (tabName) => {
     setActiveTab(tabName);
+  };
+
+  const getGuideMessage = (activeTab) => {
+    if (activeTab === 'subscribe') {
+      return (
+        <>
+          아직 구독한 항목이 없습니다.
+          <br />
+          아래의 <strong>⚙️ 구독 설정</strong>에서 관심있는 공지를 구독해보세요!
+        </>
+      );
+    } else if (activeTab === 'keyword') {
+      return (
+        <>
+          아직 구독한 키워드가 없습니다.
+          <br />
+          아래의 <strong>🔔 키워드 설정</strong>에서 관심있는 키워드를 구독해보세요!
+        </>
+      );
+    } else {
+      // 기본 메시지 (탭 선택 전이거나, 예외 상황 대비)
+      return (
+        <>
+          아직 구독한 항목이 없습니다.
+          <br />
+          아래의 톱니바퀴/종 모양의 <strong>'설정'</strong>에서 관심있는 공지를 구독해보세요!
+        </>
+      );
+    }
   };
 
   return (
@@ -104,6 +166,11 @@ export default function SubscribePage() {
       {accessToken ? (
         <MainContentContaioner>
           <LocationBar location="구독" />
+          {showGuide && (
+            <GuideMessage>
+              {getGuideMessage(activeTab)}
+            </GuideMessage>
+          )}
           <TabContainer>
               <Tab active={activeTab === 'subscribe'} 
                 onClick={() => setActiveTab('subscribe')}>
@@ -119,12 +186,12 @@ export default function SubscribePage() {
           </TabContainer>
           {activeTab === 'subscribe' && (
             <SubscribeContainer>
-              <SubscribeTab />
+              <SubscribeTab showGuide={showGuide} />
             </SubscribeContainer>
           )}
           {activeTab === 'keyword' && (
             <SubscribeContainer>
-              <KeywordTab />
+              <KeywordTab showGuide={showGuide} />
             </SubscribeContainer>
           )}
         </MainContentContaioner>
