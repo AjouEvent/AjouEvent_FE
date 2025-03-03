@@ -153,46 +153,49 @@ const BottomContainer = styled.div`
   z-index: 5;
   position: fixed;
   bottom: 0;
-  border: 1px solid rgba(35, 102, 175, 0.08);
-  background-color: #fff;
   display: flex;
-  gap: 20px;
-  font-size: 16px;
-  color: rgba(35, 102, 175, 1);
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  padding: 8px 16px 8px;
+  align-items: center;
+  background-color: #fff;
+  border-top: 1px solid rgba(35, 102, 175, 0.08);
+  padding: 8px 12px; /* 양쪽에 여백 추가 */
+  gap: 4px; /* <<< 여기 추가 (북마크와 버튼 사이 거리) */
+`;
+
+const BookmarkContainer = styled.div`
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 `;
 
 const BottomImage = styled.img`
-  aspect-ratio: 1;
-  object-fit: auto;
-  object-position: center;
-  width: 24px;
-  align-self: flex-start;
-  margin-top: 12px;
+  width: 30px;
+  height: 30px;
 `;
 
-const BottomBody = styled.div`
+const ButtonGroup = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 3px 4px;
-  flex: 1;
+  gap: 8px; /* 버튼 사이 여백 추가 */
+  flex: 1; /* 남는 공간 차지 */
 `;
 
-const Button = styled.button`
-  font-feature-settings: 'ss10' on;
+const BottomButton = styled.button`
+  flex: 1;
+  height: 50px; /* 버튼 높이도 조금 줄여서 여유 느낌 */
   font-family: 'Pretendard Variable';
-  border-radius: 4px;
+  font-size: 14px;
+  color: #2366af;
+  font-weight: 600;
   background-color: rgba(35, 102, 175, 0.08);
-  color: rgba(35, 102, 175, 1);
-  padding: 14px 60px;
-  cursor: pointer;
   border: none;
+  border-radius: 8px; /* 버튼 모서리 둥글게 */
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
+  white-space: nowrap;
 `;
 
 function Stat({ iconSrc, value, altText }) {
@@ -371,28 +374,24 @@ const EventDetail = () => {
               ))}
             </Content>
             <Writer>작성자: {event.writer}</Writer>
-            <LinkButton onClick={handleRedirect}>바로가기</LinkButton>
+            
           </ContentContaioner>
           <BottomContainer>
-            {event.star ? (
+            <BookmarkContainer onClick={handleStarClick}>
               <BottomImage
-                onClick={handleStarClick}
                 loading="lazy"
-                src={`${process.env.PUBLIC_URL}/icons/FilledBookmarkIcon.svg`}
-                alt="Calendar"
+                src={
+                  event.star
+                    ? `${process.env.PUBLIC_URL}/icons/FilledBookmarkIcon.svg`
+                    : `${process.env.PUBLIC_URL}/icons/EmptyBookmarkIcon.svg`
+                }
+                alt="Bookmark"
               />
-            ) : (
-              <BottomImage
-                onClick={handleStarClick}
-                loading="lazy"
-                src={`${process.env.PUBLIC_URL}/icons/EmptyBookmarkIcon.svg`}
-                alt="Calendar"
-              />
-            )}
-
-            <BottomBody>
-              <Button onClick={handleCalendarClick}>캘린더에 추가</Button>
-            </BottomBody>
+            </BookmarkContainer>
+            <ButtonGroup>
+              <BottomButton onClick={handleRedirect}>사이트 바로가기</BottomButton>
+              <BottomButton onClick={handleCalendarClick}>캘린더에 추가</BottomButton>
+            </ButtonGroup>
           </BottomContainer>
           {isImageModalOpen && (
             <ImageModal
