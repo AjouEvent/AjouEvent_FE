@@ -171,8 +171,8 @@ const BookmarkContainer = styled.div`
 `;
 
 const BottomImage = styled.img`
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
 `;
 
 const ButtonGroup = styled.div`
@@ -183,7 +183,7 @@ const ButtonGroup = styled.div`
 
 const BottomButton = styled.button`
   flex: 1;
-  height: 40px; /* 버튼 높이도 조금 줄여서 여유 느낌 */
+  height: 50px; /* 버튼 높이도 조금 줄여서 여유 느낌 */
   font-family: 'Pretendard Variable';
   font-size: 14px;
   color: #2366af;
