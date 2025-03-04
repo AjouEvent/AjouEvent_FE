@@ -8,14 +8,14 @@ const FlexContainer = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
   width: 100%;
-  padding: 0 20px 0 20px;
+  padding: 0.25rem 1.5rem;
+  gap: 0.5rem;
 `;
 
 export default function HomeHotEvent() {
   const [events, setEvents] = useState([]);
   const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     const loadHotEvent = async () => {
       if (isError || loading) return;
