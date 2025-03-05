@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 const Container = styled.div`
   z-index: 1;
   display: block;
-  padding-top: 8rem;
+  padding-top: 6rem;
   width: 90%;
   height: 100vh;
   background-color: transparent;
@@ -167,11 +167,11 @@ const Description = styled.div`
   flex-direction: column;
   justify-content: space-between;
   color: #999999;
-  margin: 40px 0 20px 0;
-  font-size: 14px;
+  margin: 20px 0 10px 0;
+  font-size: 13px;
   width: 100%;
   text-align: center;
-  line-height: 1.8;
+  line-height: 1.6;
   padding: 0 1rem 0 1rem;
   .contact {
     p {
@@ -253,8 +253,8 @@ const Login = () => {
       <Description>
         <div>
           <p>
-            * AjouEvent는 2024-1학기 아주대학교 파란학기제에서 진행한 프로젝트로
-            아주대학교 공식 서비스가 아닙니다.
+            * AjouEvent는 2024-1학기 아주대학교 파란학기제에서<br /> 
+            진행한 프로젝트로 아주대학교 공식 서비스가 아닙니다.
           </p>
           <p>* AjouEvent 계정은 아주대학교 포탈 계정과 무관합니다.</p>
         </div>
