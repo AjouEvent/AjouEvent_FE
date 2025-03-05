@@ -30,8 +30,8 @@ const ring = keyframes`
 `;
 
 const BellIcon = styled.img`
-  width: 4vw;
-  height: 4vh;
+  width: 25px;  
+  height: 25px; 
   filter: ${({ isActive }) =>
     isActive
       ? 'invert(29%) sepia(97%) saturate(937%) hue-rotate(187deg) brightness(91%) contrast(90%)'
