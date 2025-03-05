@@ -168,6 +168,13 @@ const ParagraphText = styled.p`
   text-align: center;
 `;
 
+const isKakaoTalkBrowser = () => /KAKAOTALK/i.test(navigator.userAgent);
+
+const openExternalBrowser = (url = window.location.href) => {
+    const kakaoUrl = `kakaotalk://web/openExternal?url=${encodeURIComponent(url)}`;
+    window.location.href = kakaoUrl;
+};
+
 export default function HomePage() {
   const [showModal, setShowModal] = useState(false);
   const [isPWAInstalled, setIsPWAInstalled] = useState(false);
@@ -181,6 +188,12 @@ export default function HomePage() {
   const navigate = useNavigate(); // useNavigate 훅 사용
   useEffect(() => {
     GetUserPermission(setIsLoading);
+  }, []);
+
+  useEffect(() => {
+      if (isKakaoTalkBrowser()) {
+          openExternalBrowser();
+      }
   }, []);
 
   useEffect(() => {
