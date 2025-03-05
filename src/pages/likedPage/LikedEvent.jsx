@@ -6,7 +6,8 @@ const FlexContainer = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
   width: 100%;
-  padding: 0 20px 0 20px;
+  padding: 0.25rem 1.5rem;
+  gap: 0.5rem;
 `;
 
 const MessageContainer = styled.div`
@@ -42,7 +43,7 @@ const LikedEvent = ({ events, bottomRef, loading, hasMore }) => {
       </FlexContainer>
       <div ref={bottomRef} style={{ height: '1px' }}></div>
       {loading && <MessageContainer>로딩중...</MessageContainer>}
-      {!hasMore && (
+      {events.length === 0 && (
         <MessageContainer>불러올 이벤트가 없습니다.</MessageContainer>
       )}
     </>

@@ -8,11 +8,11 @@ import Swal from 'sweetalert2';
 const Container = styled.div`
   z-index: 1;
   display: block;
-  padding-top: 8rem;
+  padding-top: 6rem;
   width: 90%;
   height: 100vh;
   background-color: transparent;
-  margin: 0;
+  margin-bottom: 4rem;
   font-family: 'Pretendard Variable';
 `;
 
@@ -135,7 +135,7 @@ const GoogleLoginButton = styled.button`
     color: #000000;
     color: rgba(0, 0, 0, 0.54); // 폰트 컬러 54% 투명도
     font-size: 14px;
-    font-family: 'Roboto', system-ui;
+    font-family: 'Pretendard Variable', sans-serif;
     font-weight: 500;
     font-style: normal;
   }
@@ -146,7 +146,6 @@ const BottomLinks = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 20px auto;
-  margin-top: 20px;
   font-size: 14px;
   color: #6f6f6f;
   width: 90%;
@@ -163,13 +162,29 @@ const BottomLinks = styled.div`
   }
 `;
 
-const Description = styled.p`
+const Description = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   color: #999999;
-  margin: 40px 0 20px 0;
-  font-size: 14px;
+  margin: 20px 0 10px 0;
+  font-size: 13px;
   width: 100%;
   text-align: center;
-  line-height: 1.8;
+  line-height: 1.6;
+  padding: 0 1rem 0 1rem;
+  .contact {
+    p {
+      font-weight: 600;
+      margin: 0;
+    }
+    .contact-info {
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      gap: 10px;
+    }
+  }
 `;
 
 const LoadingOverlay = styled.div`
@@ -232,16 +247,29 @@ const Login = () => {
         <span>아직 회원이 아니신가요?</span>
         <Link to="/privacy-agreement">회원가입</Link>
       </BottomLinks>
-      <Description>
-        * AjouEvent는 2024-1학기 아주대학교 파란학기제에서
-        <br />
-        진행한 프로젝트로 아주대학교 공식 서비스가 아닙니다. <br />
-        * AjouEvent 계정은 아주대학교 포탈 계정과 무관합니다. <br />
-        서비스 문의: jysim0326@ajou.ac.kr
-      </Description>
       <LogoWrapper>
         <Logo />
       </LogoWrapper>
+      <Description>
+        <div>
+          <p>
+            * AjouEvent는 2024-1학기 아주대학교 파란학기제에서<br /> 
+            진행한 프로젝트로 아주대학교 공식 서비스가 아닙니다.
+          </p>
+          <p>* AjouEvent 계정은 아주대학교 포탈 계정과 무관합니다.</p>
+        </div>
+        <div className="contact">
+          <p> 서비스 문의</p>
+          <div className="contact-info">
+            <a href="mailto:jysim0326@ajou.ac.kr?subject=ajouevent 서비스 문의">
+              BE: 심재엽
+            </a>
+            <a href="mailto:ysc0731@ajou.ac.kr?subject=ajouevent 서비스 문의">
+              FE: 윤석찬
+            </a>
+          </div>
+        </div>
+      </Description>
     </Container>
   );
 };

@@ -8,48 +8,40 @@ import Swal from 'sweetalert2';
 
 const CardContainer = styled.div`
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
+  align-items: center;
+  gap: 1rem;
   align-self: stretch;
-  width: calc(100vw - 40px);
-  height: 144px;
-  text-decoration: none;
-  margin-top: 24px;
+  width: 100%;
+  height: 5rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   cursor: pointer;
+  padding: 0.5rem 0;
 `;
 
 const Image = styled.img`
-  border-radius: 20px;
+  border-radius: 0.5rem;
   overflow: hidden;
-  width: 120px;
-  height: 120px;
+  width: 100%;
+  height: 100%;
 `;
 
 const DetailsContainer = styled.div`
   display: flex;
-  width: calc(100vw - 176px);
-  height: 120px;
+  height: 100%;
+  width: calc(100% - 5rem);
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 8px;
-`;
-
-const ImageWapper = styled.div`
-  width: 25px;
-  height: 25px;
-  object-fit: cover;
-  cursor: pointer;
+  gap: 0.2rem;
 `;
 
 const TitleText = styled.div`
   display: flex;
   width: 100%;
-  height: 40px;
-  color: #000;
-  font-family: 'Pretendard Variable';
-  font-size: 16px;
+  height: fit-content;
+  color: black;
+  font-family: 'Pretendard Variable', sans-serif;
+  font-size: 12px;
   font-style: normal;
   font-weight: 600;
   line-height: 120%;
@@ -66,7 +58,7 @@ const SubDetailContainer = styled.div`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 600;
   color: gray;
   font-family: 'Pretendard Variable';
@@ -74,57 +66,60 @@ const SubDetailContainer = styled.div`
 
 const LikeContainer = styled.div`
   display: flex;
-  width: 30px;
-  justify-content: space-between;
+  width: 1rem;
+  height: 1rem;
+  justify-content: center;
   align-items: center;
 `;
 
 const TagContaioner = styled.div`
   display: flex;
   width: 100%;
+  height: fit-content;
   justify-content: space-between;
   align-items: end;
 `;
 
 const CardImageWapper = styled.div`
   object-fit: cover;
-  width: 120px;
-  height: 120px;
+  width: 4rem;
+  height: 4rem;
 `;
 
 const TitleContainer = styled.div`
   display: flex;
   width: 100%;
+  height: fit-content;
   flex-direction: column;
-  gap: 6px;
+  gap: 0.2rem;
 `;
 
 const Subject = styled.div`
   width: fit-content;
   padding: 3px 4px;
-  height: 20px;
+  height: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 4px;
   background: rgba(84, 84, 84, 0.08);
-  font-size: 14px;
+  font-size: 10px;
   color: rgba(84, 84, 84);
-  font-weight: bold;
-  font-family: 'Pretendard Variable';
+  font-weight: 700;
+  font-family: 'Pretendard Variable', sans-serif;
 `;
 
 const Stats = styled.div`
-  align-self: start;
+  align-items: start;
   display: flex;
   color: #c2c8d1;
   white-space: nowrap;
   text-align: center;
+  gap: 0.5rem;
 `;
 
 const StatItem = styled.div`
   display: flex;
-  padding-right: 20px;
   gap: 4px;
 `;
 
@@ -132,10 +127,11 @@ const StatIcon = styled.img`
   aspect-ratio: 1;
   object-fit: auto;
   object-position: center;
-  width: 14px;
+  width: 0.75rem;
 `;
 
 const StatValue = styled.span`
+  font-size: 12px;
   font-family: 'Pretendard Variable';
 `;
 
@@ -212,12 +208,12 @@ const EventCard = ({
       </CardImageWapper>
       <DetailsContainer>
         <TitleContainer>
-          <Subject>{subject}</Subject>
           <TitleText>{title}</TitleText>
           <SubDetailContainer>{formattedContent}</SubDetailContainer>
         </TitleContainer>
         <TagContaioner>
           <Stats>
+            <Subject>{subject}</Subject>
             <Stat
               iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/62c7bb15f5fd13739601caff1be349795102bd00b8ccfe603cd2e43498657c46?apiKey=75213697ab8e4fbfb70997e546d69efb&"
               value={viewCount}
@@ -230,14 +226,12 @@ const EventCard = ({
               altText="Statistic icon 2"
             />
           </Stats>
-          <LikeContainer>
-            <ImageWapper onClick={handleStarClick}>
-              {cardStar ? (
-                <FilledStarIcon></FilledStarIcon>
-              ) : (
-                <EmptyStarIcon></EmptyStarIcon>
-              )}
-            </ImageWapper>
+          <LikeContainer onClick={handleStarClick}>
+            {cardStar ? (
+              <FilledStarIcon></FilledStarIcon>
+            ) : (
+              <EmptyStarIcon></EmptyStarIcon>
+            )}
           </LikeContainer>
         </TagContaioner>
       </DetailsContainer>

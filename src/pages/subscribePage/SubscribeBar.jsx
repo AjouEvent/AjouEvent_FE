@@ -3,6 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import useStore from '../../store/useStore';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import Swal from 'sweetalert2';
+import SubscribeStatusDropdown from './SubscribeStatusDropdown'; 
 
 const Container = styled.div`
   display: flex;
@@ -140,78 +141,6 @@ const ModalHeaderIcon = styled.img`
   width: 20px;
   object-fit: contain;
   object-position: center;
-`;
-
-const BellIcon = styled.button`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 16px;
-  background-color: ${(props) => (props.isProcessing ? '#e0e0e0' : '#f5f5f5')};
-  color: #000000;
-  font-family: 'Pretendard Variable', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 50px;
-  border: none;
-  cursor: ${(props) => (props.isProcessing ? 'not-allowed' : 'pointer')};
-  gap: 8px;
-  white-space: nowrap;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: ${(props) =>
-      props.isProcessing ? '#e0e0e0' : '#e6e6e6'};
-  }
-
-  animation: ${(props) => (props.ringing ? gradientChange : 'none')} 2s
-    ease-in-out;
-
-  img {
-    animation: ${(props) => (props.ringing ? ring : 'none')} 1s ease-in-out;
-  }
-
-  span {
-    animation: ${(props) => (props.ringing ? ringText : 'none')} 1s ease-in-out;
-  }
-`;
-
-const gradientChange = keyframes`
-  0% { background-color: #f5f5f5; }
-  10% { background-color: #e0edf8; }
-  20% { background-color: #c9e0f2; }
-  30% { background-color: #b3d3ec; }
-  40% { background-color: #9cc7e6; }
-  50% { background-color: #92C1E9; }
-  60% { background-color: #9cc7e6; }
-  70% { background-color: #b3d3ec; }
-  80% { background-color: #c9e0f2; }
-  90% { background-color: #e0edf8; }
-  100% { background-color: #f5f5f5; }
-`;
-
-const IconImage = styled.img`
-  width: 18px;
-  height: 18px;
-  object-fit: contain;
-`;
-
-// Keyframes for bell ringing animation
-const ring = keyframes`
-  0% { transform: rotate(0); }
-  25% { transform: rotate(-15deg); }
-  50% { transform: rotate(15deg); }
-  75% { transform: rotate(-15deg); }
-  100% { transform: rotate(0); }
-`;
-
-// Keyframes for text animation
-const ringText = keyframes`
-  0% { transform: rotate(0); }
-  25% { transform: rotate(-15deg); }
-  50% { transform: rotate(15deg); }
-  75% { transform: rotate(-15deg); }
-  100% { transform: rotate(0); }
 `;
 
 const SubscribeButton = styled.button`
@@ -393,8 +322,8 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
         { topic: topic.englishTopic },
       );
 
-      // 구독에 성공한 후 subscribeItems를 새로 불러오기
-      await fetchSubscribeItems();
+      // 구독에 성공한 후 사용자가 구독하고 있는 항목을 새로 불러오기
+      await fetchMenuItems();
 
       // 구독에 성공하면 isTopicTabRead를 false로 설정하여 읽지 않은 항목이 있음을 표시
       setIsTopicTabRead(false);
@@ -437,48 +366,6 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
     }
   };
 
-  const handleUnsubscribe = async (topic) => {
-    if (isProcessing) return;
-
-    setIsProcessing(true);
-
-    try {
-      Toast.fire({
-        icon: 'info',
-        title: `${topic.koreanTopic} 구독 취소 중`,
-      });
-
-      await requestWithAccessToken(
-        'post',
-        `${process.env.REACT_APP_BE_URL}/api/topic/unsubscribe`,
-        { topic: topic.englishTopic },
-      );
-
-      Swal.fire({
-        icon: 'success',
-        title: '구독 취소 성공',
-        text: `${topic.koreanTopic}를 구독 취소하셨습니다`,
-      });
-
-      setMenuItems((prevMenuItems) =>
-        prevMenuItems.map((item) =>
-          item.koreanTopic === topic.koreanTopic
-            ? { ...item, subscribed: false }
-            : item,
-        ),
-      );
-    } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: '구독 실패',
-        text: '서버 에러',
-      });
-      console.error('Error unsubscribing from topic:', error);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
   const categorizeAndSortItems = (items) => {
     const categories = {
       학과: [],
@@ -511,10 +398,9 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
             <ViewAllIcon src={`${process.env.PUBLIC_URL}/icons/gear.svg`} />
             <p>구독 설정</p>
           </ViewAllButton>
-          <InlineTooltip show={showGuide}>
-            클릭해서 구독하기
-          </InlineTooltip>
+          <InlineTooltip show={showGuide}>클릭해서 구독하기</InlineTooltip>
         </ViewAllButtonWrapper>
+
         <MenuItemContainer>
           {Array.isArray(subscribeItems) ? (
             subscribeItems.map((item) => (
@@ -544,6 +430,7 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
               />
               <ModalHeaderTitle>전체 구독 항목</ModalHeaderTitle>
             </ModalHeader>
+
             {Object.keys(categorizedItems).map((category) => (
               <div key={category}>
                 <CategoryTitle onClick={() => handleCategoryClick(category)}>
@@ -558,28 +445,20 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
                     style={{ width: '24px', height: '24px' }}
                   />
                 </CategoryTitle>
+
                 {openCategory === category &&
                   categorizedItems[category].map((item) => (
                     <MenuItemInModal key={item.id}>
                       <div>{item.koreanTopic}</div>
                       <div>
                         {item.subscribed ? (
-                          <BellIcon
-                            onClick={() => handleUnsubscribe(item)}
-                            loading="lazy"
+                          <SubscribeStatusDropdown
+                            topic={item}
+                            fetchMenuItems={fetchMenuItems}
                             ringing={ringingTopics[item.id]}
-                          >
-                            <IconImage
-                              src={`${process.env.PUBLIC_URL}/icons/alarm_filled.svg`}
-                              alt="구독중 아이콘"
-                            />
-                            <span>구독중</span>
-                          </BellIcon>
+                          />
                         ) : (
-                          <SubscribeButton
-                            onClick={() => handleSubscribe(item)}
-                            loading="lazy"
-                          >
+                          <SubscribeButton onClick={() => handleSubscribe(item)}>
                             구독
                           </SubscribeButton>
                         )}

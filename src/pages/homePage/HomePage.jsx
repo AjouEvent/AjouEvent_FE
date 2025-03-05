@@ -183,6 +183,19 @@ export default function HomePage() {
     GetUserPermission(setIsLoading);
   }, []);
 
+  const isKakaoTalkBrowser = () => /KAKAOTALK/i.test(navigator.userAgent);
+
+  const openExternalBrowser = (url = window.location.href) => {
+      const kakaoUrl = `kakaotalk://web/openExternal?url=${encodeURIComponent(url)}`;
+      window.location.href = kakaoUrl;
+  };
+
+  useEffect(() => {
+      if (isKakaoTalkBrowser()) {
+          openExternalBrowser();
+      }
+  }, []);
+
   useEffect(() => {
     const fetchBannerImages = async () => {
       setIsLoading(true);
