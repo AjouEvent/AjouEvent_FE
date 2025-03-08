@@ -88,21 +88,6 @@ const useStore = create((set, get) => ({
         isTopicTabRead: allTopicsRead,
         isSubscribedTabRead: allTopicsRead && allKeywordsRead,
       });
-
-      // 모든 항목이 읽음 상태일 경우 서버에 읽음 상태 업데이트
-      if (allTopicsRead && !state.isTopicTabRead) {
-        try {
-          await requestWithAccessToken(
-            'post',
-            `${process.env.REACT_APP_BE_URL}/api/event/updateTopicTabRead`,
-          );
-        } catch (error) {
-          console.error(
-            'Error updating topic read status on the server:',
-            error,
-          );
-        }
-      }
     }),
 
   // 특정 토픽을 읽음 상태로 변경하고 전체 읽음 상태를 갱신하는 함수
@@ -126,43 +111,15 @@ const useStore = create((set, get) => ({
         isKeywordTabRead: allKeywordsRead,
         isSubscribedTabRead: allTopicsRead && allKeywordsRead, 
       });
-
-      // 모든 항목이 읽음 상태일 경우 서버에 읽음 상태 업데이트
-      if (allKeywordsRead && !state.isKeywordTabRead) {
-        // 중복 API 호출 방지
-        try {
-          await requestWithAccessToken(
-            'post',
-            `${process.env.REACT_APP_BE_URL}/api/event/updateKeywordTabRead`,
-          );
-        } catch (error) {
-          console.error(
-            'Error updating keyword read status on the server:',
-            error,
-          );
-        }
-      }
     }),
 
   // 읽음 상태 업데이트
   setIsTopicTabRead: async (isRead) => {
     set({ isTopicTabRead: isRead });
-    if (isRead) {
-      await requestWithAccessToken(
-        'post',
-        `${process.env.REACT_APP_BE_URL}/api/event/updateTopicTabRead`,
-      );
-    }
   },
 
   setIsKeywordTabRead: async (isRead) => {
     set({ isKeywordTabRead: isRead });
-    if (isRead) {
-      await requestWithAccessToken(
-        'post',
-        `${process.env.REACT_APP_BE_URL}/api/event/updateKeywordTabRead`,
-      );
-    }
   },
 
   setIsSubscribedTabRead: (isRead) => set({ isSubscribedTabRead: isRead }),
