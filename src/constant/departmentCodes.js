@@ -44,9 +44,10 @@ const KtoECodes = {
   인문대학: 'Humanities',
   자연과학대학: 'NaturalScience',
   전자공학과: 'ElectricalComputerEngineering',
-  정보통신대학: 'InformationTechnology',
   정치외교학과: 'PoliticalScienceDiplomacy',
   지능형반도체공학과: 'IntelligenceSemiconductorEngineering',
+  첨단ICT융합대학: 'InformationTechnology',
+  첨단바이오융합대학: 'BioConvergenceEngineering',
   첨단신소재공학과: 'MaterialsScienceEngineering',
   행정학과: 'PublicAdministration',
   화학공학과: 'ChemicalEngineering',
@@ -105,7 +106,7 @@ const EtoKCodes = {
   Humanities: '인문대학',
   NaturalScience: '자연과학대학',
   ElectricalComputerEngineering: '전자공학과',
-  InformationTechnology: '정보통신대학',
+  InformationTechnology: '첨단ICT융합대학',
   PoliticalScienceDiplomacy: '정치외교학과',
   IntelligenceSemiconductorEngineering: '지능형반도체공학과',
   MaterialsScienceEngineering: '첨단신소재공학과',
@@ -117,7 +118,8 @@ const EtoKCodes = {
   AppliedChemistry: '응용화학과',
   EconomicPoliticalAndSocialStudies: '경제정치사회융합학부',
   FrontierSciences: '프런티어과학학부',
-  LiberalStudies: '자유전공학부'
+  LiberalStudies: '자유전공학부',
+  BioConvergenceEngineering: '첨단바이오융합대학'
 };
 
 const priorityOrder = [
@@ -179,6 +181,7 @@ const priorityOrder = [
   'EconomicPoliticalAndSocialStudies',
   'FrontierSciences',
   'LiberalStudies',
+  'BioConvergenceEngineering',
 ];
 
 export { KtoECodes, EtoKCodes, priorityOrder };
