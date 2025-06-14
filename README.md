@@ -1,24 +1,6 @@
 # AjouEvent_FE
 
-npm install react-router-dom
-npm install styled-components
-npm install axios
-npm install firebase
-
-npm i --save @fortawesome/fontawesome-svg-core
-npm i --save @fortawesome/free-solid-svg-icons
-npm i --save @fortawesome/free-regular-svg-icons
-npm i --save @fortawesome/free-brands-svg-icons
-npm i --save @fortawesome/react-fontawesome@latest
-npm install sweetalert2
-
-npm i zustand
-
-npm install dotenv (.env)
-npm install react-intersection-observer --save (무한스크롤)
-
-npm install react-ga --save
-npm install react-bootstrap bootstrap
+![ajouevent_홍보_page-0001](https://github.com/user-attachments/assets/93b9314f-9d0b-4502-9950-8ffe0545dcfb)
 
 version guide
 24.06.06 - 0.0.1
