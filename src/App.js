@@ -15,7 +15,7 @@ import GuidePage from './pages/GuidePage';
 import ProfileModificationPage from './pages/myPage/ProfileModificationPage';
 import DeleteAccountPage from './pages/myPage/DeleteAccountPage';
 import SignUpSelectPage from './pages/signupPage/SignUpSelectPage';
-import RegisterMemberInfoPage from './pages/signupPage/RegisterMebmerInfoPage';
+import RegisterMemberInfoPage from './pages/signupPage/RegisterMemberInfoPage';
 import PrivacyAgreementPage from './pages/signupPage/PrivacyAgreementPage';
 import NotificationPage from './pages/notificationPage/NotificationPage';
 import EventDetailPage from "./pages/eventPage/EventDetailPage";
