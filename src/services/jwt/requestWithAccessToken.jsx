@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { clearAuth } from '../../utils/auth';
 
 export default async function requestWithAccessToken(method, url, data = null) {
   const accessToken = localStorage.getItem('accessToken');
@@ -68,12 +69,7 @@ async function refreshAccessToken() {
 
   try {
     if (!refreshToken) {
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('email');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('id');
-      localStorage.removeItem('name');
-      localStorage.removeItem('major');
+      clearAuth();
       window.location.href = '/login';
     }
 
@@ -90,12 +86,7 @@ async function refreshAccessToken() {
     if (error.response && error.response.status === 401) {
       console.log('refresh token 401 error');
       // localStorage 초기화 및 리다이렉션 수행
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('email');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('id');
-      localStorage.removeItem('name');
-      localStorage.removeItem('major');
+      clearAuth();
       Swal.fire({
         icon: 'warning',
         title: '타임오버',
@@ -103,12 +94,7 @@ async function refreshAccessToken() {
       });
       window.location.href = '/login';
     } else {
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('email');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('id');
-      localStorage.removeItem('name');
-      localStorage.removeItem('major');
+      clearAuth();
       Swal.fire({
         icon: 'warning',
         title: '타임오버',
