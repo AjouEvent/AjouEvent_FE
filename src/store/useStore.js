@@ -151,9 +151,11 @@ const useStore = create((set, get) => ({
         'get',
         `${process.env.REACT_APP_BE_URL}/api/subscriptions/isSubscribedTabRead`,
       );
-      set({
-        isSubscribedTabRead: response.data.subscribedTabRead,
-      });
+      if (response) {
+        set({
+          isSubscribedTabRead: response.data.subscribedTabRead,
+        });
+      }
     } catch (error) {
       console.error('Error fetching read status', error);
     }

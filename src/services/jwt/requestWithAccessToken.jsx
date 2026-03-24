@@ -1,122 +1,87 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+const axiosInstance = axios.create({
+  withCredentials: true,
+});
+
 export default async function requestWithAccessToken(method, url, data = null) {
   const accessToken = localStorage.getItem('accessToken');
 
+  const config = accessToken
+    ? { headers: { Authorization: `Bearer ${accessToken}` } }
+    : {};
+
   try {
     let response;
-    const config = accessToken
-      ? {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      : {};
-
     if (method === 'get') {
-      response = await axios.get(url, config);
+      response = await axiosInstance.get(url, config);
     } else if (method === 'post') {
-      response = await axios.post(url, data, config);
+      response = await axiosInstance.post(url, data, config);
     } else if (method === 'patch') {
-      response = await axios.patch(url, data, config);
+      response = await axiosInstance.patch(url, data, config);
     } else if (method === 'delete') {
-      response = await axios.delete(url, config);
+      response = await axiosInstance.delete(url, config);
     }
     return response;
   } catch (error) {
-    // accessToken이 만료되었을 때
     if (error.response && error.response.status === 401) {
-      console.log('Access Token 401Error');
-      // 새로운 accessToken 얻기 시도
       const newAccessToken = await refreshAccessToken();
+      if (!newAccessToken) return null;
 
-      const newConfig = newAccessToken
-        ? {
-            headers: {
-              Authorization: `Bearer ${newAccessToken}`,
-            },
-          }
-        : {};
+      const newConfig = {
+        headers: { Authorization: `Bearer ${newAccessToken}` },
+      };
 
-      // 새로운 accessToken으로 다시 요청
       let response;
-      console.log('New Access Token request');
       if (method === 'get') {
-        response = await axios.get(url, newConfig);
+        response = await axiosInstance.get(url, newConfig);
       } else if (method === 'post') {
-        response = await axios.post(url, data, newConfig);
+        response = await axiosInstance.post(url, data, newConfig);
       } else if (method === 'patch') {
-        response = await axios.patch(url, data, newConfig);
+        response = await axiosInstance.patch(url, data, newConfig);
       } else if (method === 'delete') {
-        response = await axios.delete(url, newConfig);
+        response = await axiosInstance.delete(url, newConfig);
       }
-      console.error(
-        `Response making ${method} request with access token:`,
-        response,
-      );
       return response;
     } else {
-      console.error(`Error making ${method} request with access token:`, error);
+      console.error(`Error making ${method} request:`, error);
       throw error;
     }
   }
 }
 
 async function refreshAccessToken() {
-  const refreshToken = localStorage.getItem('refreshToken');
+  // 인증이 필요 없는 페이지면 리다이렉트 방지
+  const publicPaths = ['/login', '/loginSuccess', '/privacy-agreement', '/signUp'];
+  if (publicPaths.some(path => window.location.pathname.startsWith(path))) {
+    return null;
+  }
 
   try {
-    if (!refreshToken) {
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('email');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('id');
-      localStorage.removeItem('name');
-      localStorage.removeItem('major');
-      window.location.href = '/login';
-    }
-
-    const response = await axios.patch(
+    // refreshToken은 HttpOnly 쿠키로 자동 전송 (withCredentials)
+    const response = await axiosInstance.patch(
       `${process.env.REACT_APP_BE_URL}/api/users/reissue-token`,
-      { refreshToken },
     );
     const newAccessToken = response.data.accessToken;
-    console.log('refresh token respon' + newAccessToken);
     localStorage.setItem('accessToken', newAccessToken);
     return newAccessToken;
   } catch (error) {
-    // refreshToken이 만료되었을 경우
-    if (error.response && error.response.status === 401) {
-      console.log('refresh token 401 error');
-      // localStorage 초기화 및 리다이렉션 수행
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('email');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('id');
-      localStorage.removeItem('name');
-      localStorage.removeItem('major');
-      Swal.fire({
-        icon: 'warning',
-        title: '타임오버',
-        text: '로그인 시간이 만료되어 로그아웃 되었습니다.',
-      });
-      window.location.href = '/login';
-    } else {
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('email');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('id');
-      localStorage.removeItem('name');
-      localStorage.removeItem('major');
-      Swal.fire({
-        icon: 'warning',
-        title: '타임오버',
-        text: '로그인 시간이 만료되어 로그아웃 되었습니다.',
-      });
-      console.error('Error refreshing access token:', error);
-      window.location.href = '/login';
-      throw error;
-    }
+    clearAuthAndRedirect();
+    return null;
   }
+}
+
+function clearAuthAndRedirect() {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('email');
+  localStorage.removeItem('id');
+  localStorage.removeItem('name');
+  localStorage.removeItem('major');
+  Swal.fire({
+    icon: 'warning',
+    title: '타임오버',
+    text: '로그인 시간이 만료되어 로그아웃 되었습니다.',
+  });
+  window.location.href = '/login';
 }

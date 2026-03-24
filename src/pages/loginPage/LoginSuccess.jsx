@@ -66,9 +66,11 @@ const LoginSuccess = () => {
           const response = await axios.post(
             `${process.env.REACT_APP_BE_URL}/api/users/oauth`,
             loginData,
+            { withCredentials: true },
           );
 
           if (response.status === 200) {
+            console.log('[LoginSuccess] response.data:', response.data);
             const {
               id,
               accessToken,
@@ -78,6 +80,7 @@ const LoginSuccess = () => {
               major,
               isNewMember,
             } = response.data;
+            console.log('[LoginSuccess] isNewMember:', isNewMember);
 
             localStorage.setItem('id', id);
             localStorage.setItem('accessToken', accessToken);
