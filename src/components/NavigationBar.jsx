@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PWAPrompt from 'react-ios-pwa-prompt';
 import useStore from '../store/useStore';
-import { Z_INDEX } from '../constant/appConstants';
+import { Z_INDEX, COLORS } from '../constant/appConstants';
 
 const NavWrapper = styled.nav`
   z-index: ${Z_INDEX.NAV};
@@ -14,7 +14,7 @@ const NavWrapper = styled.nav`
   justify-content: center;
   width: 100%;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
   flex-direction: column;
   font-size: 12px;
   font-family: 'Pretendard Variable';
@@ -39,7 +39,7 @@ const NavItem = styled.li`
   flex: 1;
   padding: 0 14px;
   align-items: center;
-  color: ${(props) => (props.active ? '#2366af' : '#b8bfc6')};
+  color: ${(props) => (props.active ? COLORS.BLUE_SECONDARY : '#b8bfc6')};
   cursor: pointer;
   position: relative;
 `;

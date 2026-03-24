@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Carousel from 'react-bootstrap/Carousel';
+import { COLORS } from '../../constant/appConstants';
 
 const BannerContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
   height: 100vw;
   width: 100%;
 `;
@@ -67,7 +68,7 @@ const SlideCount = styled.div`
   position: absolute;
   bottom: 10px;
   right: 10px;
-  background: rgba(0, 0, 0, 0.5);
+  background: ${COLORS.OVERLAY_BLACK};
   color: white;
   padding: 5px 10px;
   border-radius: 5px;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Swal from "sweetalert2";
-import { Z_INDEX } from '../constant/appConstants';
+import { Z_INDEX, COLORS } from '../constant/appConstants';
 
 const Container = styled.div`
     z-index: ${Z_INDEX.PAGE};
@@ -18,7 +18,7 @@ const Container = styled.div`
 `;
 
 const Heading = styled.h1`
-    color: #000000;
+    color: ${COLORS.BLACK};
     font-size: 24px;
     font-weight: 700;
     text-align: left;
@@ -62,7 +62,7 @@ const CheckboxBlock = styled.div`
         appearance: none;
         width: 20px;
         height: 20px;
-        border: 1px solid #cdcdcd;
+        border: 1px solid ${COLORS.BORDER_GARY};
         border-radius: 50%; /* Make it round */
         outline: none;
         cursor: pointer;
@@ -98,7 +98,7 @@ const CheckboxBlock = styled.div`
 
   span {
     margin-left: auto; /* 오른쪽 정렬 */
-    color: #cccccc; /* 연한 회색 */
+    color: ${COLORS.BORDER_GARY}; /* 연한 회색 */
     cursor: pointer; /* 클릭 가능하게 */
   }
 `;
@@ -116,7 +116,7 @@ const SelectAllBlock = styled.div`
     label {
         font-size: 16px;
         font-weight: 700;
-        color: #333333;
+        color: ${COLORS.DARK_GRAY_TEXT};
         margin-left: 10px;
     }
 `;

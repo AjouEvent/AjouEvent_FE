@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import Swal from 'sweetalert2';
-import { Z_INDEX } from '../../constant/appConstants';
+import { COLORS, Z_INDEX } from '../../constant/appConstants';
 
 const Wrapper = styled.div`
   position: relative;
@@ -13,7 +13,7 @@ const DropdownButton = styled.button`
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #f5f5f5;
+  background: ${COLORS.OFF_WHITE};
   padding: 6px 12px;
   border: none;
   border-radius: 50px;
@@ -47,7 +47,7 @@ const DropdownMenu = styled.ul`
   background: white;
   list-style: none;
   padding: 6px 0;
-  border: 1px solid #ddd;
+  border: 1px solid ${COLORS.BORDER_GARY};
   border-radius: 8px;
   width: 130px;
   z-index: ${Z_INDEX.DROPDOWN};
@@ -59,10 +59,10 @@ const MenuItem = styled.li`
   justify-content: space-between;
   align-items: center;
   cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-  color: ${(props) => (props.disabled ? '#bbb' : '#000')};
+  color: ${(props) => (props.disabled ? '#bbb' : COLORS.BLACK)};
   pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
   &:hover {
-    background-color: ${(props) => (props.disabled ? 'transparent' : '#f0f0f0')};
+    background-color: ${(props) => (props.disabled ? 'transparent' : COLORS.OFF_WHITE)};
   }
 `;
 
@@ -78,7 +78,7 @@ const Icon = styled.img`
 `;
 
 const Check = styled.span`
-  color: #0072ce;
+  color: ${COLORS.BLUE_BRIGHT};
   font-weight: bold;
 `;
 

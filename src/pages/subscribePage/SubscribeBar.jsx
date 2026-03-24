@@ -4,7 +4,7 @@ import useStore from '../../store/useStore';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import Swal from 'sweetalert2';
 import SubscribeStatusDropdown from './SubscribeStatusDropdown';
-import { LIMITS, Z_INDEX } from '../../constant/appConstants';
+import { COLORS, LIMITS, Z_INDEX } from '../../constant/appConstants';
 
 const Container = styled.div`
   display: flex;
@@ -20,7 +20,7 @@ const MenuBarContainer = styled.div`
   align-items: center;
   overflow-x: auto;
   white-space: nowrap;
-  background: #ffffff;
+  background: ${COLORS.WHITE};
   padding: ${({ highlight }) => (highlight ? '18px 10px 18px 12px' : '12px 10px 0px 16px')};
   font-family: 'Pretendard Variable';
   font-weight: 600;
@@ -40,8 +40,8 @@ const MenuItemContainer = styled.div`
 `;
 
 const MenuItem = styled.div`
-  background-color: ${(props) => (props.isSelected ? '#0A5CA8' : '#ffffff')};
-  color: ${(props) => (props.isSelected ? '#ffffff' : '#000000')};
+  background-color: ${(props) => (props.isSelected ? COLORS.BLUE_MEDIUM : COLORS.WHITE)};
+  color: ${(props) => (props.isSelected ? COLORS.WHITE : COLORS.BLACK)};
   display: flex;
   height: fit-content;
   padding: 8px 12px;
@@ -50,7 +50,7 @@ const MenuItem = styled.div`
   align-items: center;
   gap: 4px;
   border-radius: 600px;
-  border: 2px solid #f7f7f7;
+  border: 2px solid ${COLORS.OFF_WHITE};
   cursor: pointer;
 `;
 
@@ -68,8 +68,8 @@ const ViewAllButton = styled.div`
   align-items: center;
   gap: 4px;
   border-radius: 600px;
-  border: 2px solid #f7f7f7;
-  background-color: #ffffff;
+  border: 2px solid ${COLORS.OFF_WHITE};
+  background-color: ${COLORS.WHITE};
   cursor: pointer;
   font-size: 14px;
   white-space: nowrap;
@@ -77,14 +77,14 @@ const ViewAllButton = styled.div`
   animation: ${({ highlight }) => highlight ? glowAnimation : 'none'} 1.5s infinite;
 
   background-color: ${(props) =>
-    props.isSelected ? '#e0e0e0' : '#ffffff'}; /* 항상 회색 유지 */
+    props.isSelected ? COLORS.LIGHT_GARY : COLORS.WHITE}; /* 항상 회색 유지 */
   p {
     margin: 0
 `;
 
 const InlineTooltip = styled.div`
-  background-color: #0072ce;
-  color: #ffffff;
+  background-color: ${COLORS.BLUE_BRIGHT};
+  color: ${COLORS.WHITE};
   padding: 4px 8px;
   border-radius: 12px;
   font-size: 11px;
@@ -119,7 +119,7 @@ const ModalOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: ${COLORS.OVERLAY_BLACK};
   z-index: ${Z_INDEX.MODAL};
 `;
 
@@ -149,8 +149,8 @@ const SubscribeButton = styled.button`
   justify-content: center;
   align-items: center;
   padding: 10px 20px;
-  background-color: #0072ce;
-  color: #ffffff;
+  background-color: ${COLORS.BLUE_BRIGHT};
+  color: ${COLORS.WHITE};
   font-family: 'Pretendard Variable', sans-serif;
   font-size: 16px;
   font-weight: 600;
@@ -161,12 +161,12 @@ const SubscribeButton = styled.button`
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   gap: 8px;
   &:hover {
-    background-color: #e0e0e0;
+    background-color: ${COLORS.LIGHT_GARY};
   }
 `;
 
 const ModalHeaderTitle = styled.h1`
-  color: #000;
+  color: ${COLORS.BLACK};
   font-family: 'Pretendard Variable';
   font-size: 18px;
   font-style: normal;
@@ -188,7 +188,7 @@ const MenuItemInModal = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid ${COLORS.LIGHT_GARY};
   font-family: 'Pretendard Variable';
   font-weight: 600;
 `;
@@ -199,7 +199,7 @@ const CategoryTitle = styled.h2`
   font-weight: 700;
   margin-top: 40px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid ${COLORS.LIGHT_GARY};
   display: flex;
   justify-content: space-between;
   align-items: center;

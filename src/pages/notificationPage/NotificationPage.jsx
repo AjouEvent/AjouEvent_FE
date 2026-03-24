@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import TabBar from '../../components/TabBar';
 import NotificationList from './NotificationList';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import { COLORS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
@@ -50,8 +51,8 @@ const KeywordRegistrationBanner = styled.div`
 `;
 
 const StyledButton = styled.button`
-  background-color: #0a5ca8;
-  color: #fff;
+  background-color: ${COLORS.BLUE_MEDIUM};
+  color: ${COLORS.WHITE};
   padding: 4px 14px;
   font-size: 16px;
   border: none;
@@ -61,13 +62,13 @@ const StyledButton = styled.button`
   font-weight: 500;
   transition: background-color 0.3s ease-in-out;
   &:hover {
-    background-color: #1a4f8b;
+    background-color: ${COLORS.BLUE_DARK};
   }
 `;
 
 const MarkAllAsReadButton = styled.button`
-  background-color: #0a5ca8;
-  color: #fff;
+  background-color: ${COLORS.BLUE_MEDIUM};
+  color: ${COLORS.WHITE};
   padding: 4px 14px;
   font-size: 16px;
   border: none;
@@ -77,7 +78,7 @@ const MarkAllAsReadButton = styled.button`
   font-weight: 500;
   transition: background-color 0.3s ease-in-out;
   &:hover {
-    background-color: #1a4f8b;
+    background-color: ${COLORS.BLUE_DARK};
   }
 `;
 

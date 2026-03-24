@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import useStore from '../store/useStore';
-import { Z_INDEX } from '../constant/appConstants';
+import { Z_INDEX, COLORS } from '../constant/appConstants';
 
 const Title = styled.h2`
   padding-top: 5%;
@@ -66,7 +66,7 @@ const InputField = styled.div`
     height: 2.5rem;
     padding-left: 10px;
     font-size: 14px;
-    border: 1px solid #cdcdcd;
+    border: 1px solid ${COLORS.BORDER_GARY};
     border-radius: 5px;
   }
 

@@ -8,6 +8,7 @@ import {
   대학원,
   기숙사,
 } from '../../constant/searchDropOption';
+import { COLORS } from '../../constants/appConstants';
 
 function FilterOption({
   label,
@@ -180,7 +181,7 @@ const FilterOptionWrapper = styled.div`
   width: 150px;
   flex-direction: column;
   justify-content: center;
-  background-color: #fff;
+  background-color: ${COLORS.WHITE};
   border: 1px solid rgba(229, 232, 235, 1);
   border-radius: 50px;
 `;

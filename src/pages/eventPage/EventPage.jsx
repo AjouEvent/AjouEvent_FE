@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { COLORS } from '../../constant/appConstants';
 import EventMain from '../events/EventMain';
 import NavigationBar from '../../components/NavigationBar';
 import SearchDropBox from '../../searchPage/SearchDropBox';
@@ -10,7 +11,7 @@ const AppContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
   height: 100vh;
 `;
 

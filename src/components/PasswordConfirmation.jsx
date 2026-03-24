@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { STORAGE_KEYS } from '../constant/appConstants';
+import { STORAGE_KEYS, COLORS } from '../constant/appConstants';
 
 const PasswordConfirmContainer = styled.div`
   display: flex;
@@ -32,7 +32,7 @@ const TapIcon = styled.img`
 `;
 
 const TapTitle = styled.div`
-  color: #000;
+  color: ${COLORS.BLACK};
   font-family: "Pretendard Variable";
   font-size: 18px;
   font-style: normal;
@@ -61,7 +61,7 @@ const InputLabel = styled.p`
 
 const Input = styled.input`
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid ${COLORS.BORDER_GARY};
   border-radius: 4px;
   font-size: 1rem;
   flex-grow: 1;
@@ -96,7 +96,7 @@ const Button = styled.button`
   margin-top: 20px;
 
   &:hover {
-    background-color: #333;
+    background-color: ${COLORS.DARK_GRAY_TEXT};
   }
 `;
 

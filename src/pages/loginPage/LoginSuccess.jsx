@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
-import { LIMITS, STORAGE_KEYS } from '../../constant/appConstants';
+import { LIMITS, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
 
 const Container = styled.div`
   width: 100%;
@@ -12,7 +12,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #000;
+  color: ${COLORS.BLACK};
   font-family: 'Pretendard Variable';
   font-size: 26px;
   font-style: normal;

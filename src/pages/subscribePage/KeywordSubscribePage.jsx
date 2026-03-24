@@ -6,13 +6,13 @@ import NavigationBar from '../../components/NavigationBar';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import Swal from 'sweetalert2';
 import useStore from '../../store/useStore';
-import { LIMITS, Z_INDEX, STORAGE_KEYS } from '../../constant/appConstants';
+import { COLORS, LIMITS, Z_INDEX, STORAGE_KEYS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
 `;
 
 const MainContentContaioner = styled.div`
@@ -42,7 +42,7 @@ const TapIcon = styled.img`
 `;
 
 const TapTitle = styled.div`
-  color: #000;
+  color: ${COLORS.BLACK};
   font-family: 'Pretendard Variable';
   font-size: 18px;
   font-style: normal;
@@ -54,7 +54,7 @@ const TemporaryContaioner = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
   height: 100vh;
 `;
 
@@ -85,7 +85,7 @@ const SubscribeInputContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #ddd;
+  border: 1px solid ${COLORS.BORDER_GARY};
   border-radius: 4px;
   padding: 10px;
   margin-bottom: 20px;
@@ -122,14 +122,14 @@ const KeywordHeader = styled.div`
   font-weight: bold;
   margin-bottom: 10px;
   padding: 5px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid ${COLORS.BORDER_GARY};
 `;
 
 const KeywordItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid ${COLORS.OFF_WHITE};
   padding: 10px 0;
 `;
 
@@ -166,10 +166,10 @@ const ViewAllButton = styled.div`
   align-items: center;
   gap: 4px;
   border-radius: 600px;
-  border: 2px solid #f7f7f7;
-  background-color: #ffffff;
+  border: 2px solid ${COLORS.OFF_WHITE};
+  background-color: ${COLORS.WHITE};
   cursor: pointer;
-  background-color: ${(props) => (props.isSelected ? '#e0e0e0' : '#ffffff')};
+  background-color: ${(props) => (props.isSelected ? COLORS.LIGHT_GARY : COLORS.WHITE)};
   p {
     margin: 0;
     font-size: clamp(0.8rem, 2.5vw, 1rem); /* 글자 크기 조절 */
@@ -215,7 +215,7 @@ const ModalHeaderIcon = styled.img`
 `;
 
 const ModalHeaderTitle = styled.h1`
-  color: #000;
+  color: ${COLORS.BLACK};
   font-family: 'Pretendard Variable';
   font-size: 18px;
   font-style: normal;
@@ -237,7 +237,7 @@ const MenuItemInModal = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid ${COLORS.LIGHT_GARY};
   font-family: 'Pretendard Variable';
   font-weight: 600;
 `;
@@ -248,7 +248,7 @@ const CategoryTitle = styled.h2`
   font-weight: 700;
   margin-top: 40px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid ${COLORS.LIGHT_GARY};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -256,8 +256,8 @@ const CategoryTitle = styled.h2`
 `;
 
 const TopicButton = styled.button`
-  background-color: ${(props) => (props.isSelected ? '#d3d3d3' : '#ffffff')};
-  border: 1px solid #ccc;
+  background-color: ${(props) => (props.isSelected ? '#d3d3d3' : COLORS.WHITE)};
+  border: 1px solid ${COLORS.BORDER_GARY};
   border-radius: 4px;
   padding: 8px 16px;
   margin: 4px;
@@ -274,7 +274,7 @@ const TopicDisplay = styled.div`
   border-radius: 4px;
   padding: 5px 10px;
   font-size: clamp(0.8rem, 2.5vw, 1rem); /* 글자 크기 조절 */
-  color: #333;
+  color: ${COLORS.DARK_GARY_TEXT};
 `;
 
 const KeywordError = styled.div`

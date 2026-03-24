@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import EventBanner from './EventBanner';
 import axios from 'axios';
 import ImageModal from './ImageModal';
-import { Z_INDEX, STORAGE_KEYS } from '../../constant/appConstants';
+import { Z_INDEX, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -76,7 +76,7 @@ const TitleContainer = styled.div`
   align-items: flex-start;
   gap: 12px;
   align-self: stretch;
-  color: #000;
+  color: ${COLORS.BLACK};
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
@@ -156,7 +156,7 @@ const BottomContainer = styled.div`
   bottom: 0;
   display: flex;
   align-items: center;
-  background-color: #fff;
+  background-color: ${COLORS.WHITE};
   border-top: 1px solid rgba(35, 102, 175, 0.08);
   padding: 8px 12px; /* 양쪽에 여백 추가 */
   gap: 4px; /* <<< 여기 추가 (북마크와 버튼 사이 거리) */
@@ -187,7 +187,7 @@ const BottomButton = styled.button`
   height: 50px; /* 버튼 높이도 조금 줄여서 여유 느낌 */
   font-family: 'Pretendard Variable';
   font-size: 14px;
-  color: #2366af;
+  color: ${COLORS.BLUE_SECONDARY};
   font-weight: 600;
   background-color: rgba(35, 102, 175, 0.08);
   border: none;

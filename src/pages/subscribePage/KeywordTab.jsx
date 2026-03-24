@@ -5,13 +5,13 @@ import SearchBar from '../../components/SearchBar';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import EventCard from '../../components/events/EventCard';
 import useStore from '../../store/useStore';
-import { LIMITS } from '../../constant/appConstants';
+import { COLORS, LIMITS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
 `;
 
 const KeywordListContainer = styled.div`

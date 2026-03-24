@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import Swal from 'sweetalert2';
+import { COLORS } from '../constants/appConstants';
 
 const CardContainer = styled.div`
   display: flex;
@@ -41,7 +42,7 @@ const TitleText = styled.div`
   display: flex;
   width: 100%;
   height: ${(props) => (props.$hasKeyword ? '40px' : 'fit-content')};
-  color: ${(props) => (props.$hasKeyword ? '#000' : 'black')};
+  color: ${(props) => (props.$hasKeyword ? COLORS.BLACK : 'black')};
   font-family: 'Pretendard Variable', sans-serif;
   font-size: ${(props) => (props.$hasKeyword ? '16px' : '12px')};
   font-style: normal;
@@ -160,7 +161,7 @@ const BellIcon = styled.img`
 const KeywordText = styled.div`
   font-size: 16px;
   font-weight: bold;
-  color: #333;
+  color: ${COLORS.DARK_GARY_TEXT};
 `;
 
 function Stat({ iconSrc, value, altText, $hasKeyword }) {

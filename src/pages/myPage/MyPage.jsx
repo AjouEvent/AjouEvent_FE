@@ -5,14 +5,14 @@ import NavigationBar from '../../components/NavigationBar';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import LocationBar from '../../components/LocationBar';
 import Swal from 'sweetalert2';
-import { STORAGE_KEYS } from '../../constant/appConstants';
+import { STORAGE_KEYS, COLORS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
   height: 100vh;
   overflow-y: hidden;
   width: 100vw;
@@ -82,7 +82,7 @@ const MenuItem = styled.li`
   cursor: pointer;
 
   &:hover {
-    background-color: #f5f5f5;
+    background-color: ${COLORS.OFF_WHITE};
   }
 `;
 

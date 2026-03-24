@@ -7,13 +7,13 @@ import LocationBar from '../../components/LocationBar';
 import useStore from '../../store/useStore';
 import { Link } from 'react-router-dom';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
-import { LIMITS, STORAGE_KEYS } from '../../constant/appConstants';
+import { LIMITS, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
 `;
 
 const Contaioner = styled.div`
@@ -21,7 +21,7 @@ const Contaioner = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
   height: 100vh;
 `;
 

@@ -6,7 +6,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import useStore from '../store/useStore';
-import { Z_INDEX } from '../constant/appConstants';
+import { Z_INDEX, COLORS } from '../constant/appConstants';
 
 const Container = styled.div`
   z-index: ${Z_INDEX.PAGE};
@@ -21,7 +21,7 @@ const Container = styled.div`
 `;
 
 const Heading = styled.h1`
-  color: #000000;
+  color: ${COLORS.BLACK};
   font-size: 36px;
   font-weight: 100;
   letter-spacing: -3px;
@@ -69,7 +69,7 @@ const InputField = styled.div`
     height: 2.5rem;
     padding-left: 10px;
     font-size: 14px;
-    border: 1px solid #cdcdcd;
+    border: 1px solid ${COLORS.BORDER_GARY};
     border-radius: 5px;
   }
 `;

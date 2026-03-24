@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { COLORS } from '../../constant/appConstants';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 
 const CardContainer = styled.div`
@@ -42,7 +43,7 @@ const TitleText = styled.div`
   word-break: break-word;
   width: 100%;
   height: 45px;
-  color: #000;
+  color: ${COLORS.BLACK};
   font-family: 'Pretendard Variable';
   font-size: 16px;
   font-style: normal;
@@ -94,7 +95,7 @@ const Subject = styled.div`
 const Keyword = styled.span`
   font-family: 'Pretendard Variable';
   font-size: 14px;
-  color: #0a5ca8;
+  color: ${COLORS.BLUE_MEDIUM};
   font-weight: bold;
 `;
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { Z_INDEX, STORAGE_KEYS } from '../constant/appConstants';
+import { Z_INDEX, STORAGE_KEYS, COLORS } from '../constant/appConstants';
 
 const ModalWrapper = styled.div`
   position: fixed;
@@ -13,7 +13,7 @@ const ModalWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${COLORS.OVERLAY_BLACK};
 `;
 
 const ModalContent = styled.div`
@@ -60,7 +60,7 @@ const ModalFooter = styled.div`
 const EllipticalLink = styled(Link)`
   display: inline-block;
   padding: 10px 20px;
-  background-color: #2366af;
+  background-color: ${COLORS.BLUE_SECONDARY};
   color: white;
   text-decoration: none;
   border-radius: 50px;
@@ -68,7 +68,7 @@ const EllipticalLink = styled(Link)`
   text-align: center;
 
   &:hover {
-    background-color: #1a4f8b;
+    background-color: ${COLORS.BLUE_DARK};
   }
 `;
 

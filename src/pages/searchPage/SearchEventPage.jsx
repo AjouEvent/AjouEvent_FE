@@ -8,13 +8,13 @@ import { KtoECodes } from '../../constant/departmentCodes';
 import LocationBar from '../../components/LocationBar';
 import SearchEvent from './SearchEvent';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
-import { LIMITS } from '../../constant/appConstants';
+import { LIMITS, COLORS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
 `;
 
 const MainContentContaioner = styled.div`

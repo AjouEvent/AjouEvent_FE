@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import GetUserPermission from '../services/fcm/GetUserPermission';
 import Swal from 'sweetalert2';
-import { Z_INDEX, STORAGE_KEYS } from '../constant/appConstants';
+import { Z_INDEX, STORAGE_KEYS, COLORS } from '../constant/appConstants';
 
 const Container = styled.div`
   z-index: ${Z_INDEX.PAGE};
@@ -33,7 +33,7 @@ const Logo = styled.div`
 `;
 
 const Heading = styled.h1`
-  color: #000000;
+  color: ${COLORS.BLACK};
   font-size: 32px;
   font-weight: 700;
   margin: 0;
@@ -76,7 +76,7 @@ const Separator = styled.div`
     position: absolute;
     top: 8px;
     left: 0;
-    background: rgba(120, 120, 120, 0.5);
+    background: ${COLORS.OVERLAY_GARY};
     height: 1px;
     width: 50%;
   }
@@ -86,7 +86,7 @@ const Separator = styled.div`
     position: absolute;
     top: 8px;
     right: 0;
-    background: rgba(120, 120, 120, 0.5);
+    background: ${COLORS.OVERLAY_GARY};
     height: 1px;
     width: 50%;
   }
@@ -109,7 +109,7 @@ const GoogleLoginButton = styled.button`
   padding-right: 8px; // 오른쪽 여백 8dp
 
   &:hover {
-    background-color: #f0f0f0;
+    background-color: ${COLORS.OFF_WHITE};
   }
 
   .icon {
@@ -120,7 +120,7 @@ const GoogleLoginButton = styled.button`
 
   span {
     text-align: center;
-    color: #000000;
+    color: ${COLORS.BLACK};
     color: rgba(0, 0, 0, 0.54); // 폰트 컬러 54% 투명도
     font-size: 14px;
     font-family: 'Roboto', system-ui;
@@ -141,11 +141,11 @@ const BottomLinks = styled.div`
   max-width: 680px;
 
   span {
-    color: #000;
+    color: ${COLORS.BLACK};
   }
 
   a {
-    color: #0072ce;
+    color: ${COLORS.BLUE_BRIGHT};
     text-decoration: none;
     font-weight: 700;
   }

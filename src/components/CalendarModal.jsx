@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import requestWithAccessToken from '../services/jwt/requestWithAccessToken';
 import Swal from 'sweetalert2';
-import { Z_INDEX } from '../constant/appConstants';
+import { Z_INDEX, COLORS } from '../constant/appConstants';
 
 const ModalBackgroundContainer = styled.div`
   position: fixed;
@@ -10,7 +10,7 @@ const ModalBackgroundContainer = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${COLORS.OVERLAY_BLACK};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,7 +35,7 @@ const Input = styled.input`
   width: auto;
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid ${COLORS.BORDER_GARY};
   border-radius: 4px;
 `;
 
@@ -44,7 +44,7 @@ const TextArea = styled.textarea`
   width: auto;
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid ${COLORS.BORDER_GARY};
   border-radius: 4px;
 `;
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { COLORS } from '../../constant/appConstants';
 import EventDetail from '../../components/events/EventDetail';
 
 const AppContainer = styled.div`
@@ -7,7 +8,7 @@ const AppContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
   height: 100vh;
   width: 100%;
 `;

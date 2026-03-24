@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import useStore from '../../store/useStore';
+import { COLORS } from '../../constants/colors';
 
 const Container = styled.div`
   display: flex;
@@ -17,7 +18,7 @@ const MenuBarContainer = styled.div`
   align-items: center;
   overflow-x: auto;
   white-space: nowrap;
-  background: #ffffff;
+  background: ${COLORS.WHITE};
   padding: ${({ highlight }) => (highlight ? '18px 10px 18px 12px' : '12px 10px 0px 16px')};
   font-family: 'Pretendard Variable';
   font-weight: 600;
@@ -37,8 +38,8 @@ const MenuItemContainer = styled.div`
 `;
 
 const MenuItem = styled.div`
-  background-color: ${(props) => (props.isSelected ? '#0A5CA8' : '#ffffff')};
-  color: ${(props) => (props.isSelected ? '#ffffff' : '#000000')};
+  background-color: ${(props) => (props.isSelected ? COLORS.BLUE_MEDIUM : COLORS.WHITE)};
+  color: ${(props) => (props.isSelected ? COLORS.WHITE : COLORS.BLACK)};
   display: flex;
   height: fit-content;
   padding: 8px 12px;
@@ -47,7 +48,7 @@ const MenuItem = styled.div`
   align-items: center;
   gap: 4px;
   border-radius: 600px;
-  border: 2px solid #f7f7f7;
+  border: 2px solid ${COLORS.OFF_WHITE};
   cursor: pointer;
 `;
 
@@ -65,8 +66,8 @@ const ViewAllButton = styled.div`
   align-items: center;
   gap: 4px;
   border-radius: 600px;
-  border: 2px solid #f7f7f7;
-  background-color: #ffffff;
+  border: 2px solid ${COLORS.OFF_WHITE};
+  background-color: ${COLORS.WHITE};
   cursor: pointer;
   font-size: 14px;
   white-space: nowrap;
@@ -74,14 +75,14 @@ const ViewAllButton = styled.div`
   animation: ${({ highlight }) => highlight ? glowAnimation : 'none'} 1.5s infinite;
 
   background-color: ${(props) =>
-    props.isSelected ? '#e0e0e0' : '#ffffff'}; /* 항상 회색 유지 */
+    props.isSelected ? COLORS.LIGHT_GARY : COLORS.WHITE}; /* 항상 회색 유지 */
   p {
     margin: 0
 `;
 
 const InlineTooltip = styled.div`
-  background-color: #0072ce;
-  color: #ffffff;
+  background-color: ${COLORS.BLUE_BRIGHT};
+  color: ${COLORS.WHITE};
   padding: 4px 8px;
   border-radius: 12px;
   font-size: 11px;

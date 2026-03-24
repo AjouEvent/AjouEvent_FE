@@ -5,13 +5,13 @@ import SubscribeBar from './SubscribeBar';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import SubscribeEvent from './SubscribeEvent';
 import SearchBar from '../../components/SearchBar';
-import { LIMITS, STORAGE_KEYS } from '../../constant/appConstants';
+import { COLORS, LIMITS, STORAGE_KEYS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
 `;
 
 export default function SubscribeTab({ showGuide }) {
