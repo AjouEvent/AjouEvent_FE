@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { clearAuth } from '../utils/auth';
 
 const TopBarContainer = styled.div`
   z-index: 5;
@@ -94,12 +95,7 @@ export default function TopBar() {
       text: '로그아웃 했습니다.',
     });
     setIsSignIn(false);
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('email');
-    localStorage.removeItem('id');
-    localStorage.removeItem('name');
-    localStorage.removeItem('major');
+    clearAuth();
   };
 
   return (
