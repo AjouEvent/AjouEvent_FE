@@ -89,7 +89,7 @@ export default function TopBar() {
 
   const handleLogoutBtnClick = () => {
     Swal.fire({
-      icon: 'seccess',
+      icon: 'success',
       title: '로그아웃 성공',
       text: '로그아웃 했습니다.',
     });
