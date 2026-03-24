@@ -39,11 +39,6 @@ export const LIMITS = {
   },
 };
 
-export const DEFAULTS = {
-  DEPARTMENT: '아주대학교-일반',
-  CATEGORY_LABEL: '아주대 공지사항',
-};
-
 export const STORAGE_KEYS = {
   ACCESS_TOKEN: 'accessToken',
   REFRESH_TOKEN: 'refreshToken',

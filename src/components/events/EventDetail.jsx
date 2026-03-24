@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import EventBanner from './EventBanner';
 import axios from 'axios';
 import ImageModal from './ImageModal';
+import { Z_INDEX, STORAGE_KEYS } from '../../constant/appConstants';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -19,7 +20,7 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: ${Z_INDEX.MODAL};
 `;
 
 const Container = styled.div`
@@ -150,7 +151,7 @@ const HorizontalLine = styled.hr`
 
 const BottomContainer = styled.div`
   width: 100%;
-  z-index: 5;
+  z-index: ${Z_INDEX.NAV};
   position: fixed;
   bottom: 0;
   display: flex;
@@ -241,7 +242,7 @@ const EventDetail = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const accessToken = localStorage.getItem('accessToken');
+        const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
         const alreadyViewClubEventNum = getCookie('AlreadyViewClubEventNum');
         console.log(alreadyViewClubEventNum);
         let response;

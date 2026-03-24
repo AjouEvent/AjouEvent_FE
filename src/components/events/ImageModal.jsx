@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { LIMITS, Z_INDEX } from '../../constant/appConstants';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -11,7 +12,7 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: ${Z_INDEX.MODAL};
 `;
 
 const ModalContent = styled.div`
@@ -49,13 +50,13 @@ const ArrowButton = styled.button`
 
 const PrevButton = styled(ArrowButton)`
   left: 7px;
-  z-index: 10;
+  z-index: ${Z_INDEX.IMAGE_CONTROLS};
   filter: invert(70%);
 `;
 
 const NextButton = styled(ArrowButton)`
   right: 7px;
-  z-index: 10;
+  z-index: ${Z_INDEX.IMAGE_CONTROLS};
   filter: invert(70%);
 `;
 
@@ -88,11 +89,11 @@ function ImageModal({ images, currentIndex, onClose }) {
     const diffX = startX - endX;
 
     // 왼쪽으로 스와이프한 경우 다음 이미지
-    if (diffX > 50) {
+    if (diffX > LIMITS.SWIPE_THRESHOLD) {
       handleNext();
     }
     // 오른쪽으로 스와이프한 경우 이전 이미지
-    else if (diffX < -50) {
+    else if (diffX < -LIMITS.SWIPE_THRESHOLD) {
       handlePrev();
     }
   };

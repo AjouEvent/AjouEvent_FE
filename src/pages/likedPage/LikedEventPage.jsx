@@ -7,6 +7,7 @@ import LocationBar from '../../components/LocationBar';
 import useStore from '../../store/useStore';
 import { Link } from 'react-router-dom';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import { LIMITS, STORAGE_KEYS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
@@ -60,10 +61,10 @@ export default function LikedEventPage() {
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const pageSize = 10;
+  const pageSize = LIMITS.PAGE_SIZE;
   const bottomRef = useRef(null);
 
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
   const fetchData = useCallback(async () => {
     if (loading || !hasMore || isError) return;

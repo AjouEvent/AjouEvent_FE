@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { Z_INDEX, STORAGE_KEYS } from '../constant/appConstants';
 
 const ModalWrapper = styled.div`
   position: fixed;
-  z-index: 1000;
+  z-index: ${Z_INDEX.MODAL};
   left: 0;
   top: 0;
   width: 100%;
@@ -82,7 +83,7 @@ const DailyModal = ({ show, onClose }) => {
     if (doNotShowToday) {
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
-      localStorage.setItem("modalDismissedUntil", tomorrow.toISOString());
+      localStorage.setItem(STORAGE_KEYS.MODAL_DISMISSED_UNTIL, tomorrow.toISOString());
     }
     onClose();
   };

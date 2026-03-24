@@ -3,7 +3,8 @@ import styled, { keyframes } from 'styled-components';
 import useStore from '../../store/useStore';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import Swal from 'sweetalert2';
-import SubscribeStatusDropdown from './SubscribeStatusDropdown'; 
+import SubscribeStatusDropdown from './SubscribeStatusDropdown';
+import { LIMITS, Z_INDEX } from '../../constant/appConstants';
 
 const Container = styled.div`
   display: flex;
@@ -119,7 +120,7 @@ const ModalOverlay = styled.div`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: ${Z_INDEX.MODAL};
 `;
 
 const ModalContent = styled.div`
@@ -131,7 +132,7 @@ const ModalContent = styled.div`
   border-radius: 10px;
   overflow-y: auto;
   padding: 24px;
-  z-index: 1001;
+  z-index: ${Z_INDEX.MODAL_TOP};
   width: 90%;
   height: 80%;
 `;
@@ -219,7 +220,7 @@ const Toast = Swal.mixin({
   toast: true,
   position: 'center-center',
   showConfirmButton: false,
-  timer: 2000,
+  timer: LIMITS.TOAST_TIMER.MEDIUM,
   timerProgressBar: true,
   didOpen: (toast) => {
     toast.addEventListener('mouseenter', Swal.stopTimer);

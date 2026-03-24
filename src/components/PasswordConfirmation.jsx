@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { STORAGE_KEYS } from '../constant/appConstants';
 
 const PasswordConfirmContainer = styled.div`
   display: flex;
@@ -138,7 +139,7 @@ const PasswordConfirmation = ({ onConfirm }) => {
   const handleSignIn = async (e) => {
     e.preventDefault();
 
-    const fcmToken = localStorage.getItem("fcmToken");
+    const fcmToken = localStorage.getItem(STORAGE_KEYS.FCM_TOKEN);
     if (!fcmToken) {
       Swal.fire({
         icon: "error",
@@ -160,13 +161,13 @@ const PasswordConfirmation = ({ onConfirm }) => {
         userData
       );
 
-      localStorage.setItem("accessToken", response.data.accessToken);
-      localStorage.setItem("refreshToken", response.data.refreshToken);
+      localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, response.data.accessToken);
+      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, response.data.refreshToken);
 
       // 응답 로그
-      localStorage.setItem("id", response.data.id);
-      localStorage.setItem("name", response.data.name);
-      localStorage.setItem("major", response.data.major);
+      localStorage.setItem(STORAGE_KEYS.USER_ID, response.data.id);
+      localStorage.setItem(STORAGE_KEYS.NAME, response.data.name);
+      localStorage.setItem(STORAGE_KEYS.MAJOR, response.data.major);
 
       navigate("/profile-modification", {
         state: { user: response.data } // 사용자 정보 전달

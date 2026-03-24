@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import useStore from '../store/useStore';
+import { LIMITS, Z_INDEX } from '../constant/appConstants';
 
 const StickyContainer = styled.div`
   display: flex;
@@ -11,7 +12,7 @@ const StickyContainer = styled.div`
   right: 0;
   top: 0;
   gap: 6px;
-  z-index: 100;
+  z-index: ${Z_INDEX.DROPDOWN};
   padding: 10px;
 `;
 
@@ -92,7 +93,7 @@ const HelpBox = () => {
           alt="bellIcon"
         />
         {unreadNotificationCount > 0 &&
-          (unreadNotificationCount < 100 ? (
+          (unreadNotificationCount < LIMITS.NOTIFICATION_BADGE_MAX ? (
             <Badge>{unreadNotificationCount}</Badge>
           ) : (
             <Badge>99+</Badge>

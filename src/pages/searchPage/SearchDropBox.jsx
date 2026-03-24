@@ -102,9 +102,9 @@ function SearchDropBox({
         }
         break;
       default:
-        setOption1('아주대 공지사항');
+        setOption1('아주대학교-일반');
         setOption2List(아주대공지사항);
-        setOption2('아주대학교-일반');
+        setOption2('아주대 공지사항');
         break;
     }
   }, [option1]);

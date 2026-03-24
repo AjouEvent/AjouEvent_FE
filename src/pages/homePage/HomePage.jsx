@@ -8,6 +8,7 @@ import HomeBanner from './HomeBanner';
 import HomeHotEvent from './HomeHotEvent';
 import DailyModal from '../../components/DailyModal';
 import HelpBox from '../../components/HelpBox';
+import { Z_INDEX, STORAGE_KEYS } from '../../constant/appConstants';
 import axios from 'axios';
 import NotifyModal from '../notificationPage/NotificationPage';
 
@@ -39,12 +40,12 @@ const LoadingOverlay = styled.div`
   justify-content: center;
   color: white;
   font-size: 24px;
-  z-index: 1000;
+  z-index: ${Z_INDEX.MODAL};
 `;
 
 const InstallPromptContainer = styled.div`
   position: fixed;
-  z-index: 1000;
+  z-index: ${Z_INDEX.MODAL};
   left: 0;
   top: 0;
   width: 100%;
@@ -115,7 +116,7 @@ const PushNotificationPromptContainer = styled.div`
   left: 0;
   background-color: #ffffff; /* 흰색 배경 */
   color: #000; /* 검은색 텍스트 (흰색 배경에 잘 보이도록) */
-  z-index: 1000; /* 가장 위에 표시되도록 설정 */
+  z-index: ${Z_INDEX.MODAL}; /* 가장 위에 표시되도록 설정 */
   padding: 20px;
   text-align: center;
 `;
@@ -217,15 +218,15 @@ export default function HomePage() {
   useEffect(() => {
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setIsPWAInstalled(true);
-      const isFirstTimeOpen = localStorage.getItem('isFirstTimeOpen');
+      const isFirstTimeOpen = localStorage.getItem(STORAGE_KEYS.IS_FIRST_TIME);
       if (!isFirstTimeOpen) {
         setShowPushNotificationPrompt(true);
-        localStorage.setItem('isFirstTimeOpen', 'false');
+        localStorage.setItem(STORAGE_KEYS.IS_FIRST_TIME, 'false');
       }
       return;
     }
 
-    const dismissedUntil = localStorage.getItem('modalDismissedUntil');
+    const dismissedUntil = localStorage.getItem(STORAGE_KEYS.MODAL_DISMISSED_UNTIL);
     if (dismissedUntil) {
       const now = new Date();
       if (new Date(dismissedUntil) > now) {

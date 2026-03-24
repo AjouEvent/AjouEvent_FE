@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import requestWithAccessToken from '../services/jwt/requestWithAccessToken';
+import { LIMITS } from '../constant/appConstants';
 
-const usePagination = (apiUrl, pageSize = 10) => {
+const usePagination = (apiUrl, pageSize = LIMITS.PAGE_SIZE) => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);

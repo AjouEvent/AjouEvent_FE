@@ -6,6 +6,7 @@ import NavigationBar from '../../components/NavigationBar';
 import LocationBar from '../../components/LocationBar';
 import SubscribeTab from './SubscribeTab';
 import KeywordTab from './KeywordTab';
+import { STORAGE_KEYS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
@@ -112,7 +113,7 @@ export default function SubscribePage() {
   );
   const [showGuide, setShowGuide] = useState(false);
 
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
   // 구독 아이템/키워드 변화 감지해 showGuide 판단
   useEffect(() => {

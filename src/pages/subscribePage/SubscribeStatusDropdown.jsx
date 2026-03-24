@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import Swal from 'sweetalert2';
+import { Z_INDEX } from '../../constant/appConstants';
 
 const Wrapper = styled.div`
   position: relative;
@@ -49,7 +50,7 @@ const DropdownMenu = styled.ul`
   border: 1px solid #ddd;
   border-radius: 8px;
   width: 130px;
-  z-index: 100;
+  z-index: ${Z_INDEX.DROPDOWN};
 `;
 
 const MenuItem = styled.li`

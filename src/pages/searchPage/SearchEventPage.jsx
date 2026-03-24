@@ -8,6 +8,7 @@ import { KtoECodes } from '../../constant/departmentCodes';
 import LocationBar from '../../components/LocationBar';
 import SearchEvent from './SearchEvent';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import { LIMITS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
@@ -51,7 +52,7 @@ export default function SearchEventPage() {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [isError, setIsError] = useState(false);
-  const pageSize = 10;
+  const pageSize = LIMITS.PAGE_SIZE;
   const bottomRef = useRef(null);
 
   const fetchData = useCallback(async () => {

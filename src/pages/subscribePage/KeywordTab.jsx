@@ -5,6 +5,7 @@ import SearchBar from '../../components/SearchBar';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import EventCard from '../../components/events/EventCard';
 import useStore from '../../store/useStore';
+import { LIMITS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
@@ -46,7 +47,7 @@ export default function KeywordTab({ showGuide }) {
   const [hasMore, setHasMore] = useState(true);
   const [isError, setIsError] = useState(false);
   const [selectedKeyword, setSelectedKeyword] = useState(null);
-  const pageSize = 10;
+  const pageSize = LIMITS.PAGE_SIZE;
   const bottomRef = useRef(null);
 
   const handleKeywordSelect = (keyword) => {

@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PWAPrompt from 'react-ios-pwa-prompt';
 import useStore from '../store/useStore';
+import { Z_INDEX } from '../constant/appConstants';
 
 const NavWrapper = styled.nav`
-  z-index: 5;
+  z-index: ${Z_INDEX.NAV};
   position: fixed;
   bottom: 0;
   left: 0;

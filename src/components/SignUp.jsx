@@ -5,9 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
+import { Z_INDEX } from '../constant/appConstants';
 
 const Container = styled.div`
-  z-index: 1;
+  z-index: ${Z_INDEX.PAGE};
   display: flex;
   padding-top: 3%;
   flex-direction: column;

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import { useNavigate, useLocation } from 'react-router-dom';
 import requestWithAccessToken from '../services/jwt/requestWithAccessToken';
+import { Z_INDEX } from '../constant/appConstants';
 
 const Container = styled.div`
   display: flex;
@@ -110,7 +111,7 @@ const ModalOverlay = styled.div`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: ${Z_INDEX.MODAL};
 `;
 
 const ModalContent = styled.div`
@@ -122,7 +123,7 @@ const ModalContent = styled.div`
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1001;
+  z-index: ${Z_INDEX.MODAL_TOP};
   width: 90%;
   max-width: 600px;
   height: 80%;

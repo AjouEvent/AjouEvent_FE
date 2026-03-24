@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import requestWithAccessToken from '../services/jwt/requestWithAccessToken';
 import Swal from 'sweetalert2';
+import { Z_INDEX } from '../constant/appConstants';
 
 const ModalBackgroundContainer = styled.div`
   position: fixed;
@@ -13,7 +14,7 @@ const ModalBackgroundContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 20;
+  z-index: ${Z_INDEX.CALENDAR};
 `;
 
 const ModalContainer = styled.div`

@@ -6,6 +6,7 @@ import NavigationBar from '../../components/NavigationBar';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import Swal from 'sweetalert2';
 import useStore from '../../store/useStore';
+import { LIMITS, Z_INDEX, STORAGE_KEYS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
@@ -189,7 +190,7 @@ const ModalOverlay = styled.div`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: ${Z_INDEX.MODAL};
 `;
 
 const ModalContent = styled.div`
@@ -201,7 +202,7 @@ const ModalContent = styled.div`
   border-radius: 10px;
   overflow-y: auto;
   padding: 24px;
-  z-index: 1001;
+  z-index: ${Z_INDEX.MODAL_TOP};
   width: 90%;
   height: 80%;
 `;
@@ -335,7 +336,7 @@ const Toast = Swal.mixin({
   toast: true,
   position: 'center-center',
   showConfirmButton: false,
-  timer: 2000,
+  timer: LIMITS.TOAST_TIMER.MEDIUM,
   timerProgressBar: true,
   didOpen: (toast) => {
     toast.addEventListener('mouseenter', Swal.stopTimer);
@@ -347,7 +348,7 @@ export default function KeywordSubscribePage() {
   const { setSubscribedKeywords } = useStore((state) => ({
     setSubscribedKeywords: state.setSubscribedKeywords,
   }));
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
   const navigate = useNavigate();
   const [keywords, setKeywords] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -380,7 +381,7 @@ export default function KeywordSubscribePage() {
       );
     } else if (value.length === 0) {
       setErrorMessage('');
-    } else if (value.length < 2) {
+    } else if (value.length < LIMITS.MIN_KEYWORD_LENGTH) {
       setErrorMessage('두 글자 이상 입력해 주세요.');
     } else {
       setErrorMessage('');
@@ -407,7 +408,7 @@ export default function KeywordSubscribePage() {
     }
 
     if (
-      finalInputValue.length <= 1 ||
+      finalInputValue.length < LIMITS.MIN_KEYWORD_LENGTH ||
       !koreanEnglishAndSpacePattern.test(inputValue)
     ) {
       Swal.fire({
@@ -597,7 +598,7 @@ export default function KeywordSubscribePage() {
             </SubscribeInputContainer>
             {errorMessage && <KeywordError>{errorMessage}</KeywordError>}
             <KeywordHeader>
-              알림 설정한 키워드 {keywords.length} / 10
+              알림 설정한 키워드 {keywords.length} / {LIMITS.MAX_KEYWORDS}
             </KeywordHeader>
             <KeywordListContainer>
               {keywords.map((item, index) => (

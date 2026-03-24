@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import GetUserPermission from '../../services/fcm/GetUserPermission';
 import Swal from 'sweetalert2';
+import { Z_INDEX, STORAGE_KEYS } from '../../constant/appConstants';
 
 const Container = styled.div`
-  z-index: 1;
+  z-index: ${Z_INDEX.PAGE};
   display: block;
   padding-top: 6rem;
   width: 90%;
@@ -199,7 +200,7 @@ const LoadingOverlay = styled.div`
   justify-content: center;
   color: white;
   font-size: 24px;
-  z-index: 1000;
+  z-index: ${Z_INDEX.MODAL};
 `;
 
 const Login = () => {
@@ -210,7 +211,7 @@ const Login = () => {
   }, []);
 
   const handleGoogleButtonClicked = () => {
-    const fcmToken = localStorage.getItem('fcmToken');
+    const fcmToken = localStorage.getItem(STORAGE_KEYS.FCM_TOKEN);
     if (!fcmToken) {
       Swal.fire({
         icon: 'error',

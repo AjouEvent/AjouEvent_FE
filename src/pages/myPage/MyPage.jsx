@@ -5,6 +5,7 @@ import NavigationBar from '../../components/NavigationBar';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import LocationBar from '../../components/LocationBar';
 import Swal from 'sweetalert2';
+import { STORAGE_KEYS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
@@ -93,7 +94,7 @@ const ArrowIcon = styled.span`
 const MyPage = () => {
   const [user, setUser] = useState({});
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
   useEffect(() => {
     if (!accessToken) {
@@ -143,12 +144,12 @@ const MyPage = () => {
       title: '로그아웃 성공',
       text: '로그아웃 했습니다.',
     });
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('email');
-    localStorage.removeItem('id');
-    localStorage.removeItem('name');
-    localStorage.removeItem('major');
+    localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+    localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+    localStorage.removeItem(STORAGE_KEYS.EMAIL);
+    localStorage.removeItem(STORAGE_KEYS.USER_ID);
+    localStorage.removeItem(STORAGE_KEYS.NAME);
+    localStorage.removeItem(STORAGE_KEYS.MAJOR);
   };
 
   return (
