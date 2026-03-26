@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import useStore from '../../store/useStore';
+import useSubscriptionStore from '../../store/useSubscriptionStore';
 import { COLORS } from '../../constants/colors';
 
 const Container = styled.div`
@@ -134,7 +134,7 @@ const KeywordBar = ({ onKeywordSelect, showGuide }) => {
     subscribedKeywords,
     markKeywordAsRead,
     fetchSubscribedKeywords,
-  } = useStore();
+  } = useSubscriptionStore();
   const navigate = useNavigate();
   const [selectedKeyword, setSelectedKeyword] = useState(null);
 
