@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
-import useStore from '../store/useStore';
+import useUIStore from '../store/useUIStore';
 import { Z_INDEX, COLORS } from '../constant/appConstants';
 
 const Title = styled.h2`
@@ -155,7 +155,7 @@ const ChangePasswordPage = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isFormValid, setIsFormValid] = useState(false);
-  const { isAuthorized } = useStore((state) => ({
+  const { isAuthorized } = useUIStore((state) => ({
     isAuthorized: state.isAuthorized,
   }));
 

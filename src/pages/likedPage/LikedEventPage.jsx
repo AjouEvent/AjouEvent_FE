@@ -4,7 +4,7 @@ import LikedEvent from './LikedEvent';
 import NavigationBar from '../../components/NavigationBar';
 import SearchBar from '../../components/SearchBar';
 import LocationBar from '../../components/LocationBar';
-import useStore from '../../store/useStore';
+import useUIStore from '../../store/useUIStore';
 import { Link } from 'react-router-dom';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import { LIMITS, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
@@ -51,7 +51,7 @@ const StyledLink = styled(Link)`
 `;
 
 export default function LikedEventPage() {
-  const { savedKeyword, setSavedKeyword } = useStore((state) => ({
+  const { savedKeyword, setSavedKeyword } = useUIStore((state) => ({
     savedKeyword: state.savedKeyword,
     setSavedKeyword: state.setSavedKeyword,
   }));

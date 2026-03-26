@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import useStore from '../store/useStore';
+import useUIStore from '../store/useUIStore';
 import { Z_INDEX, COLORS } from '../constant/appConstants';
 
 const Container = styled.div`
@@ -190,7 +190,7 @@ const FindPassword = () => {
   const [emailCheck, setEmailCheck] = useState(false);
   const [emailRequested, setEmailRequested] = useState(false);
   const [emailRequestLoading, setEmailRequestLoading] = useState(false);
-  const { setIsAuthorized } = useStore((state) => ({
+  const { setIsAuthorized } = useUIStore((state) => ({
     setIsAuthorized: state.setIsAuthorized,
   }));
   const navigate = useNavigate();
