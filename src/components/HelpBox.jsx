@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import useStore from '../store/useStore';
+import useNotificationStore from '../store/useNotificationStore';
 import { LIMITS, Z_INDEX } from '../constant/appConstants';
 
 const StickyContainer = styled.div`
@@ -65,7 +65,7 @@ const TapText = styled.span`
 
 const HelpBox = () => {
   const navigate = useNavigate();
-  const { unreadNotificationCount, fetchUnreadNotificationCount } = useStore();
+  const { unreadNotificationCount, fetchUnreadNotificationCount } = useNotificationStore();
 
   useEffect(() => {
     fetchUnreadNotificationCount(); // 처음 마운트될 때 최신 알림 개수 가져오기
