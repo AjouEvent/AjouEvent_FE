@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RouteChangeTracker from './RouteChangeTracker';
 import { Analytics } from '@vercel/analytics/react';
-import useStore from './store/useStore';
+import useNotificationStore from "./store/useNotificationStore";
+import useSubscriptionStore from "./store/useSubscriptionStore";
 import HomePage from './pages/homePage/HomePage';
 import SearchEventPage from './pages/searchPage/SearchEventPage';
 import LoginPage from './pages/loginPage/LoginPage';
@@ -88,7 +89,8 @@ const ROUTER = createBrowserRouter([
 ]);
 
 function App() {
-  const { fetchMemberStatus, unreadNotificationCount, setUnreadNotificationCount } = useStore();
+  const { fetchMemberStatus } = useSubscriptionStore();
+  const { unreadNotificationCount, setUnreadNotificationCount } = useNotificationStore();
 
   useEffect(() => {
     fetchMemberStatus();
