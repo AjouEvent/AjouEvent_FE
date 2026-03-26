@@ -86,7 +86,7 @@ const NotificationPage = () => {
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState('topic');
   const [keywordCount, setKeywordCount] = useState(0);
-  const [Notifications, setNotifications] = useState(0);
+  const [notifications, setNotifications] = useState(0);
 
   // 키워드 개수 가져오기
   useEffect(() => {
@@ -169,12 +169,12 @@ const NotificationPage = () => {
 
       {currentTab === 'topic' ? (
         <NotificationList
-          key={`topic-${Notifications}`}
+          key={`topic-${notifications}`}
           apiUrl={`${process.env.REACT_APP_BE_URL}/api/notification/topic`}
         />
       ) : (
         <NotificationList
-          key={`keyword-${Notifications}`}
+          key={`keyword-${notifications}`}
           apiUrl={`${process.env.REACT_APP_BE_URL}/api/notification/keyword`}
         />
       )}
