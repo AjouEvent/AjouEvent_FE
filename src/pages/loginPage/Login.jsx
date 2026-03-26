@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import GetUserPermission from '../../services/fcm/GetUserPermission';
 import Swal from 'sweetalert2';
+import { Z_INDEX, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
 
 const Container = styled.div`
-  z-index: 1;
+  z-index: ${Z_INDEX.PAGE};
   display: block;
   padding-top: 6rem;
   width: 90%;
@@ -31,7 +32,7 @@ const Logo = styled.div`
 `;
 
 const Heading = styled.h1`
-  color: #000000;
+  color: ${COLORS.BLACK};
   font-size: 32px;
   font-weight: 700;
   margin: 0;
@@ -50,7 +51,7 @@ const HeadingWrapper = styled.div`
 
 // 새로 추가된 스타일
 const StyledParagraph = styled.p`
-  color: #000;
+  color: ${COLORS.BLACK};
   font-size: 15px;
   font-family: 'Pretendard Variable';
   margin-top: 10px; /* 상단 여백 추가 */
@@ -121,7 +122,7 @@ const GoogleLoginButton = styled.button`
   padding-right: 8px; // 오른쪽 여백 8dp
 
   &:hover {
-    background-color: #f0f0f0;
+    background-color: ${COLORS.OFF_WHITE};
   }
 
   .icon {
@@ -132,7 +133,7 @@ const GoogleLoginButton = styled.button`
 
   span {
     text-align: center;
-    color: #000000;
+    color: ${COLORS.BLACK};
     color: rgba(0, 0, 0, 0.54); // 폰트 컬러 54% 투명도
     font-size: 14px;
     font-family: 'Pretendard Variable', sans-serif;
@@ -152,11 +153,11 @@ const BottomLinks = styled.div`
   max-width: 680px;
 
   span {
-    color: #000;
+    color: ${COLORS.BLACK};
   }
 
   a {
-    color: #0072ce;
+    color: ${COLORS.BLUE_BRIGHT};
     text-decoration: none;
     font-weight: 700;
   }
@@ -199,7 +200,7 @@ const LoadingOverlay = styled.div`
   justify-content: center;
   color: white;
   font-size: 24px;
-  z-index: 1000;
+  z-index: ${Z_INDEX.MODAL};
 `;
 
 const Login = () => {
@@ -210,7 +211,7 @@ const Login = () => {
   }, []);
 
   const handleGoogleButtonClicked = () => {
-    const fcmToken = localStorage.getItem('fcmToken');
+    const fcmToken = localStorage.getItem(STORAGE_KEYS.FCM_TOKEN);
     if (!fcmToken) {
       Swal.fire({
         icon: 'error',

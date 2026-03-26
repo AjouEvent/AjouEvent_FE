@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { COLORS } from '../constant/appConstants';
 
 const LocationWrapper = styled.div`
   width: 100%;
@@ -11,7 +12,7 @@ const LocationWrapper = styled.div`
 
 const LocationTitle = styled.h1`
   margin: 0 0 0 24px;
-  color: #000;
+  color: ${COLORS.BLACK};
   font-family: "Pretendard Variable";
   font-size: 26px;
   font-style: normal;

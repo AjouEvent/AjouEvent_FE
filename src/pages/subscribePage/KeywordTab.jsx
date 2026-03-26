@@ -3,14 +3,15 @@ import styled from 'styled-components';
 import KeywordBar from './KeywordBar';
 import SearchBar from '../../components/SearchBar';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
-import KeywordEventCard from '../../components/events/KeywordEventCard';
+import EventCard from '../../components/events/EventCard';
 import useStore from '../../store/useStore';
+import { COLORS, LIMITS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
 `;
 
 const KeywordListContainer = styled.div`
@@ -46,7 +47,7 @@ export default function KeywordTab({ showGuide }) {
   const [hasMore, setHasMore] = useState(true);
   const [isError, setIsError] = useState(false);
   const [selectedKeyword, setSelectedKeyword] = useState(null);
-  const pageSize = 10;
+  const pageSize = LIMITS.PAGE_SIZE;
   const bottomRef = useRef(null);
 
   const handleKeywordSelect = (keyword) => {
@@ -118,7 +119,7 @@ export default function KeywordTab({ showGuide }) {
       <SearchBar setKeyword={setSelectedKeyword} />
       <KeywordListContainer>
         {events.map((event, index) => (
-          <KeywordEventCard
+          <EventCard
             key={`${event.eventId}-${index}`}
             id={event.eventId}
             {...event}

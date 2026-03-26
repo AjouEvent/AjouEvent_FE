@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import SearchIcon from './icons/SearchIcon';
+import { COLORS } from '../constants/appConstants';
 
 const Container = styled.div`
   display: flex;
@@ -18,7 +19,7 @@ const InputContentContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: #fff;
+  background-color: ${COLORS.WHITE};
   border: 1px solid rgba(229, 232, 235, 1);
   border-radius: 50px;
 `;
@@ -28,7 +29,7 @@ const InputBox = styled.input`
   width: 84%;
   flex-direction: column;
   justify-content: center;
-  background-color: #fff;
+  background-color: ${COLORS.WHITE};
   border: none;
   outline: none;
   font-family: 'Pretendard Variable';

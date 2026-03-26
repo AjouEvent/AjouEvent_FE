@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import styled from 'styled-components';
 import requestWithAccessToken from '../services/jwt/requestWithAccessToken';
+import { STORAGE_KEYS } from '../constant/appConstants';
 
 const Container = styled.div`
   display: flex;
@@ -44,7 +45,7 @@ const DeleteAccountPage = () => {
   const [reason, setReason] = useState('');
   const [nextStep, setNextStep] = useState(false);
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
   const handleTopicReset = async () => {
     setIsLoadingTopic(true); // 로딩 시작
@@ -89,10 +90,10 @@ const DeleteAccountPage = () => {
           'delete',
           `${process.env.REACT_APP_BE_URL}/api/users`,
         );
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('id');
-        localStorage.removeItem('name');
-        localStorage.removeItem('major');
+        localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+        localStorage.removeItem(STORAGE_KEYS.USER_ID);
+        localStorage.removeItem(STORAGE_KEYS.NAME);
+        localStorage.removeItem(STORAGE_KEYS.MAJOR);
         Swal.fire('탈퇴 완료', '정상적으로 탈퇴되었습니다.', 'success');
         navigate('/login'); // 탈퇴 후 로그인 페이지로 이동
       } catch (error) {

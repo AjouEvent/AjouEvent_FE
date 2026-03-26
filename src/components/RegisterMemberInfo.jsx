@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import { useNavigate, useLocation } from 'react-router-dom';
 import requestWithAccessToken from '../services/jwt/requestWithAccessToken';
+import { Z_INDEX, COLORS } from '../constant/appConstants';
 
 const Container = styled.div`
   display: flex;
@@ -19,7 +20,7 @@ const Title = styled.h1`
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #000;
+  color: ${COLORS.BLACK};
 `;
 
 const Form = styled.form`
@@ -36,7 +37,7 @@ const Form = styled.form`
 const InputContainer = styled.div`
   display: flex;
   align-items: center;
-  border: 1px solid ${(props) => (props.hasError ? 'red' : '#ddd')};
+  border: 1px solid ${(props) => (props.hasError ? 'red' : COLORS.BORDER_GARY)};
   border-radius: 4px;
   margin-bottom: 20px;
   width: 100%;
@@ -49,8 +50,8 @@ const Input = styled.input`
   font-size: 1rem;
   font-weight: 600;
   padding: 10px;
-  color: #000;
-  background-color: ${(props) => (props.readOnly ? '#f0f0f0' : 'transparent')};
+  color: ${COLORS.BLACK};
+  background-color: ${(props) => (props.readOnly ? COLORS.OFF_WHITE : 'transparent')};
   border-radius: 4px;
   width: 100%;
   box-sizing: border-box;
@@ -60,7 +61,7 @@ const Input = styled.input`
 `;
 
 const SelectButton = styled.button`
-  background-color: #0072ce;
+  background-color: ${COLORS.BLUE_BRIGHT};
   color: white;
   border: none;
   border-radius: 4px;
@@ -75,7 +76,7 @@ const SelectButton = styled.button`
 const Label = styled.label`
   white-space: nowrap;
   font-size: 17px;
-  color: #333;
+  color: ${COLORS.DARK_GRAY_TEXT};
   margin-bottom: 8px;
   font-weight: bold;
   margin: 5px 0 7px 0;
@@ -92,14 +93,14 @@ const LabelWrapper = styled.div`
 
 const SubmitButton = styled.button`
   padding: 10px;
-  background-color: ${(props) => (props.disabled ? '#ccc' : '#0072CE')};
+  background-color: ${(props) => (props.disabled ? COLORS.BORDER_GARY : COLORS.BLUE_BRIGHT)};
   color: white;
   border: none;
   border-radius: 4px;
   font-size: 16px;
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   &:hover {
-    background-color: ${(props) => (props.disabled ? '#ccc' : '#218838')};
+    background-color: ${(props) => (props.disabled ? COLORS.BORDER_GARY : '#218838')};
   }
 `;
 
@@ -109,8 +110,8 @@ const ModalOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  background: ${COLORS.OVERLAY_BLACK};
+  z-index: ${Z_INDEX.MODAL};
 `;
 
 const ModalContent = styled.div`
@@ -122,7 +123,7 @@ const ModalContent = styled.div`
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1001;
+  z-index: ${Z_INDEX.MODAL_TOP};
   width: 90%;
   max-width: 600px;
   height: 80%;
@@ -130,7 +131,7 @@ const ModalContent = styled.div`
 `;
 
 const ModalHeaderTitle = styled.h1`
-  color: #000;
+  color: ${COLORS.BLACK};
   font-size: 18px;
   font-weight: 700;
   margin: 0;
@@ -151,7 +152,7 @@ const MenuItemInModal = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid ${COLORS.LIGHT_GARY};
   font-weight: 600;
   cursor: pointer;
   &:hover {

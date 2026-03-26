@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Swal from "sweetalert2";
+import { Z_INDEX, COLORS } from '../constant/appConstants';
 
 const Container = styled.div`
-    z-index: 1;
+    z-index: ${Z_INDEX.PAGE};
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center horizontally */
@@ -17,7 +18,7 @@ const Container = styled.div`
 `;
 
 const Heading = styled.h1`
-    color: #000000;
+    color: ${COLORS.BLACK};
     font-size: 24px;
     font-weight: 700;
     text-align: left;
@@ -61,7 +62,7 @@ const CheckboxBlock = styled.div`
         appearance: none;
         width: 20px;
         height: 20px;
-        border: 1px solid #cdcdcd;
+        border: 1px solid ${COLORS.BORDER_GARY};
         border-radius: 50%; /* Make it round */
         outline: none;
         cursor: pointer;
@@ -97,7 +98,7 @@ const CheckboxBlock = styled.div`
 
   span {
     margin-left: auto; /* 오른쪽 정렬 */
-    color: #cccccc; /* 연한 회색 */
+    color: ${COLORS.BORDER_GARY}; /* 연한 회색 */
     cursor: pointer; /* 클릭 가능하게 */
   }
 `;
@@ -115,7 +116,7 @@ const SelectAllBlock = styled.div`
     label {
         font-size: 16px;
         font-weight: 700;
-        color: #333333;
+        color: ${COLORS.DARK_GRAY_TEXT};
         margin-left: 10px;
     }
 `;
@@ -150,7 +151,7 @@ const Modal = styled.div`
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
+  z-index: ${Z_INDEX.MODAL};
   max-width: 500px;
   width: 90%;
   max-height: 80vh; /* 모달의 최대 높이 설정 */
@@ -164,7 +165,7 @@ const Overlay = styled.div`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: ${Z_INDEX.OVERLAY_BACKDROP};
 `;
 
 const PrivacyAgreement = () => {

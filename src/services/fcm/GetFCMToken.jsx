@@ -1,5 +1,6 @@
 import { firebaseApp } from './firebase';
 import { getMessaging, getToken } from 'firebase/messaging';
+import { STORAGE_KEYS } from '../../constant/appConstants';
 
 const GetFCMToken = async () => {
   try {
@@ -18,7 +19,7 @@ const GetFCMToken = async () => {
     });
 
     if (currentToken) {
-      localStorage.setItem('fcmToken', currentToken);
+      localStorage.setItem(STORAGE_KEYS.FCM_TOKEN, currentToken);
     } else {
       console.log(
         'No registration token available. Request permission to generate one.',

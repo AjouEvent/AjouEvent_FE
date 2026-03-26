@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import TabBar from '../components/TabBar';
+import { COLORS } from '../constants/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
   width: 100%;
   overflow: auto;
 `;

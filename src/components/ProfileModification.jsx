@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { STORAGE_KEYS, COLORS } from '../constant/appConstants';
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -27,7 +28,7 @@ const TapIcon = styled.img`
 `;
 
 const TapTitle = styled.div`
-  color: #000;
+  color: ${COLORS.BLACK};
   font-family: 'Pretendard Variable';
   font-size: 18px;
   font-style: normal;
@@ -47,7 +48,7 @@ const InputContainer = styled.div`
 
 const Input = styled.input`
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid ${COLORS.BORDER_GARY};
   border-radius: 4px;
   font-size: 1rem;
   flex-grow: 1;
@@ -69,7 +70,7 @@ const Separator = styled.div`
     position: absolute;
     top: 8px;
     left: 0;
-    background: rgba(120, 120, 120, 0.5);
+    background: ${COLORS.OVERLAY_GARY};
     height: 1px;
     width: 50%;
   }
@@ -79,14 +80,14 @@ const Separator = styled.div`
     position: absolute;
     top: 8px;
     right: 0;
-    background: rgba(120, 120, 120, 0.5);
+    background: ${COLORS.OVERLAY_GARY};
     height: 1px;
     width: 50%;
   }
 `;
 
 const Heading = styled.h1`
-  color: #000000;
+  color: ${COLORS.BLACK};
   font-size: 24px;
   font-weight: 700;
   text-align: left;
@@ -104,20 +105,20 @@ const InputLabel = styled.p`
 
 const DeleteAccountLink = styled.span`
   font-family: 'Pretendard Variable';
-  color: #0066b3;
+  color: ${COLORS.PRIMARY_BLUE};
   text-decoration: underline;
   cursor: pointer;
   margin-top: 20px;
 
   &:hover {
-    color: #333;
+    color: ${COLORS.DARK_GRAY_TEXT};
   }
 `;
 
 const ProfileModification = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
   const user = state?.user;
   console.log('user', user);

@@ -8,12 +8,13 @@ import { KtoECodes } from '../../constant/departmentCodes';
 import LocationBar from '../../components/LocationBar';
 import SearchEvent from './SearchEvent';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import { LIMITS, COLORS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
 `;
 
 const MainContentContaioner = styled.div`
@@ -51,7 +52,7 @@ export default function SearchEventPage() {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [isError, setIsError] = useState(false);
-  const pageSize = 10;
+  const pageSize = LIMITS.PAGE_SIZE;
   const bottomRef = useRef(null);
 
   const fetchData = useCallback(async () => {

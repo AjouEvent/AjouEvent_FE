@@ -8,6 +8,7 @@ import {
   대학원,
   기숙사,
 } from '../../constant/searchDropOption';
+import { COLORS } from '../../constants/appConstants';
 
 function FilterOption({
   label,
@@ -102,9 +103,9 @@ function SearchDropBox({
         }
         break;
       default:
-        setOption1('아주대 공지사항');
+        setOption1('아주대학교-일반');
         setOption2List(아주대공지사항);
-        setOption2('아주대학교-일반');
+        setOption2('아주대 공지사항');
         break;
     }
   }, [option1]);
@@ -180,7 +181,7 @@ const FilterOptionWrapper = styled.div`
   width: 150px;
   flex-direction: column;
   justify-content: center;
-  background-color: #fff;
+  background-color: ${COLORS.WHITE};
   border: 1px solid rgba(229, 232, 235, 1);
   border-radius: 50px;
 `;

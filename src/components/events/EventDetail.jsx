@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import EventBanner from './EventBanner';
 import axios from 'axios';
 import ImageModal from './ImageModal';
+import { Z_INDEX, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -19,7 +20,7 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: ${Z_INDEX.MODAL};
 `;
 
 const Container = styled.div`
@@ -75,7 +76,7 @@ const TitleContainer = styled.div`
   align-items: flex-start;
   gap: 12px;
   align-self: stretch;
-  color: #000;
+  color: ${COLORS.BLACK};
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
@@ -150,12 +151,12 @@ const HorizontalLine = styled.hr`
 
 const BottomContainer = styled.div`
   width: 100%;
-  z-index: 5;
+  z-index: ${Z_INDEX.NAV};
   position: fixed;
   bottom: 0;
   display: flex;
   align-items: center;
-  background-color: #fff;
+  background-color: ${COLORS.WHITE};
   border-top: 1px solid rgba(35, 102, 175, 0.08);
   padding: 8px 12px; /* 양쪽에 여백 추가 */
   gap: 4px; /* <<< 여기 추가 (북마크와 버튼 사이 거리) */
@@ -186,7 +187,7 @@ const BottomButton = styled.button`
   height: 50px; /* 버튼 높이도 조금 줄여서 여유 느낌 */
   font-family: 'Pretendard Variable';
   font-size: 14px;
-  color: #2366af;
+  color: ${COLORS.BLUE_SECONDARY};
   font-weight: 600;
   background-color: rgba(35, 102, 175, 0.08);
   border: none;
@@ -241,7 +242,7 @@ const EventDetail = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const accessToken = localStorage.getItem('accessToken');
+        const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
         const alreadyViewClubEventNum = getCookie('AlreadyViewClubEventNum');
         console.log(alreadyViewClubEventNum);
         let response;

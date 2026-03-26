@@ -1,9 +1,10 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { clearAuth } from '../../utils/auth';
+import { STORAGE_KEYS } from '../../constant/appConstants';
 
 export default async function requestWithAccessToken(method, url, data = null) {
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
   try {
     let response;
@@ -65,7 +66,7 @@ export default async function requestWithAccessToken(method, url, data = null) {
 }
 
 async function refreshAccessToken() {
-  const refreshToken = localStorage.getItem('refreshToken');
+  const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
 
   try {
     if (!refreshToken) {
@@ -79,7 +80,7 @@ async function refreshAccessToken() {
     );
     const newAccessToken = response.data.accessToken;
     console.log('refresh token respon' + newAccessToken);
-    localStorage.setItem('accessToken', newAccessToken);
+    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, newAccessToken);
     return newAccessToken;
   } catch (error) {
     // refreshToken이 만료되었을 경우

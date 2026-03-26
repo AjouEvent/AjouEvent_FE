@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
+import { LIMITS, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
 
 const Container = styled.div`
   width: 100%;
@@ -11,7 +12,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #000;
+  color: ${COLORS.BLACK};
   font-family: 'Pretendard Variable';
   font-size: 26px;
   font-style: normal;
@@ -35,7 +36,7 @@ const Toast = Swal.mixin({
   toast: true,
   position: 'center-center',
   showConfirmButton: false,
-  timer: 3000,
+  timer: LIMITS.TOAST_TIMER.LONG,
   timerProgressBar: true,
   didOpen: (toast) => {
     toast.addEventListener('mouseenter', Swal.stopTimer);
@@ -53,7 +54,7 @@ const LoginSuccess = () => {
       const authorizationCode = params.get('code');
 
       if (authorizationCode) {
-        const fcmToken = localStorage.getItem('fcmToken');
+        const fcmToken = localStorage.getItem(STORAGE_KEYS.FCM_TOKEN);
         const redirectUri = window.location.origin + '/loginSuccess';
 
         const loginData = {
@@ -79,12 +80,12 @@ const LoginSuccess = () => {
               isNewMember,
             } = response.data;
 
-            localStorage.setItem('id', id);
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('refreshToken', refreshToken);
-            localStorage.setItem('email', email);
-            localStorage.setItem('name', name);
-            localStorage.setItem('major', major);
+            localStorage.setItem(STORAGE_KEYS.USER_ID, id);
+            localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+            localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
+            localStorage.setItem(STORAGE_KEYS.EMAIL, email);
+            localStorage.setItem(STORAGE_KEYS.NAME, name);
+            localStorage.setItem(STORAGE_KEYS.MAJOR, major);
             Swal.fire({
               icon: 'success',
               title: '로그인 성공',

@@ -5,9 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
+import { Z_INDEX, COLORS } from '../constant/appConstants';
 
 const Container = styled.div`
-  z-index: 1;
+  z-index: ${Z_INDEX.PAGE};
   display: flex;
   padding-top: 3%;
   flex-direction: column;
@@ -19,7 +20,7 @@ const Container = styled.div`
 `;
 
 const Heading = styled.h1`
-  color: #000000;
+  color: ${COLORS.BLACK};
   font-size: 36px;
   font-weight: 100;
   letter-spacing: -3px;
@@ -84,7 +85,7 @@ const InputField = styled.div`
     height: 2.5rem;
     padding-left: 10px;
     font-size: 14px;
-    border: 1px solid #cdcdcd;
+    border: 1px solid ${COLORS.BORDER_GARY};
     border-radius: 5px;
   }
 
@@ -119,7 +120,7 @@ const Separator = styled.div`
     position: absolute;
     top: 8px;
     left: 0;
-    background: rgba(120, 120, 120, 0.5);
+    background: ${COLORS.OVERLAY_GARY};
     height: 1px;
     width: 50%;
   }
@@ -129,7 +130,7 @@ const Separator = styled.div`
     position: absolute;
     top: 8px;
     right: 0;
-    background: rgba(120, 120, 120, 0.5);
+    background: ${COLORS.OVERLAY_GARY};
     height: 1px;
     width: 50%;
   }
@@ -219,7 +220,7 @@ const Dropdown = styled.select`
   width: 100%;
   height: 2.5rem;
   border-radius: 10px;
-  border: solid 1px #cdcdcd;
+  border: solid 1px ${COLORS.BORDER_GARY};
   font-size: 14px;
   padding-left: 10px;
   background-color: white;
@@ -253,7 +254,7 @@ const TapIcon = styled.img`
 `;
 
 const TapTitle = styled.div`
-  color: #000;
+  color: ${COLORS.BLACK};
   font-family: "Pretendard Variable";
   font-size: 18px;
   font-style: normal;

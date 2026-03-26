@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Carousel from "react-bootstrap/Carousel";
+import { COLORS } from '../constants/appConstants';
 
 const BannerContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff;
+  background-color: ${COLORS.WHITE};
   width: 100%;
   height: 100vw;
 `;
