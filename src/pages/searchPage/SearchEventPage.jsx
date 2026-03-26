@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import NavigationBar from '../../components/NavigationBar';
 import SearchDropBox from './SearchDropBox';
 import SearchBar from '../../components/SearchBar';
-import useStore from '../../store/useStore';
+import useUIStore from '../../store/useUIStore';
 import { KtoECodes } from '../../constant/departmentCodes';
 import LocationBar from '../../components/LocationBar';
 import SearchEvent from './SearchEvent';
@@ -34,7 +34,7 @@ export default function SearchEventPage() {
     setSavedOption1,
     savedOption2,
     setSavedOption2,
-  } = useStore((state) => ({
+  } = useUIStore((state) => ({
     savedKeyword: state.savedKeyword,
     setSavedKeyword: state.setSavedKeyword,
     savedOption1: state.savedOption1,
