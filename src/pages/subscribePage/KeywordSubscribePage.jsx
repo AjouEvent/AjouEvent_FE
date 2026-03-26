@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import NavigationBar from '../../components/NavigationBar';
-import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import api from '../../services/api';
 import Swal from 'sweetalert2';
 import useSubscriptionStore from '../../store/useSubscriptionStore';
 import { COLORS, LIMITS, Z_INDEX, STORAGE_KEYS } from '../../constant/appConstants';
@@ -427,14 +427,10 @@ export default function KeywordSubscribePage() {
         title: `키워드 '${finalInputValue}' 구독 중`,
       });
 
-      await requestWithAccessToken(
-        'post',
-        `${process.env.REACT_APP_BE_URL}/api/keyword/subscribe`,
-        {
-          koreanKeyword: finalInputValue,
-          topicName: selectedTopic.englishTopic,
-        },
-      );
+      await api.post('/api/keyword/subscribe', {
+        koreanKeyword: finalInputValue,
+        topicName: selectedTopic.englishTopic,
+      });
 
       Swal.fire({
         icon: 'success',
@@ -454,10 +450,7 @@ export default function KeywordSubscribePage() {
 
   const fetchUserKeywords = async () => {
     try {
-      const response = await requestWithAccessToken(
-        'get',
-        `${process.env.REACT_APP_BE_URL}/api/keyword/userKeywords`,
-      );
+      const response = await api.get('/api/keyword/userKeywords');
       const userKeywords = response.data;
       setKeywords(userKeywords);
       setSubscribedKeywords(userKeywords);
@@ -478,11 +471,7 @@ export default function KeywordSubscribePage() {
         title: `${keyword.koreanKeyword} 구독 취소 중`,
       });
 
-      await requestWithAccessToken(
-        'post',
-        `${process.env.REACT_APP_BE_URL}/api/keyword/unsubscribe`,
-        { encodedKeyword: keyword.encodedKeyword },
-      );
+      await api.post('/api/keyword/unsubscribe', { encodedKeyword: keyword.encodedKeyword });
 
       Swal.fire({
         icon: 'success',
@@ -520,10 +509,7 @@ export default function KeywordSubscribePage() {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await requestWithAccessToken(
-          'get',
-          `${process.env.REACT_APP_BE_URL}/api/topic/subscriptionsStatus`,
-        );
+        const response = await api.get('/api/topic/subscriptionsStatus');
         const datas = response.data;
         setMenuItems(datas);
       } catch (error) {

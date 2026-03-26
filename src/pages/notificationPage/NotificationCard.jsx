@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { COLORS } from '../../constant/appConstants';
-import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import api from '../../services/api';
 
 const CardContainer = styled.div`
   display: flex;
@@ -118,13 +118,7 @@ const NotificationCard = ({
 
   const postNotificationClick = async () => {
     try {
-      const response = await requestWithAccessToken(
-        'post',
-        `${process.env.REACT_APP_BE_URL}/api/notification/click`,
-        {
-          pushNotificationId: id,
-        },
-      );
+      await api.post('/api/notification/click', { pushNotificationId: id });
     } catch (error) {
       console.error('Error fetching user keywords:', error);
     }

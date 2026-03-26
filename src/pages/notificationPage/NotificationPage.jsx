@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import TabBar from '../../components/TabBar';
 import NotificationList from './NotificationList';
-import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import api from '../../services/api';
 import { COLORS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
@@ -92,10 +92,7 @@ const NotificationPage = () => {
   useEffect(() => {
     const fetchUserKeywords = async () => {
       try {
-        const response = await requestWithAccessToken(
-          'get',
-          `${process.env.REACT_APP_BE_URL}/api/keyword/userKeywords`,
-        );
+        const response = await api.get('/api/keyword/userKeywords');
         setKeywordCount(response.data.length);
       } catch (error) {
         console.error('Error fetching user keywords:', error);
@@ -111,10 +108,7 @@ const NotificationPage = () => {
       return;
     }
     try {
-      await requestWithAccessToken(
-        'post',
-        `${process.env.REACT_APP_BE_URL}/api/notification/readAll`
-      );
+      await api.post('/api/notification/readAll');
       alert('모든 알림을 읽음 처리했습니다.');
       setNotifications((prev) => prev + 1);
     } catch (error) {

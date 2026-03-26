@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import requestWithAccessToken from '../services/jwt/requestWithAccessToken';
+import api from '../services/api';
 
 const useNotificationStore = create((set) => ({
   unreadNotificationCount: 0,
@@ -8,10 +8,7 @@ const useNotificationStore = create((set) => ({
 
   fetchUnreadNotificationCount: async () => {
     try {
-      const response = await requestWithAccessToken(
-        'get',
-        `${process.env.REACT_APP_BE_URL}/api/notification/unread-count`
-      );
+      const response = await api.get('/api/notification/unread-count');
       set({ unreadNotificationCount: response.data.unreadNotificationCount });
 
       if (navigator.setAppBadge) {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import { useNavigate, useLocation } from 'react-router-dom';
-import requestWithAccessToken from '../services/jwt/requestWithAccessToken';
+import api from '../services/api';
 import { Z_INDEX, COLORS } from '../constant/appConstants';
 
 const Container = styled.div`
@@ -225,11 +225,7 @@ const RegisterMajor = () => {
 
     try {
       console.log('email', email);
-      await requestWithAccessToken(
-        'post',
-        `${process.env.REACT_APP_BE_URL}/api/users/register-info`,
-        { major },
-      );
+      await api.post('/api/users/register-info', { major });
       Swal.fire({
         icon: 'success',
         title: '학과 등록 성공',

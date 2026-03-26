@@ -6,7 +6,7 @@ import SearchBar from '../../components/SearchBar';
 import LocationBar from '../../components/LocationBar';
 import useUIStore from '../../store/useUIStore';
 import { Link } from 'react-router-dom';
-import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import api from '../../services/api';
 import { LIMITS, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
@@ -72,10 +72,7 @@ export default function LikedEventPage() {
     setLoading(true);
 
     try {
-      const response = await requestWithAccessToken(
-        'get',
-        `${process.env.REACT_APP_BE_URL}/api/event/liked?AjouNormal&page=${page}&size=${pageSize}&keyword=${keyword}`,
-      );
+      const response = await api.get(`/api/event/liked?AjouNormal&page=${page}&size=${pageSize}&keyword=${keyword}`);
       const newEvents = response.data.result;
 
       setEvents((prevEvents) => {
