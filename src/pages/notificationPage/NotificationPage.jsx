@@ -86,6 +86,7 @@ const NotificationPage = () => {
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState('topic');
   const [keywordCount, setKeywordCount] = useState(0);
+  const [notifications, setNotifications] = useState(0);
 
   // 키워드 개수 가져오기
   useEffect(() => {
@@ -115,7 +116,7 @@ const NotificationPage = () => {
         `${process.env.REACT_APP_BE_URL}/api/notification/readAll`
       );
       alert('모든 알림을 읽음 처리했습니다.');
-      window.location.reload(); // 새로고침으로 리스트 상태 동기화
+      setNotifications((prev) => prev + 1);
     } catch (error) {
       console.error('Error reading all notifications:', error);
       alert('알림 읽음 처리 중 오류가 발생했습니다.');
@@ -168,12 +169,12 @@ const NotificationPage = () => {
 
       {currentTab === 'topic' ? (
         <NotificationList
-          key="topic"
+          key={`topic-${notifications}`}
           apiUrl={`${process.env.REACT_APP_BE_URL}/api/notification/topic`}
         />
       ) : (
         <NotificationList
-          key="keyword"
+          key={`keyword-${notifications}`}
           apiUrl={`${process.env.REACT_APP_BE_URL}/api/notification/keyword`}
         />
       )}
