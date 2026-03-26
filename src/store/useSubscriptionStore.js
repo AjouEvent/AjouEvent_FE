@@ -32,41 +32,35 @@ const useSubscriptionStore = create((set, get) => ({
     });
   },
 
-  markTopicAsRead: async (topic) =>
-    set(async (state) => {
-      const updatedItems = state.subscribeItems.map((item) =>
-        item.englishTopic === topic ? { ...item, isRead: true } : item,
-      );
+  markTopicAsRead: (topic) => {
+    const state = get();
+    const updatedItems = state.subscribeItems.map((item) =>
+      item.englishTopic === topic ? { ...item, isRead: true } : item,
+    );
+    const allTopicsRead = updatedItems.every((item) => item.isRead === true);
+    const allKeywordsRead = state.subscribedKeywords.every((item) => item.isRead === true);
+    set({
+      subscribeItems: updatedItems,
+      isTopicTabRead: allTopicsRead,
+      isSubscribedTabRead: allTopicsRead && allKeywordsRead,
+    });
+  },
 
-      const allTopicsRead = updatedItems.every((item) => item.isRead === true);
-      const allKeywordsRead = get().subscribedKeywords.every((item) => item.isRead === true);
-
-      set({
-        subscribeItems: updatedItems,
-        isTopicTabRead: allTopicsRead,
-        isSubscribedTabRead: allTopicsRead && allKeywordsRead,
-      });
-    }),
-
-  markKeywordAsRead: async (keyword) =>
-    set(async (state) => {
-      const updatedItems = state.subscribedKeywords.map((item) =>
-        item.encodedKeyword === keyword.encodedKeyword
-          ? { ...item, isRead: true }
-          : item,
-      );
-
-      const allKeywordsRead = updatedItems.every(
-        (item) => item.isRead === true,
-      );
-      const allTopicsRead = get().subscribeItems.every((item) => item.isRead === true);
-
-      set({
-        subscribedKeywords: updatedItems,
-        isKeywordTabRead: allKeywordsRead,
-        isSubscribedTabRead: allTopicsRead && allKeywordsRead,
-      });
-    }),
+  markKeywordAsRead: (keyword) => {
+    const state = get();
+    const updatedItems = state.subscribedKeywords.map((item) =>
+      item.encodedKeyword === keyword.encodedKeyword
+        ? { ...item, isRead: true }
+        : item,
+    );
+    const allKeywordsRead = updatedItems.every((item) => item.isRead === true);
+    const allTopicsRead = state.subscribeItems.every((item) => item.isRead === true);
+    set({
+      subscribedKeywords: updatedItems,
+      isKeywordTabRead: allKeywordsRead,
+      isSubscribedTabRead: allTopicsRead && allKeywordsRead,
+    });
+  },
 
   setIsTopicTabRead: async (isRead) => {
     set({ isTopicTabRead: isRead });

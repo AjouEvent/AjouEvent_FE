@@ -4,7 +4,7 @@ import KeywordBar from './KeywordBar';
 import SearchBar from '../../components/SearchBar';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import EventCard from '../../components/events/EventCard';
-import useStore from '../../store/useStore';
+import useSubscriptionStore from '../../store/useSubscriptionStore';
 import { COLORS, LIMITS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
@@ -37,7 +37,7 @@ const MessageContainer = styled.div`
 `;
 
 export default function KeywordTab({ showGuide }) {
-  const { setIsKeywordTabRead } = useStore((state) => ({
+  const { setIsKeywordTabRead } = useSubscriptionStore((state) => ({
     setIsKeywordTabRead: state.setIsKeywordTabRead,
   }));
 
