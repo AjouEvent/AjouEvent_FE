@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import useSubscriptionStore from '../../store/useSubscriptionStore';
-import { COLORS } from '../../constants/colors';
+import { COLORS } from '../../constants/appConstants';
 
 const Container = styled.div`
   display: flex;

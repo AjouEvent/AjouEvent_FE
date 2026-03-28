@@ -6,7 +6,7 @@ import LocationBar from '../../components/LocationBar';
 import { clearAuth } from '../../utils/auth';
 import { getUserInfo } from '../../services/api/user';
 import Swal from 'sweetalert2';
-import { STORAGE_KEYS, COLORS } from '../../constant/appConstants';
+import { STORAGE_KEYS, COLORS } from '../../constants/appConstants';
 
 const AppContainer = styled.div`
   display: flex;

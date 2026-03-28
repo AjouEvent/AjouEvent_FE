@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
-import GetUserPermission from '../../services/fcm/GetUserPermission';
+import GetUserPermission from '../services/fcm/GetUserPermission';
 import Swal from 'sweetalert2';
-import { Z_INDEX, STORAGE_KEYS, COLORS } from '../../constants/appConstants';
+import { Z_INDEX, STORAGE_KEYS, COLORS } from '../constants/appConstants';
 
 const Container = styled.div`
   z-index: ${Z_INDEX.PAGE};
   display: block;
-  padding-top: 6rem;
+  padding-top: 8rem;
   width: 90%;
   height: 100vh;
   background-color: transparent;
-  margin-bottom: 4rem;
+  margin: 0;
   font-family: 'Pretendard Variable';
 `;
 
@@ -49,20 +50,6 @@ const HeadingWrapper = styled.div`
   padding-left: 1rem;
 `;
 
-// 새로 추가된 스타일
-const StyledParagraph = styled.p`
-  color: ${COLORS.BLACK};
-  font-size: 15px;
-  font-family: 'Pretendard Variable';
-  margin-top: 10px; /* 상단 여백 추가 */
-  margin-bottom: 10px; /* 하단 여백 추가 */
-`;
-
-const HighlightedText = styled.span`
-  color: red;
-  font-weight: bold;
-`;
-
 const Form = styled.form`
   width: 100%;
   margin: 10px auto 10px;
@@ -89,7 +76,7 @@ const Separator = styled.div`
     position: absolute;
     top: 8px;
     left: 0;
-    background: rgba(120, 120, 120, 0.5);
+    background: ${COLORS.OVERLAY_GARY};
     height: 1px;
     width: 50%;
   }
@@ -99,7 +86,7 @@ const Separator = styled.div`
     position: absolute;
     top: 8px;
     right: 0;
-    background: rgba(120, 120, 120, 0.5);
+    background: ${COLORS.OVERLAY_GARY};
     height: 1px;
     width: 50%;
   }
@@ -136,7 +123,7 @@ const GoogleLoginButton = styled.button`
     color: ${COLORS.BLACK};
     color: rgba(0, 0, 0, 0.54); // 폰트 컬러 54% 투명도
     font-size: 14px;
-    font-family: 'Pretendard Variable', sans-serif;
+    font-family: 'Roboto', system-ui;
     font-weight: 500;
     font-style: normal;
   }
@@ -147,6 +134,7 @@ const BottomLinks = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 20px auto;
+  margin-top: 20px;
   font-size: 14px;
   color: #6f6f6f;
   width: 90%;
@@ -163,52 +151,26 @@ const BottomLinks = styled.div`
   }
 `;
 
-const Description = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+const Description = styled.p`
   color: #999999;
-  margin: 20px 0 10px 0;
-  font-size: 13px;
+  margin: 40px 0 20px 0;
+  font-size: 14px;
   width: 100%;
   text-align: center;
-  line-height: 1.6;
-  padding: 0 1rem 0 1rem;
-  .contact {
-    p {
-      font-weight: 600;
-      margin: 0;
-    }
-    .contact-info {
-      justify-content: center;
-      align-items: center;
-      display: flex;
-      gap: 10px;
-    }
-  }
-`;
-
-const LoadingOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 24px;
-  z-index: ${Z_INDEX.MODAL};
+  line-height: 1.8;
 `;
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     GetUserPermission(setIsLoading);
   }, []);
+
+  const handelSignUpButtonClicked = () => {
+    navigate('/signUp');
+  };
 
   const handleGoogleButtonClicked = () => {
     const fcmToken = localStorage.getItem(STORAGE_KEYS.FCM_TOKEN);
@@ -216,7 +178,7 @@ const Login = () => {
       Swal.fire({
         icon: 'error',
         title: '알림 토큰 미등록',
-        text: '’홈화면에 추가’를 통해 설치 / 알림 설정(허용)을 확인해주세요 ',
+        text: '’홈화면에 추가’를 통해 설치 / 알림 설정(허용)을 확인해주세요',
       });
       return;
     }
@@ -226,51 +188,36 @@ const Login = () => {
 
   return (
     <Container>
-      {isLoading && <LoadingOverlay>알림 서비스 등록 중 ...</LoadingOverlay>}
-
       <Form>
         <HeadingWrapper>
-          <Heading>로그인</Heading>
-        </HeadingWrapper>
-        <HeadingWrapper>
-          <StyledParagraph>
-            기본 로그인이 <HighlightedText>구글 로그인</HighlightedText>으로
-            통합되었습니다.
-          </StyledParagraph>
+          <Heading>회원가입</Heading>
         </HeadingWrapper>
       </Form>
+
+      {/* <SingUpButton onClick= {handelSignUpButtonClicked} type="submit" className="signin__btn">
+         @ajou.ac.kr 이메일로 회원가입
+      </SingUpButton> */}
       <GoogleLoginButton onClick={handleGoogleButtonClicked}>
         <FcGoogle className="icon" />
-        <span>Google 계정으로 로그인</span>
+        <span>Google 계정으로 가입</span>
       </GoogleLoginButton>
       <Separator></Separator>
       <BottomLinks>
-        <span>아직 회원이 아니신가요?</span>
-        <Link to="/privacy-agreement">회원가입</Link>
+        <span>이미 회원이신가요?</span>
+        <Link to="/login">로그인</Link>
+        {/* <span>|</span>
+          <Link to="/findPassword">비밀번호 찾기</Link> */}
       </BottomLinks>
+      <Description>
+        * AjouEvent는 2024-1학기 아주대학교 파란학기제에서
+        <br />
+        진행한 프로젝트로 아주대학교 공식 서비스가 아닙니다. <br />
+        * AjouEvent 계정은 아주대학교 포탈 계정과 무관합니다. <br />
+        서비스 문의: jysim0326@ajou.ac.kr <br />
+      </Description>
       <LogoWrapper>
         <Logo />
       </LogoWrapper>
-      <Description>
-        <div>
-          <p>
-            * AjouEvent는 2024-1학기 아주대학교 파란학기제에서<br /> 
-            진행한 프로젝트로 아주대학교 공식 서비스가 아닙니다.
-          </p>
-          <p>* AjouEvent 계정은 아주대학교 포탈 계정과 무관합니다.</p>
-        </div>
-        <div className="contact">
-          <p> 서비스 문의</p>
-          <div className="contact-info">
-            <a href="mailto:jysim0326@ajou.ac.kr?subject=ajouevent 서비스 문의">
-              BE: 심재엽
-            </a>
-            <a href="mailto:ysc0731@ajou.ac.kr?subject=ajouevent 서비스 문의">
-              FE: 윤석찬
-            </a>
-          </div>
-        </div>
-      </Description>
     </Container>
   );
 };

@@ -1,6 +1,6 @@
 import { firebaseApp } from './firebase';
 import { getMessaging, getToken } from 'firebase/messaging';
-import { STORAGE_KEYS } from '../../constant/appConstants';
+import { STORAGE_KEYS } from '../../constants/appConstants';
 
 const GetFCMToken = async () => {
   try {

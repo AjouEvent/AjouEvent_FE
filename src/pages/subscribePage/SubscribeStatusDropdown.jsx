@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Swal from 'sweetalert2';
 import { updateTopicNotification, unsubscribeTopic } from '../../services/api/subscription';
-import { COLORS, Z_INDEX } from '../../constant/appConstants';
+import { COLORS, Z_INDEX } from '../../constants/appConstants';
 
 const Wrapper = styled.div`
   position: relative;

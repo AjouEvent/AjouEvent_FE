@@ -7,7 +7,7 @@ import {
   단과대공지사항,
   대학원,
   기숙사,
-} from '../../constant/searchDropOption';
+} from '../../constants/searchDropOption';
 import { COLORS } from '../../constants/appConstants';
 
 function FilterOption({

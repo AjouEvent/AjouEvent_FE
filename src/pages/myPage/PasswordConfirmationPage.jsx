@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { COLORS } from '../../constants/appConstants';
-import EventDetail from '../../components/events/EventDetail';
+import NavigationBar from '../../components/NavigationBar';
+import PasswordConfirmation from '../../components/PasswordConfirmation';
 
 const AppContainer = styled.div`
   display: flex;
@@ -9,14 +10,15 @@ const AppContainer = styled.div`
   align-items: center;
   justify-content: center;
   background-color: ${COLORS.WHITE};
-  height: 100vh;
-  width: 100%;
+  width: 100vw;
+  overflow-x: hidden;
 `;
 
-export default function EventDetailPage() {
+export default function PasswordConfirmationPage() {
   return (
     <AppContainer>
-      <EventDetail></EventDetail>
+      <PasswordConfirmation></PasswordConfirmation>
+      <NavigationBar></NavigationBar>
     </AppContainer>
   );
 }

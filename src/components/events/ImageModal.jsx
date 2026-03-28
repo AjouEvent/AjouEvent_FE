@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { LIMITS, Z_INDEX } from '../../constant/appConstants';
+import { LIMITS, Z_INDEX } from '../../constants/appConstants';
 
 const ModalOverlay = styled.div`
   position: fixed;

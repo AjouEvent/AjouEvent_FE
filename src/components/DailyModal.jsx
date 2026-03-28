@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { Z_INDEX, STORAGE_KEYS, COLORS } from '../constant/appConstants';
+import { Z_INDEX, STORAGE_KEYS, COLORS } from '../constants/appConstants';
 
 const ModalWrapper = styled.div`
   position: fixed;

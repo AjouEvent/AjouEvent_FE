@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import api from '../services/api';
-import { LIMITS } from '../constant/appConstants';
+import { LIMITS } from '../constants/appConstants';
 
 const usePagination = (apiUrl, pageSize = LIMITS.PAGE_SIZE) => {
   const [data, setData] = useState([]);
