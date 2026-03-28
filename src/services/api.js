@@ -44,7 +44,9 @@ api.interceptors.response.use(
           title: '타임오버',
           text: '로그인 시간이 만료되어 로그아웃 되었습니다.',
         });
-        window.location.href = '/login';
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
         return Promise.reject(error);
       }
     }
