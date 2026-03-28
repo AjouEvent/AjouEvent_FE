@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import requestWithAccessToken from '../services/jwt/requestWithAccessToken';
+import api from '../services/api';
 import Swal from 'sweetalert2';
 import { Z_INDEX, COLORS } from '../constant/appConstants';
 
@@ -173,11 +173,7 @@ function CalendarModal({ setIsModalOpen, title, content }) {
     };
 
     try {
-      await requestWithAccessToken(
-        'post',
-        `${process.env.REACT_APP_BE_URL}/api/event/calendar`,
-        eventData,
-      );
+      await api.post('/api/event/calendar', eventData);
       Swal.fire({
         icon: 'success',
         title: '구글 캘린더 등록 성공',

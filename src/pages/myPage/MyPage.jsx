@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import NavigationBar from '../../components/NavigationBar';
-import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import api from '../../services/api';
 import LocationBar from '../../components/LocationBar';
 import Swal from 'sweetalert2';
 import { STORAGE_KEYS, COLORS } from '../../constant/appConstants';
@@ -104,10 +104,7 @@ const MyPage = () => {
 
     const fetchUserInfo = async () => {
       try {
-        const response = await requestWithAccessToken(
-          'get',
-          `${process.env.REACT_APP_BE_URL}/api/users`,
-        );
+        const response = await api.get('/api/users');
         setUser(response.data);
       } catch (error) {
         console.error(error);

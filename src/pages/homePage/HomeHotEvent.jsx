@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import api from '../../services/api';
 import EventCard from '../../components/events/EventCard';
 
 const FlexContainer = styled.div`
@@ -22,10 +22,7 @@ export default function HomeHotEvent() {
 
       setLoading(true);
       try {
-        const response = await requestWithAccessToken(
-          'get',
-          `${process.env.REACT_APP_BE_URL}/api/event/popular`,
-        );
+        const response = await api.get('/api/event/popular');
         const newEvents = response.data;
 
         setEvents(newEvents);

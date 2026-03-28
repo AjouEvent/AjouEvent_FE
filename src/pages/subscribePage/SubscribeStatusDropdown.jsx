@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import api from '../../services/api';
 import Swal from 'sweetalert2';
 import { COLORS, Z_INDEX } from '../../constant/appConstants';
 
@@ -99,14 +99,10 @@ export default function SubscribeStatusDropdown({ topic, fetchMenuItems, ringing
 
   const updateNotificationPreference = async (receiveNotification) => {
     try {
-      await requestWithAccessToken(
-        'post',
-        `${process.env.REACT_APP_BE_URL}/api/topic/subscriptions/notification`,
-        {
-          topic: topic.englishTopic,
-          receiveNotification,
-        }
-      );
+      await api.post('/api/topic/subscriptions/notification', {
+        topic: topic.englishTopic,
+        receiveNotification,
+      });
       fetchMenuItems();
       Swal.fire('알림 설정 변경 완료', '', 'success');
     } catch (error) {
@@ -116,9 +112,7 @@ export default function SubscribeStatusDropdown({ topic, fetchMenuItems, ringing
 
   const handleUnsubscribe = async () => {
     try {
-      await requestWithAccessToken('post', `${process.env.REACT_APP_BE_URL}/api/topic/unsubscribe`, {
-        topic: topic.englishTopic,
-      });
+      await api.post('/api/topic/unsubscribe', { topic: topic.englishTopic });
       fetchMenuItems();
       Swal.fire('구독 취소 완료', `${topic.koreanTopic} 구독을 취소했습니다.`, 'success');
     } catch (error) {

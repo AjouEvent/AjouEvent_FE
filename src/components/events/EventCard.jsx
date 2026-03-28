@@ -3,7 +3,7 @@ import EmptyStarIcon from '../icons/EmptyStarIcon';
 import FilledStarIcon from '../icons/FilledStarIcon';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import api from '../../services/api';
 import Swal from 'sweetalert2';
 import { COLORS } from '../constants/appConstants';
 
@@ -201,17 +201,11 @@ const EventCard = ({
 
     try {
       if (cardStar) {
-        await requestWithAccessToken(
-          'delete',
-          `${process.env.REACT_APP_BE_URL}/api/event/like/${id}`,
-        );
+        await api.delete(`/api/event/like/${id}`);
         setCardStar(!cardStar);
         setLikes(likes - 1);
       } else {
-        await requestWithAccessToken(
-          'post',
-          `${process.env.REACT_APP_BE_URL}/api/event/like/${id}`,
-        );
+        await api.post(`/api/event/like/${id}`);
         setCardStar(!cardStar);
         setLikes(likes + 1);
       }

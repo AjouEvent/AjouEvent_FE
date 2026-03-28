@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import useUIStore from '../../store/useUIStore';
 import styled from 'styled-components';
 import SubscribeBar from './SubscribeBar';
-import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import api from '../../services/api';
 import SubscribeEvent from './SubscribeEvent';
 import SearchBar from '../../components/SearchBar';
 import { COLORS, LIMITS, STORAGE_KEYS } from '../../constant/appConstants';
@@ -44,7 +44,7 @@ export default function SubscribeTab({ showGuide }) {
         ? `${process.env.REACT_APP_BE_URL}/api/event/${encodeURIComponent(selectedTopic)}?page=${page}&size=${pageSize}&keyword=${keyword}`
         : `${process.env.REACT_APP_BE_URL}/api/event/subscribed?page=${page}&size=${pageSize}&keyword=${keyword}`;
 
-      const response = await requestWithAccessToken('get', url);
+      const response = await api.get(url.replace(process.env.REACT_APP_BE_URL, ''));
       const newEvents = response.data.result;
 
       setEvents((prevEvents) => {

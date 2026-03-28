@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import CalendarModal from '../CalendarModal';
 import TabBar from '../TabBar';
-import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import api from '../../services/api';
 import Swal from 'sweetalert2';
 import EventBanner from './EventBanner';
 import axios from 'axios';
@@ -248,10 +248,7 @@ const EventDetail = () => {
         let response;
 
         if (accessToken) {
-          response = await requestWithAccessToken(
-            'get',
-            `${process.env.REACT_APP_BE_URL}/api/event/detail/${id}`,
-          );
+          response = await api.get(`/api/event/detail/${id}`);
         } else {
           const config = alreadyViewClubEventNum
             ? {
@@ -311,20 +308,14 @@ const EventDetail = () => {
   const handleStarClick = async () => {
     try {
       if (event.star) {
-        await requestWithAccessToken(
-          'delete',
-          `${process.env.REACT_APP_BE_URL}/api/event/like/${id}`,
-        );
+        await api.delete(`/api/event/like/${id}`);
         setEvent((prevEvent) => ({
           ...prevEvent,
           star: false,
           likesCount: prevEvent.likesCount - 1,
         }));
       } else {
-        await requestWithAccessToken(
-          'post',
-          `${process.env.REACT_APP_BE_URL}/api/event/like/${id}`,
-        );
+        await api.post(`/api/event/like/${id}`);
         setEvent((prevEvent) => ({
           ...prevEvent,
           star: true,

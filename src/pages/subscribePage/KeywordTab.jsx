@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import KeywordBar from './KeywordBar';
 import SearchBar from '../../components/SearchBar';
-import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import api from '../../services/api';
 import EventCard from '../../components/events/EventCard';
 import useSubscriptionStore from '../../store/useSubscriptionStore';
 import { COLORS, LIMITS } from '../../constant/appConstants';
@@ -70,7 +70,7 @@ export default function KeywordTab({ showGuide }) {
           ? `${process.env.REACT_APP_BE_URL}/api/event/getSubscribedPostsByKeyword/${selectedKeyword.encodedKeyword}?page=${page}&size=${pageSize}`
           : `${process.env.REACT_APP_BE_URL}/api/event/getSubscribedPostsByKeyword?page=${page}&size=${pageSize}`;
 
-        const response = await requestWithAccessToken('get', url);
+        const response = await api.get(url.replace(process.env.REACT_APP_BE_URL, ''));
         const newEvents = response.data.result;
 
         setEvents((prevEvents) =>

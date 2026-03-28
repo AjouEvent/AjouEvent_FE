@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import requestWithAccessToken from '../services/jwt/requestWithAccessToken';
+import api from '../services/api';
 
 const useSubscriptionStore = create((set, get) => ({
   isTopicTabRead: true,
@@ -74,7 +74,7 @@ const useSubscriptionStore = create((set, get) => ({
 
   updateSubscribedTabRead: async () => {
     try {
-      const response = await requestWithAccessToken('get', `${process.env.REACT_APP_BE_URL}/api/subscriptions/isSubscribedTabRead`);
+      const response = await api.get('/api/subscriptions/isSubscribedTabRead');
       set({ isSubscribedTabRead: response.data.isSubscribedTabRead });
     } catch (error) {
       console.error('Error updating isSubscribedTabRead:', error);
@@ -93,10 +93,7 @@ const useSubscriptionStore = create((set, get) => ({
 
   fetchMemberStatus: async () => {
     try {
-      const response = await requestWithAccessToken(
-        'get',
-        `${process.env.REACT_APP_BE_URL}/api/subscriptions/isSubscribedTabRead`,
-      );
+      const response = await api.get('/api/subscriptions/isSubscribedTabRead');
       set({
         isSubscribedTabRead: response.data.subscribedTabRead,
       });
@@ -107,10 +104,7 @@ const useSubscriptionStore = create((set, get) => ({
 
   fetchSubscribedTopics: async () => {
     try {
-      const response = await requestWithAccessToken(
-        'get',
-        `${process.env.REACT_APP_BE_URL}/api/topic/subscriptions`,
-      );
+      const response = await api.get('/api/topic/subscriptions');
       const topics = response.data;
       set({ topics });
     } catch (error) {
@@ -120,10 +114,7 @@ const useSubscriptionStore = create((set, get) => ({
 
   fetchSubscribedKeywords: async () => {
     try {
-      const response = await requestWithAccessToken(
-        'get',
-        `${process.env.REACT_APP_BE_URL}/api/keyword/userKeywords`,
-      );
+      const response = await api.get('/api/keyword/userKeywords');
       const keywords = response.data;
       set({ subscribedKeywords: keywords });
       get().updateTabReadStatus();
@@ -134,10 +125,7 @@ const useSubscriptionStore = create((set, get) => ({
 
   fetchSubscribeItems: async () => {
     try {
-      const response = await requestWithAccessToken(
-        'get',
-        `${process.env.REACT_APP_BE_URL}/api/topic/subscriptions`,
-      );
+      const response = await api.get('/api/topic/subscriptions');
       const topics = response.data;
       set({ subscribeItems: topics });
       get().updateTabReadStatus();
@@ -148,11 +136,7 @@ const useSubscriptionStore = create((set, get) => ({
 
   subscribeToTopic: async (topic) => {
     try {
-      await requestWithAccessToken(
-        'post',
-        `${process.env.REACT_APP_BE_URL}/api/topic/subscribe`,
-        { topic },
-      );
+      await api.post('/api/topic/subscribe', { topic });
       set((state) => ({
         topics: state.topics.map((t) =>
           t.englishTopic === topic ? { ...t, subscribed: true } : t,
@@ -165,11 +149,7 @@ const useSubscriptionStore = create((set, get) => ({
 
   unsubscribeFromTopic: async (topic) => {
     try {
-      await requestWithAccessToken(
-        'post',
-        `${process.env.REACT_APP_BE_URL}/api/topic/unsubscribe`,
-        { topic },
-      );
+      await api.post('/api/topic/unsubscribe', { topic });
       set((state) => ({
         topics: state.topics.map((t) =>
           t.englishTopic === topic ? { ...t, subscribed: false } : t,

@@ -7,7 +7,7 @@ import useUIStore from '../../store/useUIStore';
 import { KtoECodes } from '../../constant/departmentCodes';
 import LocationBar from '../../components/LocationBar';
 import SearchEvent from './SearchEvent';
-import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
+import api from '../../services/api';
 import { LIMITS, COLORS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
@@ -60,10 +60,7 @@ export default function SearchEventPage() {
 
     setLoading(true);
     try {
-      const response = await requestWithAccessToken(
-        'get',
-        `${process.env.REACT_APP_BE_URL}/api/event/${KtoECodes[option2]}?page=${page}&size=${pageSize}&keyword=${keyword}`,
-      );
+      const response = await api.get(`/api/event/${KtoECodes[option2]}?page=${page}&size=${pageSize}&keyword=${keyword}`);
       const newEvents = response.data.result;
 
       setEvents((prevEvents) => {
