@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import useStore from '../../store/useStore';
+import useSubscriptionStore from '../../store/useSubscriptionStore';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import Swal from 'sweetalert2';
 import SubscribeStatusDropdown from './SubscribeStatusDropdown';
@@ -241,7 +241,7 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
     markTopicAsRead,
     subscribeItems,
     fetchSubscribeItems,
-  } = useStore();
+  } = useSubscriptionStore();
   const [menuItems, setMenuItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);

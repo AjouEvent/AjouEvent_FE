@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import NavigationBar from '../../components/NavigationBar';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
 import Swal from 'sweetalert2';
-import useStore from '../../store/useStore';
+import useSubscriptionStore from '../../store/useSubscriptionStore';
 import { COLORS, LIMITS, Z_INDEX, STORAGE_KEYS } from '../../constant/appConstants';
 
 const AppContainer = styled.div`
@@ -345,7 +345,7 @@ const Toast = Swal.mixin({
 });
 
 export default function KeywordSubscribePage() {
-  const { setSubscribedKeywords } = useStore((state) => ({
+  const { setSubscribedKeywords } = useSubscriptionStore((state) => ({
     setSubscribedKeywords: state.setSubscribedKeywords,
   }));
   const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);

@@ -1,24 +1,18 @@
 import { create } from 'zustand';
 import requestWithAccessToken from '../services/jwt/requestWithAccessToken';
 
-// useStore.js
-const useStore = create((set, get) => ({
-  savedKeyword: '',
-  savedOption1: '',
-  savedOption2: '아주대학교-일반',
-  isAuthorized: false,
+const useSubscriptionStore = create((set, get) => ({
   isTopicTabRead: true,
   isKeywordTabRead: true,
   isSubscribedTabRead: true,
-  unreadNotificationCount: 0, // 푸시 알림 배지 개수 상태
-  topics: [], // 사용자가 구독한 topics
-  subscribeItems: [], // 구독된 항목들을 저장하는 상태 추가
-  keywords: [], // 사용자가 구독한 keywords
-  subscribedKeywords: [], // 구독된 키워드들을 저장하는 상태 추가
+  topics: [],
+  subscribeItems: [],
+  keywords: [],
+  subscribedKeywords: [],
 
   setSubscribeItems: (items) => {
     set({ subscribeItems: items });
-    get().updateTabReadStatus(); 
+    get().updateTabReadStatus();
   },
 
   setSubscribedKeywords: (keywords) => {
@@ -26,7 +20,6 @@ const useStore = create((set, get) => ({
     get().updateTabReadStatus();
   },
 
-  // 상태 업데이트 로직 (전체 읽음 여부 체크)
   updateTabReadStatus: () => {
     const { subscribeItems, subscribedKeywords } = get();
     const allTopicsRead = subscribeItems.every((item) => item.isRead);
@@ -39,81 +32,36 @@ const useStore = create((set, get) => ({
     });
   },
 
-  setSavedKeyword: (savedKeyword) => {
-    set({ savedKeyword });
-  },
-  setSavedOption1: (savedOption1) => {
-    set({ savedOption1 });
-  },
-  setSavedOption2: (savedOption2) => {
-    set({ savedOption2 });
-  },
-  setIsAuthorized: () => {
-    set({ isAuthorized: true });
-  },
-
-  setUnreadNotificationCount: (count) => set({ unreadNotificationCount: count }),
-
-  // 안 읽은 푸시 알림 배지 개수 가져오는 함수
-  fetchUnreadNotificationCount: async () => {
-    try {
-      const response = await requestWithAccessToken(
-        'get',
-        `${process.env.REACT_APP_BE_URL}/api/notification/unread-count`
-      );
-      set({ unreadNotificationCount: response.data.unreadNotificationCount });
-
-      if (navigator.setAppBadge) {
-        navigator.setAppBadge(response.data.unreadNotificationCount).catch(console.error);
-      }
-    } catch (error) {
-      console.error('Error fetching unread count:', error);
-    }
+  markTopicAsRead: (topic) => {
+    const state = get();
+    const updatedItems = state.subscribeItems.map((item) =>
+      item.englishTopic === topic ? { ...item, isRead: true } : item,
+    );
+    const allTopicsRead = updatedItems.every((item) => item.isRead === true);
+    const allKeywordsRead = state.subscribedKeywords.every((item) => item.isRead === true);
+    set({
+      subscribeItems: updatedItems,
+      isTopicTabRead: allTopicsRead,
+      isSubscribedTabRead: allTopicsRead && allKeywordsRead,
+    });
   },
 
-  // 특정 토픽을 읽음 상태로 변경하고 전체 읽음 상태를 갱신하는 함수
-  markTopicAsRead: async (topic) =>
-    set(async (state) => {
-      const updatedItems = state.subscribeItems.map((item) =>
-        item.englishTopic === topic ? { ...item, isRead: true } : item,
-      );
+  markKeywordAsRead: (keyword) => {
+    const state = get();
+    const updatedItems = state.subscribedKeywords.map((item) =>
+      item.encodedKeyword === keyword.encodedKeyword
+        ? { ...item, isRead: true }
+        : item,
+    );
+    const allKeywordsRead = updatedItems.every((item) => item.isRead === true);
+    const allTopicsRead = state.subscribeItems.every((item) => item.isRead === true);
+    set({
+      subscribedKeywords: updatedItems,
+      isKeywordTabRead: allKeywordsRead,
+      isSubscribedTabRead: allTopicsRead && allKeywordsRead,
+    });
+  },
 
-      // 모든 항목이 읽음 상태인지 확인하여 isTopicTabRead를 갱신
-      const allTopicsRead = updatedItems.every((item) => item.isRead === true);
-      const allKeywordsRead = get().subscribedKeywords.every((item) => item.isRead === true);
-
-      // 상태 업데이트
-      set({
-        subscribeItems: updatedItems,
-        isTopicTabRead: allTopicsRead,
-        isSubscribedTabRead: allTopicsRead && allKeywordsRead,
-      });
-    }),
-
-  // 특정 토픽을 읽음 상태로 변경하고 전체 읽음 상태를 갱신하는 함수
-  markKeywordAsRead: async (keyword) =>
-    set(async (state) => {
-      const updatedItems = state.subscribedKeywords.map((item) =>
-        item.encodedKeyword === keyword.encodedKeyword
-          ? { ...item, isRead: true }
-          : item,
-      );
-
-      // 모든 항목이 읽음 상태인지 확인하여 isTopicTabRead를 갱신
-      const allKeywordsRead = updatedItems.every(
-        (item) => item.isRead === true,
-      );
-      const allTopicsRead = get().subscribeItems.every((item) => item.isRead === true);
-
-      // 상태 업데이트
-      set({
-        subscribedKeywords: updatedItems,
-        isKeywordTabRead: allKeywordsRead,
-        isSubscribedTabRead: allTopicsRead && allKeywordsRead, 
-      });
-    }),
-
-  // 읽음 상태 업데이트
   setIsTopicTabRead: async (isRead) => {
     set({ isTopicTabRead: isRead });
   },
@@ -123,7 +71,7 @@ const useStore = create((set, get) => ({
   },
 
   setIsSubscribedTabRead: (isRead) => set({ isSubscribedTabRead: isRead }),
-  
+
   updateSubscribedTabRead: async () => {
     try {
       const response = await requestWithAccessToken('get', `${process.env.REACT_APP_BE_URL}/api/subscriptions/isSubscribedTabRead`);
@@ -133,7 +81,6 @@ const useStore = create((set, get) => ({
     }
   },
 
-  // 모든 topic의 읽음 상태 확인 및 구독 탭 뱃지 업데이트
   updateTopicReadStatus: (topics) => {
     const allTopicsRead = topics.every((topic) => topic.isRead);
     set({ isTopicTabRead: allTopicsRead });
@@ -144,7 +91,6 @@ const useStore = create((set, get) => ({
     set({ isKeywordTabRead: allKeywordsRead });
   },
 
-  // 구독 상태 불러오기
   fetchMemberStatus: async () => {
     try {
       const response = await requestWithAccessToken(
@@ -159,7 +105,6 @@ const useStore = create((set, get) => ({
     }
   },
 
-  // 사용자가 구독한 topic 목록 가져오기
   fetchSubscribedTopics: async () => {
     try {
       const response = await requestWithAccessToken(
@@ -167,7 +112,7 @@ const useStore = create((set, get) => ({
         `${process.env.REACT_APP_BE_URL}/api/topic/subscriptions`,
       );
       const topics = response.data;
-      set({ topics }); // 상태에 구독한 topic 설정
+      set({ topics });
     } catch (error) {
       console.error('Error fetching subscribed topics', error);
     }
@@ -187,7 +132,6 @@ const useStore = create((set, get) => ({
     }
   },
 
-  // 구독 항목을 서버에서 불러오는 함수
   fetchSubscribeItems: async () => {
     try {
       const response = await requestWithAccessToken(
@@ -202,7 +146,6 @@ const useStore = create((set, get) => ({
     }
   },
 
-  // 토픽 구독 및 구독 취소
   subscribeToTopic: async (topic) => {
     try {
       await requestWithAccessToken(
@@ -238,4 +181,4 @@ const useStore = create((set, get) => ({
   },
 }));
 
-export default useStore;
+export default useSubscriptionStore;

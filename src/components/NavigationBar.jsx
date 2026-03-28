@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PWAPrompt from 'react-ios-pwa-prompt';
-import useStore from '../store/useStore';
+import useSubscriptionStore from '../store/useSubscriptionStore';
 import { Z_INDEX, COLORS } from '../constant/appConstants';
 
 const NavWrapper = styled.nav`
@@ -110,7 +110,7 @@ function NavigationBar() {
   const currentPath = location.pathname;
 
   // 전역 상태에서 읽음 상태 관리 (서버 변수명 그대로 사용)
-  const { isSubscribedTabRead, fetchMemberStatus } = useStore();
+  const { isSubscribedTabRead, fetchMemberStatus } = useSubscriptionStore();
 
   const [isIOS, setIsIOS] = useState(false);
   const [shouldShowPWAPrompt, setShouldShowPWAPrompt] = useState(false);

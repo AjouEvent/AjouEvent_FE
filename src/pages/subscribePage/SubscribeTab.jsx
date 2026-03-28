@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import useStore from '../../store/useStore';
+import useUIStore from '../../store/useUIStore';
 import styled from 'styled-components';
 import SubscribeBar from './SubscribeBar';
 import requestWithAccessToken from '../../services/jwt/requestWithAccessToken';
@@ -15,11 +15,11 @@ const AppContainer = styled.div`
 `;
 
 export default function SubscribeTab({ showGuide }) {
-  const { savedKeyword, setSavedKeyword } = useStore((state) => ({
+  const { savedKeyword, setSavedKeyword } = useUIStore((state) => ({
     savedKeyword: state.savedKeyword,
     setSavedKeyword: state.setSavedKeyword,
-    isTopicTabRead: state.isTopicTabRead,
-    setIsTopicTabRead: state.setIsTopicTabRead,
+    // isTopicTabRead: state.isTopicTabRead,
+    // setIsTopicTabRead: state.setIsTopicTabRead,
   }));
 
   const [keyword, setKeyword] = useState(savedKeyword);

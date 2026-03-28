@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import useStore from '../../store/useStore';
+import useSubscriptionStore from '../../store/useSubscriptionStore';
 import NavigationBar from '../../components/NavigationBar';
 import LocationBar from '../../components/LocationBar';
 import SubscribeTab from './SubscribeTab';
@@ -107,7 +107,7 @@ const GuideMessage = styled.div`
 
 export default function SubscribePage() {
   const location = useLocation();
-  const { subscribeItems, subscribedKeywords, fetchSubscribeItems, fetchSubscribedKeywords } = useStore();
+  const { subscribeItems, subscribedKeywords, fetchSubscribeItems, fetchSubscribedKeywords } = useSubscriptionStore();
   const [activeTab, setActiveTab] = useState(
     location.state?.activeTab || 'subscribe',
   );
