@@ -5,7 +5,7 @@ import SearchBar from '../../components/SearchBar';
 import EventCard from '../../components/events/EventCard';
 import { getPostsByKeyword } from '../../services/api/event';
 import useSubscriptionStore from '../../store/useSubscriptionStore';
-import { COLORS, LIMITS } from '../../constant/appConstants';
+import { COLORS, LIMITS } from '../../constants/appConstants';
 
 const AppContainer = styled.div`
   display: flex;

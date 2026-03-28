@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { clearAuth } from '../utils/auth';
-import { STORAGE_KEYS } from '../constant/appConstants';
+import { STORAGE_KEYS } from '../constants/appConstants';
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_BE_URL,
@@ -22,21 +22,18 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const publicPaths = ['/login', '/loginSuccess', '/privacy-agreement', '/signUp'];
+    const isPublicPath = publicPaths.some((path) =>
+      window.location.pathname.startsWith(path),
+    );
+
+    if (error.response?.status === 401 && !originalRequest._retry && !isPublicPath) {
       originalRequest._retry = true; // 무한 루프 방지
-
-      const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
-
-      if (!refreshToken) {
-        clearAuth();
-        window.location.href = '/login';
-        return Promise.reject(error);
-      }
 
       try {
         const response = await axios.patch(
-          `${process.env.REACT_APP_BE_URL}/api/users/reissue-token`,
-          { refreshToken },
+          `${process.env.REACT_APP_BE_URL}/api/users/reissue-token`, null, 
+          { withCredentials: true },
         );
         const newAccessToken = response.data.accessToken;
         localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, newAccessToken);
@@ -46,12 +43,15 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch {
         clearAuth();
+        localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
         Swal.fire({
           icon: 'warning',
           title: '타임오버',
           text: '로그인 시간이 만료되어 로그아웃 되었습니다.',
         });
-        window.location.href = '/login';
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
         return Promise.reject(error);
       }
     }

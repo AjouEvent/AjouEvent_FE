@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { STORAGE_KEYS, COLORS } from '../constant/appConstants';
+import { STORAGE_KEYS, COLORS } from '../constants/appConstants';
 
 const ProfileContainer = styled.div`
   display: flex;

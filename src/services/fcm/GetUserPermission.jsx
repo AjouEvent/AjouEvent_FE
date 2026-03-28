@@ -1,6 +1,6 @@
 import GetFCMToken from './GetFCMToken';
 import Swal from 'sweetalert2';
-import { LIMITS, STORAGE_KEYS } from '../../constant/appConstants';
+import { LIMITS, STORAGE_KEYS } from '../../constants/appConstants';
 
 const Toast = Swal.mixin({
   toast: true,

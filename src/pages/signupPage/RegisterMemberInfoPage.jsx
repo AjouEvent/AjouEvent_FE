@@ -1,8 +1,8 @@
 import React from 'react';
-import SignUp from '../../components/SignUp';
 import styled from 'styled-components';
 import NavigationBar from '../../components/NavigationBar';
-import { COLORS } from '../../constants/colors';
+import RegisterMemberInfo from '../../components/RegisterMemberInfo';
+import { COLORS } from '../../constants/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
@@ -14,10 +14,10 @@ const AppContainer = styled.div`
   overflow-x: hidden;
 `;
 
-export default function SignUpPage() {
+export default function RegisterMemberInfoPage() {
   return (
     <AppContainer>
-      <SignUp></SignUp>
+      <RegisterMemberInfo></RegisterMemberInfo>
       <NavigationBar></NavigationBar>
     </AppContainer>
   );

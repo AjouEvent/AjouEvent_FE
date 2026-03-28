@@ -5,7 +5,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import useUIStore from '../store/useUIStore';
-import { Z_INDEX, COLORS } from '../constant/appConstants';
+import { Z_INDEX, COLORS } from '../constants/appConstants';
 import { checkAccountExists, requestEmailVerification, verifyEmailCode } from '../services/api/user';
 
 const Container = styled.div`

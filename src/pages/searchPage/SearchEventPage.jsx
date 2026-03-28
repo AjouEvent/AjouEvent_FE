@@ -4,10 +4,10 @@ import NavigationBar from '../../components/NavigationBar';
 import SearchDropBox from './SearchDropBox';
 import SearchBar from '../../components/SearchBar';
 import useUIStore from '../../store/useUIStore';
-import { KtoECodes } from '../../constant/departmentCodes';
+import { KtoECodes } from '../../constants/departmentCodes';
 import LocationBar from '../../components/LocationBar';
 import SearchEvent from './SearchEvent';
-import { LIMITS, COLORS } from '../../constant/appConstants';
+import { LIMITS, COLORS } from '../../constants/appConstants';
 import { getEventsByCategory } from '../../services/api/event';
 
 const AppContainer = styled.div`

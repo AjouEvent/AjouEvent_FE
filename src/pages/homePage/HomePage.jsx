@@ -8,7 +8,7 @@ import HomeBanner from './HomeBanner';
 import HomeHotEvent from './HomeHotEvent';
 import DailyModal from '../../components/DailyModal';
 import HelpBox from '../../components/HelpBox';
-import { Z_INDEX, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
+import { Z_INDEX, STORAGE_KEYS, COLORS } from '../../constants/appConstants';
 import NotifyModal from '../notificationPage/NotificationPage';
 import { getBannerImages } from '../../services/api/event';
 

@@ -5,7 +5,7 @@ import SubscribeBar from './SubscribeBar';
 import SubscribeEvent from './SubscribeEvent';
 import { getEventsByCategory, getSubscribedEvents } from '../../services/api/event';
 import SearchBar from '../../components/SearchBar';
-import { COLORS, LIMITS, STORAGE_KEYS } from '../../constant/appConstants';
+import { COLORS, LIMITS, STORAGE_KEYS } from '../../constants/appConstants';
 
 const AppContainer = styled.div`
   display: flex;

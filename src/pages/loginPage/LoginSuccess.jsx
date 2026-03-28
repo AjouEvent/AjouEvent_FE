@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
-import { LIMITS, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
+import { LIMITS, STORAGE_KEYS, COLORS } from '../../constants/appConstants';
 import { oauthLogin } from '../../services/api/user';
 
 const Container = styled.div`
@@ -70,7 +70,6 @@ const LoginSuccess = () => {
             const {
               id,
               accessToken,
-              refreshToken,
               email,
               name,
               major,
@@ -79,7 +78,6 @@ const LoginSuccess = () => {
 
             localStorage.setItem(STORAGE_KEYS.USER_ID, id);
             localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
-            localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
             localStorage.setItem(STORAGE_KEYS.EMAIL, email);
             localStorage.setItem(STORAGE_KEYS.NAME, name);
             localStorage.setItem(STORAGE_KEYS.MAJOR, major);

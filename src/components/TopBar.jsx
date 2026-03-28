@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { clearAuth } from '../utils/auth';
-import { Z_INDEX, STORAGE_KEYS } from '../constant/appConstants';
+import { Z_INDEX, STORAGE_KEYS } from '../constants/appConstants';
 
 const TopBarContainer = styled.div`
   z-index: ${Z_INDEX.NAV};

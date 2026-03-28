@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import { addEventToCalendar } from '../services/api/event';
-import { Z_INDEX, COLORS } from '../constant/appConstants';
+import { Z_INDEX, COLORS } from '../constants/appConstants';
 
 const ModalBackgroundContainer = styled.div`
   position: fixed;

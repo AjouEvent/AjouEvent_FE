@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import useNotificationStore from '../store/useNotificationStore';
-import { LIMITS, Z_INDEX } from '../constant/appConstants';
+import { LIMITS, Z_INDEX } from '../constants/appConstants';
 
 const StickyContainer = styled.div`
   display: flex;

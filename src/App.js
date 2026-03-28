@@ -15,7 +15,6 @@ import LoginSuccess from './pages/loginPage/LoginSuccess';
 import GuidePage from './pages/GuidePage';
 import ProfileModificationPage from './pages/myPage/ProfileModificationPage';
 import DeleteAccountPage from './pages/myPage/DeleteAccountPage';
-import SignUpSelectPage from './pages/signupPage/SignUpSelectPage';
 import RegisterMemberInfoPage from './pages/signupPage/RegisterMemberInfoPage';
 import PrivacyAgreementPage from './pages/signupPage/PrivacyAgreementPage';
 import NotificationPage from './pages/notificationPage/NotificationPage';
@@ -81,10 +80,6 @@ const ROUTER = createBrowserRouter([
   {
     path: '/register-info',
     element: <RegisterMemberInfoPage />,
-  },
-  {
-    path: '/signUp/select',
-    element: <SignUpSelectPage />,
   },
 ]);
 

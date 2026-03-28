@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { COLORS } from '../constant/appConstants';
+import { COLORS } from '../constants/appConstants';
 
 const LocationWrapper = styled.div`
   width: 100%;

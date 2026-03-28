@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import { login } from '../services/api/user';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { STORAGE_KEYS, COLORS } from '../constant/appConstants';
+import { STORAGE_KEYS, COLORS } from '../constants/appConstants';
 
 const PasswordConfirmContainer = styled.div`
   display: flex;

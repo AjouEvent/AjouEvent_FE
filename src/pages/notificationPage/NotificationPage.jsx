@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import TabBar from '../../components/TabBar';
 import NotificationList from './NotificationList';
-import { COLORS } from '../../constant/appConstants';
+import { COLORS } from '../../constants/appConstants';
 import { getUserKeywords } from '../../services/api/subscription';
 import { readAllNotifications } from '../../services/api/notification';
 

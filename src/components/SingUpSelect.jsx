@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import GetUserPermission from '../services/fcm/GetUserPermission';
 import Swal from 'sweetalert2';
-import { Z_INDEX, STORAGE_KEYS, COLORS } from '../constant/appConstants';
+import { Z_INDEX, STORAGE_KEYS, COLORS } from '../constants/appConstants';
 
 const Container = styled.div`
   z-index: ${Z_INDEX.PAGE};

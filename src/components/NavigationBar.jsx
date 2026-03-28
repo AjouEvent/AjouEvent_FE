@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PWAPrompt from 'react-ios-pwa-prompt';
 import useSubscriptionStore from '../store/useSubscriptionStore';
-import { Z_INDEX, COLORS } from '../constant/appConstants';
+import { Z_INDEX, COLORS } from '../constants/appConstants';
 
 const NavWrapper = styled.nav`
   z-index: ${Z_INDEX.NAV};

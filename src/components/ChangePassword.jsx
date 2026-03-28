@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import useUIStore from '../store/useUIStore';
-import { Z_INDEX, COLORS } from '../constant/appConstants';
+import { Z_INDEX, COLORS } from '../constants/appConstants';
 import { resetPassword } from '../services/api/user';
 
 const Title = styled.h2`

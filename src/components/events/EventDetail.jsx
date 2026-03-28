@@ -6,7 +6,7 @@ import TabBar from '../TabBar';
 import Swal from 'sweetalert2';
 import EventBanner from './EventBanner';
 import ImageModal from './ImageModal';
-import { Z_INDEX, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
+import { Z_INDEX, STORAGE_KEYS, COLORS } from '../../constants/appConstants';
 import { getEventDetail, getAuthEventDetail, likeEvent, unlikeEvent } from '../../services/api/event';
 
 const ModalOverlay = styled.div`

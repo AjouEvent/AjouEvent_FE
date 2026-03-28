@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Carousel from 'react-bootstrap/Carousel';
-import { COLORS } from '../../constant/appConstants';
+import { COLORS } from '../../constants/appConstants';
 
 const BannerContainer = styled.div`
   display: flex;
