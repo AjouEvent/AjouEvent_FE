@@ -10,7 +10,7 @@ export const deleteUser = () =>
   api.delete('/api/users');
 
 export const oauthLogin = (loginData) =>
-  axios.post(`${BASE_URL}/api/users/oauth`, loginData);
+  axios.post(`${BASE_URL}/api/users/oauth`, loginData, { withCredentials: true });
 
 export const login = (userData) =>
   axios.post(`${BASE_URL}/api/users/login`, userData);

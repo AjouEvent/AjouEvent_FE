@@ -70,7 +70,6 @@ const LoginSuccess = () => {
             const {
               id,
               accessToken,
-              refreshToken,
               email,
               name,
               major,

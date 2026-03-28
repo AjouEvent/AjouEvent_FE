@@ -25,18 +25,10 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true; // 무한 루프 방지
 
-      const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
-
-      if (!refreshToken) {
-        clearAuth();
-        window.location.href = '/login';
-        return Promise.reject(error);
-      }
-
       try {
         const response = await axios.patch(
-          `${process.env.REACT_APP_BE_URL}/api/users/reissue-token`,
-          { refreshToken },
+          `${process.env.REACT_APP_BE_URL}/api/users/reissue-token`, null, 
+          { withCredentials: true },
         );
         const newAccessToken = response.data.accessToken;
         localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, newAccessToken);
