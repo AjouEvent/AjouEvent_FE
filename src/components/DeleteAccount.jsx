@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { STORAGE_KEYS } from '../constant/appConstants';
 import { resetTopicSubscriptions, resetKeywordSubscriptions } from '../services/api/subscription';
 import { deleteUser } from '../services/api/user';
+import { clearAuth } from '../utils/auth';
 
 const Container = styled.div`
   display: flex;
@@ -82,10 +83,7 @@ const DeleteAccountPage = () => {
     if (isTopicReset && isKeywordReset && reason) {
       try {
         await deleteUser();
-        localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-        localStorage.removeItem(STORAGE_KEYS.USER_ID);
-        localStorage.removeItem(STORAGE_KEYS.NAME);
-        localStorage.removeItem(STORAGE_KEYS.MAJOR);
+        clearAuth();
         Swal.fire('탈퇴 완료', '정상적으로 탈퇴되었습니다.', 'success');
         navigate('/login'); // 탈퇴 후 로그인 페이지로 이동
       } catch (error) {

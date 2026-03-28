@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import NavigationBar from '../../components/NavigationBar';
 import LocationBar from '../../components/LocationBar';
+import { clearAuth } from '../../utils/auth';
 import { getUserInfo } from '../../services/api/user';
 import Swal from 'sweetalert2';
 import { STORAGE_KEYS, COLORS } from '../../constant/appConstants';
@@ -141,12 +142,7 @@ const MyPage = () => {
       title: '로그아웃 성공',
       text: '로그아웃 했습니다.',
     });
-    localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.EMAIL);
-    localStorage.removeItem(STORAGE_KEYS.USER_ID);
-    localStorage.removeItem(STORAGE_KEYS.NAME);
-    localStorage.removeItem(STORAGE_KEYS.MAJOR);
+    clearAuth();
   };
 
   return (

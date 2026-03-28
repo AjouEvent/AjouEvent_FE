@@ -38,6 +38,7 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch {
         clearAuth();
+        localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
         Swal.fire({
           icon: 'warning',
           title: '타임오버',
