@@ -22,7 +22,12 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const publicPaths = ['/login', '/loginSuccess', '/privacy-agreement', '/signUp'];
+    const isPublicPath = publicPaths.some((path) =>
+      window.location.pathname.startsWith(path),
+    );
+
+    if (error.response?.status === 401 && !originalRequest._retry && !isPublicPath) {
       originalRequest._retry = true; // 무한 루프 방지
 
       try {
