@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
-import { Z_INDEX, COLORS } from '../constant/appConstants';
+import { Z_INDEX, COLORS } from '../constants/appConstants';
 import { register, checkDuplicateEmail, requestEmailVerification, verifyEmailCode } from '../services/api/user';
 
 const Container = styled.div`

@@ -4,7 +4,7 @@ import FilledStarIcon from '../icons/FilledStarIcon';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
-import { COLORS } from '../constants/appConstants';
+import { COLORS } from '../../constants/appConstants';
 import { likeEvent, unlikeEvent } from '../../services/api/event';
 
 const CardContainer = styled.div`
@@ -161,7 +161,7 @@ const BellIcon = styled.img`
 const KeywordText = styled.div`
   font-size: 16px;
   font-weight: bold;
-  color: ${COLORS.DARK_GARY_TEXT};
+  color: ${COLORS.DARK_GRAY_TEXT};
 `;
 
 function Stat({ iconSrc, value, altText, $hasKeyword }) {

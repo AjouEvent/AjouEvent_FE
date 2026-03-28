@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { COLORS } from '../../constant/appConstants';
+import { COLORS } from '../../constants/appConstants';
 import { clickNotification } from '../../services/api/notification';
 
 const CardContainer = styled.div`

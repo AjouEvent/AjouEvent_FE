@@ -4,7 +4,7 @@ import useSubscriptionStore from '../../store/useSubscriptionStore';
 import Swal from 'sweetalert2';
 import { getTopicSubscriptionsStatus, subscribeTopic } from '../../services/api/subscription';
 import SubscribeStatusDropdown from './SubscribeStatusDropdown';
-import { COLORS, LIMITS, Z_INDEX } from '../../constant/appConstants';
+import { COLORS, LIMITS, Z_INDEX } from '../../constants/appConstants';
 
 const Container = styled.div`
   display: flex;

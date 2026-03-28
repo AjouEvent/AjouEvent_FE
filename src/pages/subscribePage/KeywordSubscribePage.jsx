@@ -6,7 +6,7 @@ import NavigationBar from '../../components/NavigationBar';
 import Swal from 'sweetalert2';
 import { getTopicSubscriptionsStatus, getUserKeywords, subscribeKeyword, unsubscribeKeyword } from '../../services/api/subscription';
 import useSubscriptionStore from '../../store/useSubscriptionStore';
-import { COLORS, LIMITS, Z_INDEX, STORAGE_KEYS } from '../../constant/appConstants';
+import { COLORS, LIMITS, Z_INDEX, STORAGE_KEYS } from '../../constants/appConstants';
 
 const AppContainer = styled.div`
   display: flex;

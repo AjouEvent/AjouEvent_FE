@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import NavigationBar from '../../components/NavigationBar';
 import RegisterMemberInfo from '../../components/RegisterMemberInfo';
-import { COLORS } from '../../constants/colors';
+import { COLORS } from '../../constants/appConstants';
 
 const AppContainer = styled.div`
   display: flex;

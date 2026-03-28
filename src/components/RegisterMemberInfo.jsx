@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Z_INDEX, COLORS } from '../constant/appConstants';
+import { Z_INDEX, COLORS } from '../constants/appConstants';
 import { registerInfo } from '../services/api/user';
 
 const Container = styled.div`

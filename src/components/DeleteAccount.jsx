@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import styled from 'styled-components';
-import { STORAGE_KEYS } from '../constant/appConstants';
+import { STORAGE_KEYS } from '../constants/appConstants';
 import { resetTopicSubscriptions, resetKeywordSubscriptions } from '../services/api/subscription';
 import { deleteUser } from '../services/api/user';
 import { clearAuth } from '../utils/auth';

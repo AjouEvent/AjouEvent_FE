@@ -6,7 +6,7 @@ import SearchBar from '../../components/SearchBar';
 import LocationBar from '../../components/LocationBar';
 import useUIStore from '../../store/useUIStore';
 import { Link } from 'react-router-dom';
-import { LIMITS, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
+import { LIMITS, STORAGE_KEYS, COLORS } from '../../constants/appConstants';
 import { getLikedEvents } from '../../services/api/event';
 
 const AppContainer = styled.div`

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { clearAuth } from '../utils/auth';
-import { STORAGE_KEYS } from '../constant/appConstants';
+import { STORAGE_KEYS } from '../constants/appConstants';
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_BE_URL,

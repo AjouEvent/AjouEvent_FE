@@ -6,7 +6,7 @@ import NavigationBar from '../../components/NavigationBar';
 import LocationBar from '../../components/LocationBar';
 import SubscribeTab from './SubscribeTab';
 import KeywordTab from './KeywordTab';
-import { COLORS, STORAGE_KEYS } from '../../constant/appConstants';
+import { COLORS, STORAGE_KEYS } from '../../constants/appConstants';
 
 const AppContainer = styled.div`
   display: flex;

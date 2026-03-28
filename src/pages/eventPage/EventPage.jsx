@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { COLORS } from '../../constant/appConstants';
+import { COLORS } from '../../constants/appConstants';
 import EventMain from '../events/EventMain';
 import NavigationBar from '../../components/NavigationBar';
 import SearchDropBox from '../../searchPage/SearchDropBox';

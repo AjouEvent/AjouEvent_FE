@@ -1,4 +1,4 @@
-import { STORAGE_KEYS } from '../constant/appConstants';
+import { STORAGE_KEYS } from '../constants/appConstants';
 
 export function clearAuth() {
   localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
