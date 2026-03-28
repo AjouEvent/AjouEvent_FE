@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 import { Z_INDEX, COLORS } from '../constant/appConstants';
+import { register, checkDuplicateEmail, requestEmailVerification, verifyEmailCode } from '../services/api/user';
 
 const Container = styled.div`
   z-index: ${Z_INDEX.PAGE};
@@ -413,13 +413,7 @@ const SignUp = () => {
     }
 
     try {
-      await axios.post(`${process.env.REACT_APP_BE_URL}/api/users/register`, {
-        name,
-        major,
-        email,
-        password,
-        // phone,
-      });
+      await register({ name, major, email, password });
 
       Swal.fire({
         icon: "success",
@@ -456,9 +450,7 @@ const SignUp = () => {
   const emailRequest = async (email) => {
     try {
       setEmailRequestLoading(true);
-      const response = await axios.get(
-        `${process.env.REACT_APP_BE_URL}/api/users/duplicateEmail?email=${email}`
-      );
+      const response = await checkDuplicateEmail(email);
       const duplicateCheck = response.data;
 
       if (!duplicateCheck) {
@@ -472,9 +464,7 @@ const SignUp = () => {
         setEmailRequested(true);
 
         try {
-          await axios.post(
-            `${process.env.REACT_APP_BE_URL}/api/users/emailCheckRequest?email=${email}`
-          );
+          await requestEmailVerification(email);
 
           Swal.fire({
             icon: "success",
@@ -514,9 +504,7 @@ const SignUp = () => {
   const handleEmailCheck = async (email, e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        `${process.env.REACT_APP_BE_URL}/api/users/emailCheck?email=${email}&code=${number}`
-      );
+      await verifyEmailCode(email, number);
 
       Swal.fire({
         icon: "success",

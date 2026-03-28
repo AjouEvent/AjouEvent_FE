@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import { LIMITS, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
+import { oauthLogin } from '../../services/api/user';
 
 const Container = styled.div`
   width: 100%;
@@ -64,10 +64,7 @@ const LoginSuccess = () => {
         };
 
         try {
-          const response = await axios.post(
-            `${process.env.REACT_APP_BE_URL}/api/users/oauth`,
-            loginData,
-          );
+          const response = await oauthLogin(loginData);
 
           if (response.status === 200) {
             const {

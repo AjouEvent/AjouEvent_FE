@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import { useNavigate, useLocation } from 'react-router-dom';
-import api from '../services/api';
 import { Z_INDEX, COLORS } from '../constant/appConstants';
+import { registerInfo } from '../services/api/user';
 
 const Container = styled.div`
   display: flex;
@@ -225,7 +225,7 @@ const RegisterMajor = () => {
 
     try {
       console.log('email', email);
-      await api.post('/api/users/register-info', { major });
+      await registerInfo({ major });
       Swal.fire({
         icon: 'success',
         title: '학과 등록 성공',

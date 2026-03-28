@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import api from '../../services/api';
 import Swal from 'sweetalert2';
+import { updateTopicNotification, unsubscribeTopic } from '../../services/api/subscription';
 import { COLORS, Z_INDEX } from '../../constant/appConstants';
 
 const Wrapper = styled.div`
@@ -99,10 +99,7 @@ export default function SubscribeStatusDropdown({ topic, fetchMenuItems, ringing
 
   const updateNotificationPreference = async (receiveNotification) => {
     try {
-      await api.post('/api/topic/subscriptions/notification', {
-        topic: topic.englishTopic,
-        receiveNotification,
-      });
+      await updateTopicNotification(topic.englishTopic, receiveNotification);
       fetchMenuItems();
       Swal.fire('알림 설정 변경 완료', '', 'success');
     } catch (error) {
@@ -112,7 +109,7 @@ export default function SubscribeStatusDropdown({ topic, fetchMenuItems, ringing
 
   const handleUnsubscribe = async () => {
     try {
-      await api.post('/api/topic/unsubscribe', { topic: topic.englishTopic });
+      await unsubscribeTopic(topic.englishTopic);
       fetchMenuItems();
       Swal.fire('구독 취소 완료', `${topic.koreanTopic} 구독을 취소했습니다.`, 'success');
     } catch (error) {

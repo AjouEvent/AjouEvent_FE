@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { COLORS } from '../../constant/appConstants';
-import api from '../../services/api';
+import { clickNotification } from '../../services/api/notification';
 
 const CardContainer = styled.div`
   display: flex;
@@ -118,7 +118,7 @@ const NotificationCard = ({
 
   const postNotificationClick = async () => {
     try {
-      await api.post('/api/notification/click', { pushNotificationId: id });
+      await clickNotification(id);
     } catch (error) {
       console.error('Error fetching user keywords:', error);
     }

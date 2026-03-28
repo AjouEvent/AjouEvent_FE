@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import useUIStore from '../../store/useUIStore';
 import styled from 'styled-components';
 import SubscribeBar from './SubscribeBar';
-import api from '../../services/api';
 import SubscribeEvent from './SubscribeEvent';
+import { getEventsByCategory, getSubscribedEvents } from '../../services/api/event';
 import SearchBar from '../../components/SearchBar';
 import { COLORS, LIMITS, STORAGE_KEYS } from '../../constant/appConstants';
 
@@ -40,11 +40,9 @@ export default function SubscribeTab({ showGuide }) {
     setLoading(true);
 
     try {
-      const url = selectedTopic
-        ? `${process.env.REACT_APP_BE_URL}/api/event/${encodeURIComponent(selectedTopic)}?page=${page}&size=${pageSize}&keyword=${keyword}`
-        : `${process.env.REACT_APP_BE_URL}/api/event/subscribed?page=${page}&size=${pageSize}&keyword=${keyword}`;
-
-      const response = await api.get(url.replace(process.env.REACT_APP_BE_URL, ''));
+      const response = selectedTopic
+        ? await getEventsByCategory(selectedTopic, page, pageSize, keyword)
+        : await getSubscribedEvents(page, pageSize, keyword);
       const newEvents = response.data.result;
 
       setEvents((prevEvents) => {

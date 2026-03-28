@@ -9,8 +9,8 @@ import HomeHotEvent from './HomeHotEvent';
 import DailyModal from '../../components/DailyModal';
 import HelpBox from '../../components/HelpBox';
 import { Z_INDEX, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
-import axios from 'axios';
 import NotifyModal from '../notificationPage/NotificationPage';
+import { getBannerImages } from '../../services/api/event';
 
 const AppContainer = styled.div`
   display: flex;
@@ -201,9 +201,7 @@ export default function HomePage() {
     const fetchBannerImages = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_BE_URL}/api/event/banner`,
-        );
+        const response = await getBannerImages();
         setBannerImages(response.data);
       } catch (error) {
         console.error('Error fetching banner images:', error);

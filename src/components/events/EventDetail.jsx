@@ -3,12 +3,11 @@ import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import CalendarModal from '../CalendarModal';
 import TabBar from '../TabBar';
-import api from '../../services/api';
 import Swal from 'sweetalert2';
 import EventBanner from './EventBanner';
-import axios from 'axios';
 import ImageModal from './ImageModal';
 import { Z_INDEX, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
+import { getEventDetail, getAuthEventDetail, likeEvent, unlikeEvent } from '../../services/api/event';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -248,7 +247,7 @@ const EventDetail = () => {
         let response;
 
         if (accessToken) {
-          response = await api.get(`/api/event/detail/${id}`);
+          response = await getAuthEventDetail(id);
         } else {
           const config = alreadyViewClubEventNum
             ? {
@@ -259,10 +258,7 @@ const EventDetail = () => {
               }
             : { withCredentials: true };
 
-          response = await axios.get(
-            `${process.env.REACT_APP_BE_URL}/api/event/detail/${id}`,
-            config,
-          );
+          response = await getEventDetail(id, config);
         }
 
         if (response.data.content) {
@@ -308,14 +304,14 @@ const EventDetail = () => {
   const handleStarClick = async () => {
     try {
       if (event.star) {
-        await api.delete(`/api/event/like/${id}`);
+        await unlikeEvent(id);
         setEvent((prevEvent) => ({
           ...prevEvent,
           star: false,
           likesCount: prevEvent.likesCount - 1,
         }));
       } else {
-        await api.post(`/api/event/like/${id}`);
+        await likeEvent(id);
         setEvent((prevEvent) => ({
           ...prevEvent,
           star: true,

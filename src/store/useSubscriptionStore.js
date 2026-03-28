@@ -1,5 +1,11 @@
 import { create } from 'zustand';
-import api from '../services/api';
+import {
+  getSubscribedTabReadStatus,
+  getTopicSubscriptions,
+  getUserKeywords,
+  subscribeTopic,
+  unsubscribeTopic,
+} from '../services/api/subscription';
 
 const useSubscriptionStore = create((set, get) => ({
   isTopicTabRead: true,
@@ -74,7 +80,7 @@ const useSubscriptionStore = create((set, get) => ({
 
   updateSubscribedTabRead: async () => {
     try {
-      const response = await api.get('/api/subscriptions/isSubscribedTabRead');
+      const response = await getSubscribedTabReadStatus();
       set({ isSubscribedTabRead: response.data.isSubscribedTabRead });
     } catch (error) {
       console.error('Error updating isSubscribedTabRead:', error);
@@ -93,7 +99,7 @@ const useSubscriptionStore = create((set, get) => ({
 
   fetchMemberStatus: async () => {
     try {
-      const response = await api.get('/api/subscriptions/isSubscribedTabRead');
+      const response = await getSubscribedTabReadStatus();
       set({
         isSubscribedTabRead: response.data.subscribedTabRead,
       });
@@ -104,7 +110,7 @@ const useSubscriptionStore = create((set, get) => ({
 
   fetchSubscribedTopics: async () => {
     try {
-      const response = await api.get('/api/topic/subscriptions');
+      const response = await getTopicSubscriptions();
       const topics = response.data;
       set({ topics });
     } catch (error) {
@@ -114,7 +120,7 @@ const useSubscriptionStore = create((set, get) => ({
 
   fetchSubscribedKeywords: async () => {
     try {
-      const response = await api.get('/api/keyword/userKeywords');
+      const response = await getUserKeywords();
       const keywords = response.data;
       set({ subscribedKeywords: keywords });
       get().updateTabReadStatus();
@@ -125,7 +131,7 @@ const useSubscriptionStore = create((set, get) => ({
 
   fetchSubscribeItems: async () => {
     try {
-      const response = await api.get('/api/topic/subscriptions');
+      const response = await getTopicSubscriptions();
       const topics = response.data;
       set({ subscribeItems: topics });
       get().updateTabReadStatus();
@@ -136,7 +142,7 @@ const useSubscriptionStore = create((set, get) => ({
 
   subscribeToTopic: async (topic) => {
     try {
-      await api.post('/api/topic/subscribe', { topic });
+      await subscribeTopic(topic);
       set((state) => ({
         topics: state.topics.map((t) =>
           t.englishTopic === topic ? { ...t, subscribed: true } : t,
@@ -149,7 +155,7 @@ const useSubscriptionStore = create((set, get) => ({
 
   unsubscribeFromTopic: async (topic) => {
     try {
-      await api.post('/api/topic/unsubscribe', { topic });
+      await unsubscribeTopic(topic);
       set((state) => ({
         topics: state.topics.map((t) =>
           t.englishTopic === topic ? { ...t, subscribed: false } : t,
