@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
-import axios from "axios";
+import { login } from '../services/api/user';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { STORAGE_KEYS, COLORS } from '../constant/appConstants';
@@ -156,10 +156,7 @@ const PasswordConfirmation = ({ onConfirm }) => {
     };
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_BE_URL}/api/users/login`,
-        userData
-      );
+      const response = await login(userData);
 
       localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, response.data.accessToken);
       localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, response.data.refreshToken);

@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import TabBar from '../../components/TabBar';
 import NotificationList from './NotificationList';
-import api from '../../services/api';
 import { COLORS } from '../../constant/appConstants';
+import { getUserKeywords } from '../../services/api/subscription';
+import { readAllNotifications } from '../../services/api/notification';
 
 const AppContainer = styled.div`
   display: flex;
@@ -92,7 +93,7 @@ const NotificationPage = () => {
   useEffect(() => {
     const fetchUserKeywords = async () => {
       try {
-        const response = await api.get('/api/keyword/userKeywords');
+        const response = await getUserKeywords();
         setKeywordCount(response.data.length);
       } catch (error) {
         console.error('Error fetching user keywords:', error);
@@ -108,7 +109,7 @@ const NotificationPage = () => {
       return;
     }
     try {
-      await api.post('/api/notification/readAll');
+      await readAllNotifications();
       alert('모든 알림을 읽음 처리했습니다.');
       setNotifications((prev) => prev + 1);
     } catch (error) {

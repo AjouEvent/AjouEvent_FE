@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import useSubscriptionStore from '../../store/useSubscriptionStore';
-import api from '../../services/api';
 import Swal from 'sweetalert2';
+import { getTopicSubscriptionsStatus, subscribeTopic } from '../../services/api/subscription';
 import SubscribeStatusDropdown from './SubscribeStatusDropdown';
 import { COLORS, LIMITS, Z_INDEX } from '../../constant/appConstants';
 
@@ -269,7 +269,7 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
   // 구독 설정 데이터 불러오기 함수
   const fetchMenuItems = async () => {
     try {
-      const response = await api.get('/api/topic/subscriptionsStatus');
+      const response = await getTopicSubscriptionsStatus();
       const datas = response.data;
       setMenuItems(datas);
     } catch (error) {
@@ -314,7 +314,7 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
         title: `${topic.koreanTopic} 구독 중`,
       });
 
-      await api.post('/api/topic/subscribe', { topic: topic.englishTopic });
+      await subscribeTopic(topic.englishTopic);
 
       // 구독에 성공한 후 사용자가 구독하고 있는 항목을 새로 불러오기
       await fetchMenuItems();

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import api from '../../services/api';
 import EventCard from '../../components/events/EventCard';
+import { getPopularEvents } from '../../services/api/event';
 
 const FlexContainer = styled.div`
   display: flex;
@@ -22,7 +22,7 @@ export default function HomeHotEvent() {
 
       setLoading(true);
       try {
-        const response = await api.get('/api/event/popular');
+        const response = await getPopularEvents();
         const newEvents = response.data;
 
         setEvents(newEvents);

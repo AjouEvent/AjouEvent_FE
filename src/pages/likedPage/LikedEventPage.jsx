@@ -6,8 +6,8 @@ import SearchBar from '../../components/SearchBar';
 import LocationBar from '../../components/LocationBar';
 import useUIStore from '../../store/useUIStore';
 import { Link } from 'react-router-dom';
-import api from '../../services/api';
 import { LIMITS, STORAGE_KEYS, COLORS } from '../../constant/appConstants';
+import { getLikedEvents } from '../../services/api/event';
 
 const AppContainer = styled.div`
   display: flex;
@@ -72,7 +72,7 @@ export default function LikedEventPage() {
     setLoading(true);
 
     try {
-      const response = await api.get(`/api/event/liked?AjouNormal&page=${page}&size=${pageSize}&keyword=${keyword}`);
+      const response = await getLikedEvents(page, pageSize, keyword);
       const newEvents = response.data.result;
 
       setEvents((prevEvents) => {

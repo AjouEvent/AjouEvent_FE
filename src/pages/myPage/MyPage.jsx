@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import NavigationBar from '../../components/NavigationBar';
-import api from '../../services/api';
 import LocationBar from '../../components/LocationBar';
+import { getUserInfo } from '../../services/api/user';
 import Swal from 'sweetalert2';
 import { STORAGE_KEYS, COLORS } from '../../constant/appConstants';
 
@@ -104,7 +104,7 @@ const MyPage = () => {
 
     const fetchUserInfo = async () => {
       try {
-        const response = await api.get('/api/users');
+        const response = await getUserInfo();
         setUser(response.data);
       } catch (error) {
         console.error(error);

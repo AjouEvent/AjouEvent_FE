@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import api from '../services/api';
+import { getUnreadNotificationCount } from '../services/api/notification';
 
 const useNotificationStore = create((set) => ({
   unreadNotificationCount: 0,
@@ -8,7 +8,7 @@ const useNotificationStore = create((set) => ({
 
   fetchUnreadNotificationCount: async () => {
     try {
-      const response = await api.get('/api/notification/unread-count');
+      const response = await getUnreadNotificationCount();
       set({ unreadNotificationCount: response.data.unreadNotificationCount });
 
       if (navigator.setAppBadge) {

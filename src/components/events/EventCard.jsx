@@ -3,9 +3,9 @@ import EmptyStarIcon from '../icons/EmptyStarIcon';
 import FilledStarIcon from '../icons/FilledStarIcon';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import api from '../../services/api';
 import Swal from 'sweetalert2';
 import { COLORS } from '../constants/appConstants';
+import { likeEvent, unlikeEvent } from '../../services/api/event';
 
 const CardContainer = styled.div`
   display: flex;
@@ -201,11 +201,11 @@ const EventCard = ({
 
     try {
       if (cardStar) {
-        await api.delete(`/api/event/like/${id}`);
+        await unlikeEvent(id);
         setCardStar(!cardStar);
         setLikes(likes - 1);
       } else {
-        await api.post(`/api/event/like/${id}`);
+        await likeEvent(id);
         setCardStar(!cardStar);
         setLikes(likes + 1);
       }

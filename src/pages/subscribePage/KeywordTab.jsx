@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import KeywordBar from './KeywordBar';
 import SearchBar from '../../components/SearchBar';
-import api from '../../services/api';
 import EventCard from '../../components/events/EventCard';
+import { getPostsByKeyword } from '../../services/api/event';
 import useSubscriptionStore from '../../store/useSubscriptionStore';
 import { COLORS, LIMITS } from '../../constant/appConstants';
 
@@ -66,11 +66,7 @@ export default function KeywordTab({ showGuide }) {
       setIsError(false);
 
       try {
-        const url = selectedKeyword
-          ? `${process.env.REACT_APP_BE_URL}/api/event/getSubscribedPostsByKeyword/${selectedKeyword.encodedKeyword}?page=${page}&size=${pageSize}`
-          : `${process.env.REACT_APP_BE_URL}/api/event/getSubscribedPostsByKeyword?page=${page}&size=${pageSize}`;
-
-        const response = await api.get(url.replace(process.env.REACT_APP_BE_URL, ''));
+        const response = await getPostsByKeyword(selectedKeyword?.encodedKeyword, page, pageSize);
         const newEvents = response.data.result;
 
         setEvents((prevEvents) =>

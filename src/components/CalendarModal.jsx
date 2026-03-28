@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import api from '../services/api';
 import Swal from 'sweetalert2';
+import { addEventToCalendar } from '../services/api/event';
 import { Z_INDEX, COLORS } from '../constant/appConstants';
 
 const ModalBackgroundContainer = styled.div`
@@ -173,7 +173,7 @@ function CalendarModal({ setIsModalOpen, title, content }) {
     };
 
     try {
-      await api.post('/api/event/calendar', eventData);
+      await addEventToCalendar(eventData);
       Swal.fire({
         icon: 'success',
         title: '구글 캘린더 등록 성공',

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import useUIStore from '../store/useUIStore';
 import { Z_INDEX, COLORS } from '../constant/appConstants';
+import { resetPassword } from '../services/api/user';
 
 const Title = styled.h2`
   padding-top: 5%;
@@ -243,13 +243,7 @@ const ChangePasswordPage = () => {
     }
 
     try {
-      await axios.patch(
-        `${process.env.REACT_APP_BE_URL}/api/users/reset-password`,
-        {
-          email,
-          newPassword,
-        },
-      );
+      await resetPassword(email, newPassword);
       Swal.fire({
         icon: 'success',
         title: '비밀번호 재설정 성공',

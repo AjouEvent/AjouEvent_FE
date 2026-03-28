@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import styled from 'styled-components';
-import api from '../services/api';
 import { STORAGE_KEYS } from '../constant/appConstants';
+import { resetTopicSubscriptions, resetKeywordSubscriptions } from '../services/api/subscription';
+import { deleteUser } from '../services/api/user';
 
 const Container = styled.div`
   display: flex;
@@ -50,7 +51,7 @@ const DeleteAccountPage = () => {
   const handleTopicReset = async () => {
     setIsLoadingTopic(true); // 로딩 시작
     try {
-      await api.delete('/api/topic/subscriptions/reset');
+      await resetTopicSubscriptions();
       setIsTopicReset(true);
       Swal.fire('성공', '구독한 토픽이 초기화되었습니다.', 'success');
     } catch (error) {
@@ -63,7 +64,7 @@ const DeleteAccountPage = () => {
   const handleKeywordReset = async () => {
     setIsLoadingKeyword(true); // 로딩 시작
     try {
-      await api.delete('/api/keyword/subscriptions/reset');
+      await resetKeywordSubscriptions();
       setIsKeywordReset(true);
       Swal.fire('성공', '구독한 키워드가 초기화되었습니다.', 'success');
     } catch (error) {
@@ -80,7 +81,7 @@ const DeleteAccountPage = () => {
   const handleAccountDeletion = async () => {
     if (isTopicReset && isKeywordReset && reason) {
       try {
-        await api.delete('/api/users');
+        await deleteUser();
         localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
         localStorage.removeItem(STORAGE_KEYS.USER_ID);
         localStorage.removeItem(STORAGE_KEYS.NAME);
