@@ -42,7 +42,7 @@
 | **Framework** | ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB) |
 | **Language** | ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=JavaScript&logoColor=black) |
 | **Notification** | ![Firebase](https://img.shields.io/badge/Firebase_FCM-FFCA28?style=flat&logo=firebase&logoColor=black) (Cloud Messaging) |
-| **State Mgt** | `Recoil` (or Context API) |
+| **State Mgt** | <img src="https://img.shields.io/badge/zustand-orange?style=for-the-badge&logo=zustand&logoColor=white"> |
 | **Styling** | ![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=flat&logo=styled-components&logoColor=white) |
 | **Deploy** | ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=Vercel&logoColor=white) (or AWS Amplify) |
 
