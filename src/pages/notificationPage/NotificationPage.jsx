@@ -6,6 +6,7 @@ import NotificationList from './NotificationList';
 import { COLORS } from '../../constants/appConstants';
 import { getUserKeywords } from '../../services/api/subscription';
 import { readAllNotifications } from '../../services/api/notification';
+import dialog from '../../utils/dialog';
 
 const AppContainer = styled.div`
   display: flex;
@@ -104,17 +105,17 @@ const NotificationPage = () => {
   }, []);
 
   // 알림 모두 읽음 처리 함수 (백엔드 readAll API 호출)
-  const readAllNotifications = async () => {
-    if (!window.confirm('정말 모든 알림을 읽음 처리할까요?')) {
-      return;
-    }
+  const handleReadAllNotifications = async () => {
+    const confirmed = await dialog.confirm('알림 읽음 처리', '정말 모든 알림을 읽음 처리할까요?');
+    if (!confirmed) return;
+
     try {
       await readAllNotifications();
-      alert('모든 알림을 읽음 처리했습니다.');
+      dialog.success('읽음 처리 완료', '모든 알림을 읽음 처리했습니다.');
       setNotifications((prev) => prev + 1);
     } catch (error) {
       console.error('Error reading all notifications:', error);
-      alert('알림 읽음 처리 중 오류가 발생했습니다.');
+      dialog.error('오류', '알림 읽음 처리 중 오류가 발생했습니다.');
     }
   };
 
@@ -133,7 +134,7 @@ const NotificationPage = () => {
       <TabBar
         Title="알림"
         RightComponent={
-          <MarkAllAsReadButton onClick={readAllNotifications}>
+          <MarkAllAsReadButton onClick={handleReadAllNotifications}>
             모두 읽음
           </MarkAllAsReadButton>
         }

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import { clearAuth } from '../utils/auth';
+import dialog from '../utils/dialog';
 import { Z_INDEX, STORAGE_KEYS } from '../constants/appConstants';
 
 const TopBarContainer = styled.div`
@@ -90,11 +90,7 @@ export default function TopBar() {
   }, []);
 
   const handleLogoutBtnClick = () => {
-    Swal.fire({
-      icon: 'success',
-      title: '로그아웃 성공',
-      text: '로그아웃 했습니다.',
-    });
+    dialog.success('로그아웃 성공', '로그아웃 했습니다.');
     setIsSignIn(false);
     clearAuth();
   };
