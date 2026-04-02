@@ -10,7 +10,6 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
     "@vercel/analytics": "^1.6.1",
     "axios": "^1.7.3",
     "bootstrap": "^5.3.3",
@@ -74,11 +73,15 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@eslint/js": "^9.17.0",
+    "@playwright/test": "^1.59.1",
+    "@testing-library/user-event": "^14.6.1",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.37.3",
     "globals": "^15.14.0",
+    "jest-styled-components": "^7.4.0",
+    "msw": "^2.12.14",
     "prettier": "^3.4.2"
   }
 }
