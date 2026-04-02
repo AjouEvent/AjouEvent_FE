@@ -58,6 +58,42 @@
       "react-app/jest"
     ]
   },
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "lines": 70,
+        "functions": 70,
+        "branches": 60
+      },
+      "./src/utils/": {
+        "lines": 90,
+        "functions": 90,
+        "branches": 90
+      },
+      "./src/hooks/": {
+        "lines": 90,
+        "functions": 90,
+        "branches": 90
+      },
+      "./src/store/": {
+        "lines": 90,
+        "functions": 90,
+        "branches": 90
+      }
+    },
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "src/mocks/",
+      "src/__mocks__/",
+      "src/reportWebVitals.js",
+      "src/serviceWorkerRegistration.js",
+      "src/service-worker.js",
+      "src/index.js"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|svg|ico)$": "<rootDir>/src/__mocks__/fileMock.js"
+    }
+  },
   "browserslist": {
     "production": [
       ">0.2%",
