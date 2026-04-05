@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw';
+import { rest } from 'msw';
 
 export const mockEvents = [
   {
@@ -39,36 +39,36 @@ export const mockEventDetail = {
 };
 
 export const eventHandlers = [
-  http.get('*/api/events', ({ request }) => {
-    const url = new URL(request.url);
-    const keyword = url.searchParams.get('keyword');
+  rest.get('*/api/events', (req, res, ctx) => {
+    const keyword = req.url.searchParams.get('keyword');
     const data = keyword
       ? mockEvents.filter((e) => e.title.includes(keyword))
       : mockEvents;
-    return HttpResponse.json({ data, hasNext: false });
+    return res(ctx.json({ data, hasNext: false }));
   }),
 
-  http.get('*/api/events/:id', ({ params }) => {
-    const event = mockEvents.find((e) => e.id === Number(params.id));
-    if (!event) return new HttpResponse(null, { status: 404 });
-    return HttpResponse.json({ data: mockEventDetail });
+  rest.get('*/api/events/:id', (req, res, ctx) => {
+    const { id } = req.params;
+    const event = mockEvents.find((e) => e.id === Number(id));
+    if (!event) return res(ctx.status(404));
+    return res(ctx.json({ data: mockEventDetail }));
   }),
 
-  http.post('*/api/events/:id/like', ({ params }) => {
-    return HttpResponse.json({ success: true });
+  rest.post('*/api/events/:id/like', (req, res, ctx) => {
+    return res(ctx.json({ success: true }));
   }),
 
-  http.delete('*/api/events/:id/like', ({ params }) => {
-    return HttpResponse.json({ success: true });
+  rest.delete('*/api/events/:id/like', (req, res, ctx) => {
+    return res(ctx.json({ success: true }));
   }),
 
-  http.get('*/api/events/banner', () => {
-    return HttpResponse.json({
-      data: [{ id: 1, imageUrl: 'https://example.com/banner.jpg' }],
-    });
+  rest.get('*/api/events/banner', (req, res, ctx) => {
+    return res(
+      ctx.json({ data: [{ id: 1, imageUrl: 'https://example.com/banner.jpg' }] })
+    );
   }),
 
-  http.get('*/api/events/popular', () => {
-    return HttpResponse.json({ data: mockEvents.slice(0, 3) });
+  rest.get('*/api/events/popular', (req, res, ctx) => {
+    return res(ctx.json({ data: mockEvents.slice(0, 3) }));
   }),
 ];

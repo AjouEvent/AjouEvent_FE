@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw';
+import { rest } from 'msw';
 
 export const mockTopics = [
   { id: 1, name: '소프트웨어학과', isSubscribed: true, notificationEnabled: true },
@@ -12,35 +12,35 @@ export const mockKeywords = [
 ];
 
 export const subscriptionHandlers = [
-  http.get('*/api/subscriptions/topics', () => {
-    return HttpResponse.json({ data: mockTopics });
+  rest.get('*/api/subscriptions/topics', (req, res, ctx) => {
+    return res(ctx.json({ data: mockTopics }));
   }),
 
-  http.post('*/api/subscriptions/topics/:id', () => {
-    return HttpResponse.json({ success: true });
+  rest.post('*/api/subscriptions/topics/:id', (req, res, ctx) => {
+    return res(ctx.json({ success: true }));
   }),
 
-  http.delete('*/api/subscriptions/topics/:id', () => {
-    return HttpResponse.json({ success: true });
+  rest.delete('*/api/subscriptions/topics/:id', (req, res, ctx) => {
+    return res(ctx.json({ success: true }));
   }),
 
-  http.patch('*/api/subscriptions/topics/:id/notification', () => {
-    return HttpResponse.json({ success: true });
+  rest.patch('*/api/subscriptions/topics/:id/notification', (req, res, ctx) => {
+    return res(ctx.json({ success: true }));
   }),
 
-  http.get('*/api/subscriptions/keywords', () => {
-    return HttpResponse.json({ data: mockKeywords });
+  rest.get('*/api/subscriptions/keywords', (req, res, ctx) => {
+    return res(ctx.json({ data: mockKeywords }));
   }),
 
-  http.post('*/api/subscriptions/keywords', () => {
-    return HttpResponse.json({ success: true });
+  rest.post('*/api/subscriptions/keywords', (req, res, ctx) => {
+    return res(ctx.json({ success: true }));
   }),
 
-  http.delete('*/api/subscriptions/keywords/:id', () => {
-    return HttpResponse.json({ success: true });
+  rest.delete('*/api/subscriptions/keywords/:id', (req, res, ctx) => {
+    return res(ctx.json({ success: true }));
   }),
 
-  http.get('*/api/subscriptions/read-status', () => {
-    return HttpResponse.json({ data: { isRead: true } });
+  rest.get('*/api/subscriptions/read-status', (req, res, ctx) => {
+    return res(ctx.json({ data: { isRead: true } }));
   }),
 ];

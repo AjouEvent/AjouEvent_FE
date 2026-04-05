@@ -91,8 +91,12 @@
       "src/index.js"
     ],
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|svg|ico)$": "<rootDir>/src/__mocks__/fileMock.js"
-    }
+      "\\.(jpg|jpeg|png|gif|svg|ico)$": "<rootDir>/src/__mocks__/fileMock.js",
+      "@vercel/analytics(.*)": "<rootDir>/src/__mocks__/vercelAnalytics.js"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(axios)/)"
+    ]
   },
   "browserslist": {
     "production": [
@@ -117,7 +121,7 @@
     "eslint-plugin-react": "^7.37.3",
     "globals": "^15.14.0",
     "jest-styled-components": "^7.4.0",
-    "msw": "^2.12.14",
+    "msw": "^1.3.5",
     "prettier": "^3.4.2"
   }
 }

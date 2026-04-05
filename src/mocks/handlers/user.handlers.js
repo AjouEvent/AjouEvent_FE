@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw';
+import { rest } from 'msw';
 
 export const mockUser = {
   id: 1,
@@ -8,29 +8,27 @@ export const mockUser = {
 };
 
 export const userHandlers = [
-  http.get('*/api/users/me', () => {
-    return HttpResponse.json({ data: mockUser });
+  rest.get('*/api/users/me', (req, res, ctx) => {
+    return res(ctx.json({ data: mockUser }));
   }),
 
-  http.patch('*/api/users/me', () => {
-    return HttpResponse.json({ success: true });
+  rest.patch('*/api/users/me', (req, res, ctx) => {
+    return res(ctx.json({ success: true }));
   }),
 
-  http.delete('*/api/users/me', () => {
-    return HttpResponse.json({ success: true });
+  rest.delete('*/api/users/me', (req, res, ctx) => {
+    return res(ctx.json({ success: true }));
   }),
 
   // 토큰 갱신 - 성공 케이스 (기본)
-  http.patch('*/api/users/reissue-token', () => {
-    return HttpResponse.json(
-      {},
-      {
-        headers: { Authorization: 'Bearer new-mock-access-token' },
-      }
+  rest.patch('*/api/users/reissue-token', (req, res, ctx) => {
+    return res(
+      ctx.set('Authorization', 'Bearer new-mock-access-token'),
+      ctx.json({})
     );
   }),
 
-  http.post('*/api/users/register', () => {
-    return HttpResponse.json({ success: true });
+  rest.post('*/api/users/register', (req, res, ctx) => {
+    return res(ctx.json({ success: true }));
   }),
 ];

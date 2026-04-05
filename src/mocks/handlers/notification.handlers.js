@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw';
+import { rest } from 'msw';
 
 export const mockNotifications = [
   {
@@ -20,15 +20,15 @@ export const mockNotifications = [
 ];
 
 export const notificationHandlers = [
-  http.get('*/api/notifications/unread-count', () => {
-    return HttpResponse.json({ data: { count: 1 } });
+  rest.get('*/api/notifications/unread-count', (req, res, ctx) => {
+    return res(ctx.json({ data: { count: 1 } }));
   }),
 
-  http.patch('*/api/notifications/read-all', () => {
-    return HttpResponse.json({ success: true });
+  rest.patch('*/api/notifications/read-all', (req, res, ctx) => {
+    return res(ctx.json({ success: true }));
   }),
 
-  http.patch('*/api/notifications/:id/click', ({ params }) => {
-    return HttpResponse.json({ success: true });
+  rest.patch('*/api/notifications/:id/click', (req, res, ctx) => {
+    return res(ctx.json({ success: true }));
   }),
 ];
