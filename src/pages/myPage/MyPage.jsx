@@ -123,18 +123,12 @@ const MyPage = () => {
     });
   };
 
-  const handleFrequentlyAskedQuestionsClick = () => {};
-
   const handleFeedBackClick = () => {
     window.open(
       'https://docs.google.com/forms/d/e/1FAIpQLSfSyN05EK3L9N7DMfQlpAnrebcuIGzadeANgELlGqrdlKeeqg/viewform',
       '_blank',
     );
   };
-
-  const handleNofificationClick = () => {};
-
-  const handleVersionClick = () => {};
 
   const handleLogoutBtnClick = () => {
     Swal.fire({

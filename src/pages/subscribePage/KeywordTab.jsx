@@ -4,7 +4,6 @@ import KeywordBar from './KeywordBar';
 import SearchBar from '../../components/SearchBar';
 import EventCard from '../../components/events/EventCard';
 import { getPostsByKeyword } from '../../services/api/event';
-import useSubscriptionStore from '../../store/useSubscriptionStore';
 import { COLORS, LIMITS } from '../../constants/appConstants';
 
 const AppContainer = styled.div`
@@ -37,10 +36,6 @@ const MessageContainer = styled.div`
 `;
 
 export default function KeywordTab({ showGuide }) {
-  const { setIsKeywordTabRead } = useSubscriptionStore((state) => ({
-    setIsKeywordTabRead: state.setIsKeywordTabRead,
-  }));
-
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
@@ -85,6 +80,7 @@ export default function KeywordTab({ showGuide }) {
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, selectedKeyword]);
 
   // 무한 스크롤에서 중복 호출 방지
@@ -98,13 +94,14 @@ export default function KeywordTab({ showGuide }) {
       { threshold: 1 },
     );
 
-    if (bottomRef.current) {
-      observer.observe(bottomRef.current);
+    const currentRef = bottomRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (bottomRef.current) {
-        observer.unobserve(bottomRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [hasMore, loading]);

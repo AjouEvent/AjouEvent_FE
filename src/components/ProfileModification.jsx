@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { STORAGE_KEYS, COLORS } from '../constants/appConstants';
+import { COLORS } from '../constants/appConstants';
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -118,7 +118,6 @@ const DeleteAccountLink = styled.span`
 const ProfileModification = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
   const user = state?.user;
   console.log('user', user);

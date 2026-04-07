@@ -287,6 +287,7 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
 
   useEffect(() => {
     fetchSubscribeItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menuItems]);
 
   useEffect(() => {
@@ -301,6 +302,7 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
       // 읽지 않은 항목이 있는 경우, isTopicTabRead를 false로 설정
       setIsTopicTabRead(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subscribeItems, isTopicTabRead]);
 
   const handleSubscribe = async (topic) => {

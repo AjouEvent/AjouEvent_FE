@@ -108,6 +108,7 @@ function SearchDropBox({
         setOption2('아주대 공지사항');
         break;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [option1]);
 
   useEffect(() => {
@@ -128,6 +129,7 @@ function SearchDropBox({
     };
 
     fetchDataAndUpdateState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [option2]);
 
   return (

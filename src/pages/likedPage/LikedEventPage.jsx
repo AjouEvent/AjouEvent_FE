@@ -94,7 +94,7 @@ export default function LikedEventPage() {
     } finally {
       setLoading(false);
     }
-  }, [loading, hasMore, page, keyword]);
+  }, [loading, hasMore, isError, page, pageSize, keyword]);
 
   // Handle infinite scroll
   useEffect(() => {
@@ -107,13 +107,14 @@ export default function LikedEventPage() {
       { threshold: 1 },
     );
 
-    if (bottomRef.current) {
-      observer.observe(bottomRef.current);
+    const currentRef = bottomRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (bottomRef.current) {
-        observer.unobserve(bottomRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [loading, hasMore, fetchData]);

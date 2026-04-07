@@ -265,18 +265,6 @@ const TopicButton = styled.button`
   font-size: clamp(0.7rem, 2vw, 1rem); /* 글자 크기 조절 */
 `;
 
-const TopicDisplay = styled.div`
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: #f1f1f1;
-  border-radius: 4px;
-  padding: 5px 10px;
-  font-size: clamp(0.8rem, 2.5vw, 1rem); /* 글자 크기 조절 */
-  color: ${COLORS.DARK_GARY_TEXT};
-`;
-
 const KeywordError = styled.div`
   display: flex;
   justify-content: start;
@@ -516,6 +504,7 @@ export default function KeywordSubscribePage() {
 
     fetchMenuItems();
     fetchUserKeywords();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCategoryClick = (category) => {
