@@ -5,7 +5,7 @@ import SubscribeBar from './SubscribeBar';
 import SubscribeEvent from './SubscribeEvent';
 import { getEventsByCategory, getSubscribedEvents } from '../../services/api/event';
 import SearchBar from '../../components/SearchBar';
-import { COLORS, LIMITS, STORAGE_KEYS } from '../../constants/appConstants';
+import { COLORS, LIMITS } from '../../constants/appConstants';
 
 const AppContainer = styled.div`
   display: flex;
@@ -31,8 +31,6 @@ export default function SubscribeTab({ showGuide }) {
   const [selectedTopic, setSelectedTopic] = useState(null);
   const pageSize = LIMITS.PAGE_SIZE;
   const bottomRef = useRef(null);
-
-  const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
   const fetchData = useCallback(async () => {
     if (loading || !hasMore || isError) return;
@@ -64,7 +62,7 @@ export default function SubscribeTab({ showGuide }) {
     } finally {
       setLoading(false);
     }
-  }, [loading, hasMore, isError, page, keyword, selectedTopic]);
+  }, [loading, hasMore, isError, page, pageSize, keyword, selectedTopic]);
 
   // Handle infinite scroll
   useEffect(() => {
@@ -77,13 +75,14 @@ export default function SubscribeTab({ showGuide }) {
       { threshold: 1 },
     );
 
-    if (bottomRef.current) {
-      observer.observe(bottomRef.current);
+    const currentRef = bottomRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (bottomRef.current) {
-        observer.unobserve(bottomRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [loading, hasMore, fetchData]);
@@ -101,6 +100,7 @@ export default function SubscribeTab({ showGuide }) {
 
   useEffect(() => {
     fetchData(selectedTopic); // Topic이나 페이지 변경 시 데이터 재로드
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTopic]);
 
   return (

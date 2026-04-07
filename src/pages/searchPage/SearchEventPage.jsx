@@ -82,7 +82,7 @@ export default function SearchEventPage() {
     } finally {
       setLoading(false);
     }
-  }, [loading, hasMore, page, option2, keyword]);
+  }, [loading, hasMore, isError, page, pageSize, option2, keyword]);
 
   // Handle infinite scroll
   useEffect(() => {
@@ -95,13 +95,14 @@ export default function SearchEventPage() {
       { threshold: 1 },
     );
 
-    if (bottomRef.current) {
-      observer.observe(bottomRef.current);
+    const currentRef = bottomRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (bottomRef.current) {
-        observer.unobserve(bottomRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [loading, hasMore, fetchData]);

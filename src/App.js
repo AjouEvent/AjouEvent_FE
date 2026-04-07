@@ -89,7 +89,7 @@ function App() {
 
   useEffect(() => {
     fetchMemberStatus();
-  }, []);
+  }, [fetchMemberStatus]);
 
   useEffect(() => {
     if ("serviceWorker" in navigator) {

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import styled from 'styled-components';
-import { STORAGE_KEYS } from '../constants/appConstants';
 import { resetTopicSubscriptions, resetKeywordSubscriptions } from '../services/api/subscription';
 import { deleteUser } from '../services/api/user';
 import { clearAuth } from '../utils/auth';
@@ -47,7 +46,6 @@ const DeleteAccountPage = () => {
   const [reason, setReason] = useState('');
   const [nextStep, setNextStep] = useState(false);
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
   const handleTopicReset = async () => {
     setIsLoadingTopic(true); // 로딩 시작

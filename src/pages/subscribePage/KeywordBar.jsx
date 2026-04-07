@@ -133,7 +133,6 @@ const KeywordBar = ({ onKeywordSelect, showGuide }) => {
     setIsKeywordTabRead,
     subscribedKeywords,
     markKeywordAsRead,
-    fetchSubscribedKeywords,
   } = useSubscriptionStore();
   const navigate = useNavigate();
   const [selectedKeyword, setSelectedKeyword] = useState(null);

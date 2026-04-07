@@ -69,7 +69,7 @@ const HelpBox = () => {
 
   useEffect(() => {
     fetchUnreadNotificationCount(); // 처음 마운트될 때 최신 알림 개수 가져오기
-  }, []);
+  }, [fetchUnreadNotificationCount]);
 
   const handleBellClick = () => {
     navigate('/notification');

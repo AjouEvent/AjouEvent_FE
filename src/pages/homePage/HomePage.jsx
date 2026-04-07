@@ -9,7 +9,6 @@ import HomeHotEvent from './HomeHotEvent';
 import DailyModal from '../../components/DailyModal';
 import HelpBox from '../../components/HelpBox';
 import { Z_INDEX, STORAGE_KEYS, COLORS } from '../../constants/appConstants';
-import NotifyModal from '../notificationPage/NotificationPage';
 import { getBannerImages } from '../../services/api/event';
 
 const AppContainer = styled.div`
@@ -26,21 +25,6 @@ const MainContentContainer = styled.div`
   align-items: center;
   flex-direction: column;
   padding: 0 0 80px 0;
-`;
-
-const LoadingOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: ${COLORS.OVERLAY_BLACK};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 24px;
-  z-index: ${Z_INDEX.MODAL};
 `;
 
 const InstallPromptContainer = styled.div`
@@ -174,7 +158,7 @@ export default function HomePage() {
   const [isPWAInstalled, setIsPWAInstalled] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null); // PWA 설치 프롬프트 저장
   const [showInstallPrompt, setShowInstallPrompt] = useState(false); // 설치 프롬프트 표시 여부
-  const [isLoading, setIsLoading] = useState(false);
+  const [, setIsLoading] = useState(false);
   const [bannerImages, setBannerImages] = useState([]);
   const [showPushNotificationPrompt, setShowPushNotificationPrompt] =
     useState(false);

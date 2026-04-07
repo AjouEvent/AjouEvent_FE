@@ -107,7 +107,7 @@ const GuideMessage = styled.div`
 
 export default function SubscribePage() {
   const location = useLocation();
-  const { subscribeItems, subscribedKeywords, fetchSubscribeItems, fetchSubscribedKeywords } = useSubscriptionStore();
+  const { subscribeItems, subscribedKeywords, fetchSubscribedKeywords } = useSubscriptionStore();
   const [activeTab, setActiveTab] = useState(
     location.state?.activeTab || 'subscribe',
   );
@@ -125,13 +125,9 @@ export default function SubscribePage() {
   }, [subscribeItems, subscribedKeywords, activeTab]);
 
   useEffect(() => {
-    // fetchSubscribeItems();
     fetchSubscribedKeywords(); // 여기에서 가져와야 키워드 알림 탭의 뱃지를 보여줄 수 있음
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const handleTabClick = async (tabName) => {
-    setActiveTab(tabName);
-  };
 
   const getGuideMessage = (activeTab) => {
     if (activeTab === 'subscribe') {

@@ -9,19 +9,6 @@ import ImageModal from './ImageModal';
 import { Z_INDEX, STORAGE_KEYS, COLORS } from '../../constants/appConstants';
 import { getEventDetail, getAuthEventDetail, likeEvent, unlikeEvent } from '../../services/api/event';
 
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: ${Z_INDEX.MODAL};
-`;
-
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -80,17 +67,6 @@ const TitleContainer = styled.div`
   font-style: normal;
   font-weight: 700;
   line-height: 130%; /* 26px */
-`;
-
-const LinkButton = styled.div`
-  text-align: center;
-  width: 100%;
-  padding: 10px 20px;
-  border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  margin: 24px 0 16px 0;
-  cursor: pointer;
-  display: inline-block;
 `;
 
 const ContentContaioner = styled.div`

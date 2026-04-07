@@ -302,7 +302,7 @@ const PrivacyAgreement = () => {
         <>
           <Overlay onClick={closeModal} />
           <Modal>
-            <h2></h2>
+            <h2 aria-hidden="true">{' '}</h2>
             {/* Render HTML content in the modal */}
             <div dangerouslySetInnerHTML={{ __html: modalContent }} />
             <Button onClick={handleModalConfirm}>확인</Button>
