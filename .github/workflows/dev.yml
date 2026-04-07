@@ -21,7 +21,7 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.AUTH_TOKEN }}
         with:
           source-directory: 'output'
-          destination-github-username: Simzard10 
+          destination-github-username: mkms0222
           destination-repository-name: AjouEvent_FE
           user-email: ${{ secrets.OFFICIAL_ACCOUNT_EMAIL }}
           commit-message: ${{ github.event.commits[0].message }}
