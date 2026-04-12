@@ -72,9 +72,10 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // navigator.setAppBadge 모킹 (PWA badge API)
+// 실제 setAppBadge는 Promise를 반환하므로 .catch() 호출이 가능해야 한다
 Object.defineProperty(navigator, 'setAppBadge', {
   writable: true,
-  value: jest.fn(),
+  value: jest.fn().mockResolvedValue(undefined),
 });
 Object.defineProperty(navigator, 'clearAppBadge', {
   writable: true,
