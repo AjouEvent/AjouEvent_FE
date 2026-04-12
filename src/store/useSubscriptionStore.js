@@ -6,6 +6,7 @@ import {
   subscribeTopic,
   unsubscribeTopic,
 } from '../services/api/subscription';
+import { GA } from '../utils/analytics';
 
 const useSubscriptionStore = create((set, get) => ({
   isTopicTabRead: true,
@@ -143,6 +144,7 @@ const useSubscriptionStore = create((set, get) => ({
   subscribeToTopic: async (topic) => {
     try {
       await subscribeTopic(topic);
+      GA.subscribeTopic(topic);
       set((state) => ({
         topics: state.topics.map((t) =>
           t.englishTopic === topic ? { ...t, subscribed: true } : t,
@@ -156,6 +158,7 @@ const useSubscriptionStore = create((set, get) => ({
   unsubscribeFromTopic: async (topic) => {
     try {
       await unsubscribeTopic(topic);
+      GA.unsubscribeTopic(topic);
       set((state) => ({
         topics: state.topics.map((t) =>
           t.englishTopic === topic ? { ...t, subscribed: false } : t,
