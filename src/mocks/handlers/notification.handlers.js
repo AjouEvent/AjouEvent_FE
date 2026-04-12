@@ -19,16 +19,27 @@ export const mockNotifications = [
   },
 ];
 
+const SUCCESS_RESPONSE = {
+  successStatus: "100 CONTINUE",
+  successContent: "Success",
+  data: {}
+};
+
 export const notificationHandlers = [
-  rest.get('*/api/notifications/unread-count', (req, res, ctx) => {
-    return res(ctx.json({ data: { count: 1 } }));
+  // 실제 서비스: GET /api/notification/unread-count (단수형)
+  // 실제 응답 형식: { unreadNotificationCount: N }
+  // store(useNotificationStore.js): response.data.unreadNotificationCount 로 읽음
+  rest.get('*/api/notification/unread-count', (req, res, ctx) => {
+    return res(ctx.json({ unreadNotificationCount: 3 }));
   }),
 
-  rest.patch('*/api/notifications/read-all', (req, res, ctx) => {
-    return res(ctx.json({ success: true }));
+  // 실제 서비스: POST /api/notification/readAll
+  rest.post('*/api/notification/readAll', (req, res, ctx) => {
+    return res(ctx.json(SUCCESS_RESPONSE));
   }),
 
-  rest.patch('*/api/notifications/:id/click', (req, res, ctx) => {
-    return res(ctx.json({ success: true }));
+  // 실제 서비스: POST /api/notification/click
+  rest.post('*/api/notification/click', (req, res, ctx) => {
+    return res(ctx.json(SUCCESS_RESPONSE));
   }),
 ];

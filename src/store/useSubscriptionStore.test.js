@@ -22,10 +22,16 @@ const initialState = useSubscriptionStore.getState();
 // englishTopic 값은 departmentCodes.js의 KtoECodes를 따른다 (PascalCase)
 // 예) 소프트웨어학과 → 'Software', 대학원 → 'Graduate', 기숙사 → 'Dormitory'
 const mockTopicsData = [
-  { englishTopic: 'Software', koreanTopic: '소프트웨어학과', subscribed: true, isRead: true },
-  { englishTopic: 'Dormitory', koreanTopic: '기숙사', subscribed: false, isRead: false },
-  { englishTopic: 'Graduate', koreanTopic: '대학원', subscribed: false, isRead: true },
+  { id: 1, englishTopic: 'Software', koreanTopic: '소프트웨어학과', isRead: true, lastReadAt: '2026-04-12T10:03:30.453Z' },
+  { id: 2, englishTopic: 'Dormitory', koreanTopic: '기숙사', isRead: false, lastReadAt: null },
+  { id: 3, englishTopic: 'Graduate', koreanTopic: '대학원', isRead: true, lastReadAt: '2026-04-12T10:03:30.453Z' },
 ];
+
+const SUCCESS_RESPONSE = {
+  successStatus: "100 CONTINUE",
+  successContent: "Success",
+  data: {}
+};
 
 beforeEach(() => {
   server.use(
@@ -34,19 +40,19 @@ beforeEach(() => {
       res(ctx.json(mockTopicsData)),
     ),
     rest.post('*/api/topic/subscribe', (req, res, ctx) =>
-      res(ctx.json({ success: true })),
+      res(ctx.json(SUCCESS_RESPONSE)),
     ),
     rest.post('*/api/topic/unsubscribe', (req, res, ctx) =>
-      res(ctx.json({ success: true })),
+      res(ctx.json(SUCCESS_RESPONSE)),
     ),
     // store의 fetchSubscribedKeywords: response.data를 배열로 직접 사용
     rest.get('*/api/keyword/userKeywords', (req, res, ctx) =>
       res(ctx.json([])),
     ),
-    // store의 updateSubscribedTabRead: response.data.isSubscribedTabRead 읽음
+    // store의 updateSubscribedTabRead: response.data.subscribedTabRead 읽음
     // store의 fetchMemberStatus: response.data.subscribedTabRead 읽음
     rest.get('*/api/subscriptions/isSubscribedTabRead', (req, res, ctx) =>
-      res(ctx.json({ isSubscribedTabRead: true, subscribedTabRead: true })),
+      res(ctx.json({ subscribedTabRead: true })),
     ),
   );
 });

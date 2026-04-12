@@ -1,74 +1,122 @@
 import { rest } from 'msw';
 
-export const mockEvents = [
+const SUCCESS_RESPONSE = {
+  successStatus: "100 CONTINUE",
+  successContent: "Success",
+  data: {}
+};
+
+export const mockBanners = [
   {
-    id: 1,
-    title: '아주대 소프트웨어 해커톤',
-    category: 'ACADEMIC',
-    startDate: '2024-05-01',
-    endDate: '2024-05-03',
-    location: '팔달관 301호',
-    isLiked: false,
-    likeCount: 12,
-    thumbnailUrl: 'https://example.com/image1.jpg',
-  },
+    imgUrl: "https://example.com/banner.jpg",
+    siteUrl: "https://example.com",
+    bannerOrder: 1,
+    startDate: "2026-04-12",
+    endDate: "2026-12-31"
+  }
+];
+
+export const mockPopularEvents = [
   {
-    id: 2,
-    title: '봄 축제 공연',
-    category: 'CULTURE',
-    startDate: '2024-05-10',
-    endDate: '2024-05-10',
-    location: '중앙광장',
-    isLiked: true,
-    likeCount: 34,
-    thumbnailUrl: 'https://example.com/image2.jpg',
-  },
+    title: "아주대 소프트웨어 해커톤",
+    content: "해커톤 내용",
+    imgUrl: "https://example.com/image1.jpg",
+    url: "https://example.com/detail/1",
+    createdAt: "2026-04-12T10:35:34.694Z",
+    eventId: 1,
+    likesCount: 10,
+    viewCount: 100,
+    star: true,
+    subject: "해커톤",
+    type: "AIMOBILITYENGINEERING",
+    writer: "소프트웨어학과"
+  }
 ];
 
 export const mockEventDetail = {
-  id: 1,
-  title: '아주대 소프트웨어 해커톤',
-  category: 'ACADEMIC',
-  startDate: '2024-05-01',
-  endDate: '2024-05-03',
-  location: '팔달관 301호',
-  description: '소프트웨어학과 주최 해커톤 행사입니다.',
-  isLiked: false,
-  likeCount: 12,
-  imageUrls: ['https://example.com/image1.jpg'],
+  title: "아주대 소프트웨어 해커톤",
+  content: "소프트웨어학과 주최 해커톤 행사입니다.",
+  imgUrl: ["https://example.com/image1.jpg"],
+  eventId: 1,
+  createdAt: "2026-04-12T10:36:02.193Z",
+  type: "AIMOBILITYENGINEERING",
+  writer: "소프트웨어학과",
+  likesCount: 12,
+  viewCount: 100,
+  star: true,
+  subject: "행사 세부내용",
+  url: "https://example.com/detail/1"
+};
+
+export const mockPagedEvents = {
+  result: mockPopularEvents,
+  hasPrevious: false,
+  hasNext: false,
+  currentPage: 0,
+  sort: {
+    sorted: true,
+    direction: "DESC",
+    orderProperty: "createdAt"
+  }
 };
 
 export const eventHandlers = [
-  rest.get('*/api/events', (req, res, ctx) => {
-    const keyword = req.url.searchParams.get('keyword');
-    const data = keyword
-      ? mockEvents.filter((e) => e.title.includes(keyword))
-      : mockEvents;
-    return res(ctx.json({ data, hasNext: false }));
+  // GET /api/event/banner
+  rest.get('*/api/event/banner', (req, res, ctx) => {
+    return res(ctx.json(mockBanners));
   }),
 
-  rest.get('*/api/events/:id', (req, res, ctx) => {
-    const { id } = req.params;
-    const event = mockEvents.find((e) => e.id === Number(id));
-    if (!event) return res(ctx.status(404));
-    return res(ctx.json({ data: mockEventDetail }));
+  // GET /api/event/popular
+  rest.get('*/api/event/popular', (req, res, ctx) => {
+    return res(ctx.json(mockPopularEvents));
   }),
 
-  rest.post('*/api/events/:id/like', (req, res, ctx) => {
-    return res(ctx.json({ success: true }));
+  // GET /api/event/detail/{eventId}
+  rest.get('*/api/event/detail/:eventId', (req, res, ctx) => {
+    return res(ctx.json(mockEventDetail));
   }),
 
-  rest.delete('*/api/events/:id/like', (req, res, ctx) => {
-    return res(ctx.json({ success: true }));
+  // GET /api/event/liked
+  rest.get('*/api/event/liked', (req, res, ctx) => {
+    return res(ctx.json(mockPagedEvents));
   }),
 
-  rest.get('*/api/events/banner', (req, res, ctx) => {
-    return res(
-      ctx.json({ data: [{ id: 1, imageUrl: 'https://example.com/banner.jpg' }] })
-    );
+  // GET /api/event/subscribed
+  rest.get('*/api/event/subscribed', (req, res, ctx) => {
+    return res(ctx.json(mockPagedEvents));
   }),
 
-  rest.get('*/api/events/popular', (req, res, ctx) => {
-    return res(ctx.json({ data: mockEvents.slice(0, 3) }));
+  // GET /api/event/getSubscribedPostsByKeyword
+  rest.get('*/api/event/getSubscribedPostsByKeyword', (req, res, ctx) => {
+    return res(ctx.json(mockPagedEvents));
   }),
+
+  // GET /api/event/getSubscribedPostsByKeyword/{keyword}
+  rest.get('*/api/event/getSubscribedPostsByKeyword/:keyword', (req, res, ctx) => {
+    return res(ctx.json(mockPagedEvents));
+  }),
+
+  // /api/event/{category} - getEventsByCategory 용
+  rest.get('*/api/event/:category', (req, res, ctx) => {
+    const { category } = req.params;
+    if (category === 'banner' || category === 'popular' || category === 'detail' || category === 'liked' || category === 'subscribed' || category === 'getSubscribedPostsByKeyword' || category === 'like' || category === 'calendar') {
+      return req.passthrough(); // 다른 핸들러가 처리하도록 패스스루
+    }
+    return res(ctx.json(mockPagedEvents));
+  }),
+
+  // POST /api/event/like/{eventId}
+  rest.post('*/api/event/like/:eventId', (req, res, ctx) => {
+    return res(ctx.json(SUCCESS_RESPONSE));
+  }),
+
+  // DELETE /api/event/like/{eventId}
+  rest.delete('*/api/event/like/:eventId', (req, res, ctx) => {
+    return res(ctx.json(SUCCESS_RESPONSE));
+  }),
+
+  // POST /api/event/calendar
+  rest.post('*/api/event/calendar', (req, res, ctx) => {
+    return res(ctx.json({})); // 200 OK
+  })
 ];
