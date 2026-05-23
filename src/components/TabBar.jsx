@@ -1,42 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { COLORS } from '../constants/appConstants';
-
-const TapWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* 좌우 양 끝으로 배치 */
-  padding: 16px 24px;
-  gap: 8px;
-`;
-
-const LeftSection = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
-const TapIcon = styled.img`
-  aspect-ratio: 1;
-  width: 20px;
-  object-fit: contain;
-  object-position: center;
-  cursor: pointer;
-`;
-
-const TapTitle = styled.div`
-  color: ${COLORS.BLACK};
-  font-family: 'Pretendard Variable';
-  font-size: 18px;
-  font-weight: 700;
-`;
-
-const RightSection = styled.div`
-  display: flex;
-  align-items: center;
-`;
 
 const TabBar = ({ Title, RightComponent }) => {
   const navigate = useNavigate();
@@ -50,17 +13,19 @@ const TabBar = ({ Title, RightComponent }) => {
   };
 
   return (
-    <TapWrapper>
-      <LeftSection>
-        <TapIcon
+    <div className="w-full flex items-center justify-between px-6 py-4 gap-2">
+      <div className="flex items-center gap-2">
+        <img
           onClick={arrowBackClicked}
           loading="lazy"
           src={`${process.env.PUBLIC_URL}/icons/arrow_back.svg`}
+          alt="뒤로가기"
+          className="w-5 aspect-square object-contain cursor-pointer"
         />
-        <TapTitle>{Title}</TapTitle>
-      </LeftSection>
-      <RightSection>{RightComponent}</RightSection>
-    </TapWrapper>
+        <div className="text-black text-lg font-bold">{Title}</div>
+      </div>
+      <div className="flex items-center">{RightComponent}</div>
+    </div>
   );
 };
 

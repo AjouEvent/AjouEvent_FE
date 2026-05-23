@@ -1,86 +1,6 @@
 import React, { useState } from 'react';
-import styled, { keyframes } from 'styled-components';
 import Swal from 'sweetalert2';
 import { updateTopicNotification, unsubscribeTopic } from '../../services/api/subscription';
-import { COLORS, Z_INDEX } from '../../constants/appConstants';
-
-const Wrapper = styled.div`
-  position: relative;
-  display: inline-block;
-`;
-
-const DropdownButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: ${COLORS.OFF_WHITE};
-  padding: 6px 12px;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: 600;
-`;
-
-// 떨림 애니메이션 추가
-const ring = keyframes`
-  0% { transform: rotate(0); }
-  25% { transform: rotate(-15deg); }
-  50% { transform: rotate(15deg); }
-  75% { transform: rotate(-15deg); }
-  100% { transform: rotate(0); }
-`;
-
-const BellIcon = styled.img`
-  width: 25px;  
-  height: 25px; 
-  filter: ${({ isActive }) =>
-    isActive
-      ? 'invert(29%) sepia(97%) saturate(937%) hue-rotate(187deg) brightness(91%) contrast(90%)'
-      : 'none'};
-  animation: ${({ ringing }) => (ringing ? ring : 'none')} 1s ease-in-out;
-`;
-
-const DropdownMenu = styled.ul`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: white;
-  list-style: none;
-  padding: 6px 0;
-  border: 1px solid ${COLORS.BORDER_GARY};
-  border-radius: 8px;
-  width: 130px;
-  z-index: ${Z_INDEX.DROPDOWN};
-`;
-
-const MenuItem = styled.li`
-  padding: 8px 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-  color: ${(props) => (props.disabled ? '#bbb' : COLORS.BLACK)};
-  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
-  &:hover {
-    background-color: ${(props) => (props.disabled ? 'transparent' : COLORS.OFF_WHITE)};
-  }
-`;
-
-const MenuItemContent = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-`;
-
-const Icon = styled.img`
-  width: 16px;
-  height: 16px;
-`;
-
-const Check = styled.span`
-  color: ${COLORS.BLUE_BRIGHT};
-  font-weight: bold;
-`;
 
 export default function SubscribeStatusDropdown({ topic, fetchMenuItems, ringing }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -91,8 +11,7 @@ export default function SubscribeStatusDropdown({ topic, fetchMenuItems, ringing
     if (option === 'unsubscribe') {
       await handleUnsubscribe();
     } else {
-      const receiveNotification = option === 'all';
-      await updateNotificationPreference(receiveNotification);
+      await updateNotificationPreference(option === 'all');
     }
     setIsOpen(false);
   };
@@ -117,55 +36,71 @@ export default function SubscribeStatusDropdown({ topic, fetchMenuItems, ringing
     }
   };
 
+  const bellFilter = topic.receiveNotification
+    ? 'invert(29%) sepia(97%) saturate(937%) hue-rotate(187deg) brightness(91%) contrast(90%)'
+    : 'none';
+
   return (
-    <Wrapper>
-      <DropdownButton onClick={toggleDropdown}>
-        <BellIcon
+    <div className="relative inline-block">
+      <button
+        onClick={toggleDropdown}
+        className="flex items-center gap-1.5 bg-[#F5F5F5] px-3 py-1.5 border-none rounded-full cursor-pointer font-semibold"
+      >
+        <img
           src={
             topic.receiveNotification
               ? `${process.env.PUBLIC_URL}/icons/bell_ring.svg`
               : `${process.env.PUBLIC_URL}/icons/bell_off.svg`
           }
           alt="알림 상태 아이콘"
-          isActive={topic.receiveNotification}
-          ringing={ringing}
+          className={`w-[25px] h-[25px] ${ringing ? 'animate-[ring_1s_ease-in-out]' : ''}`}
+          style={{ filter: bellFilter }}
         />
         구독중
         <img src={`${process.env.PUBLIC_URL}/icons/arrow_down.svg`} alt="arrow" />
-      </DropdownButton>
+      </button>
 
       {isOpen && (
-        <DropdownMenu>
-          <MenuItem
-            onClick={() => handleOptionChange('all')}
-            disabled={topic.receiveNotification === true}
+        <ul className="absolute top-full left-0 bg-white list-none p-1.5 border border-[#CDCDCD] rounded-lg w-[130px] z-[100]">
+          <li
+            onClick={() => !topic.receiveNotification !== false && handleOptionChange('all')}
+            className={`px-3 py-2 flex justify-between items-center ${
+              topic.receiveNotification === true
+                ? 'cursor-default text-[#bbb] pointer-events-none'
+                : 'cursor-pointer hover:bg-[#F5F5F5]'
+            }`}
           >
-            <MenuItemContent>
-              <Icon src={`${process.env.PUBLIC_URL}/icons/bell_ring.svg`} alt="알림 받기" />
+            <div className="flex items-center gap-1.5">
+              <img src={`${process.env.PUBLIC_URL}/icons/bell_ring.svg`} alt="알림 받기" className="w-4 h-4" />
               알림 받기
-            </MenuItemContent>
-            {topic.receiveNotification === true && <Check>✔</Check>}
-          </MenuItem>
-
-          <MenuItem
-            onClick={() => handleOptionChange('none')}
-            disabled={topic.receiveNotification === false}
+            </div>
+            {topic.receiveNotification === true && <span className="text-[#0072CE] font-bold">✔</span>}
+          </li>
+          <li
+            onClick={() => topic.receiveNotification !== false && handleOptionChange('none')}
+            className={`px-3 py-2 flex justify-between items-center ${
+              topic.receiveNotification === false
+                ? 'cursor-default text-[#bbb] pointer-events-none'
+                : 'cursor-pointer hover:bg-[#F5F5F5]'
+            }`}
           >
-            <MenuItemContent>
-              <Icon src={`${process.env.PUBLIC_URL}/icons/bell_off.svg`} alt="알림 없음" />
+            <div className="flex items-center gap-1.5">
+              <img src={`${process.env.PUBLIC_URL}/icons/bell_off.svg`} alt="알림 없음" className="w-4 h-4" />
               알림 없음
-            </MenuItemContent>
-            {topic.receiveNotification === false && <Check>✔</Check>}
-          </MenuItem>
-
-          <MenuItem onClick={() => handleOptionChange('unsubscribe')}>
-            <MenuItemContent>
-              <Icon src={`${process.env.PUBLIC_URL}/icons/bell_minus.svg`} alt="구독 취소" />
+            </div>
+            {topic.receiveNotification === false && <span className="text-[#0072CE] font-bold">✔</span>}
+          </li>
+          <li
+            onClick={() => handleOptionChange('unsubscribe')}
+            className="px-3 py-2 flex justify-between items-center cursor-pointer hover:bg-[#F5F5F5]"
+          >
+            <div className="flex items-center gap-1.5">
+              <img src={`${process.env.PUBLIC_URL}/icons/bell_minus.svg`} alt="구독 취소" className="w-4 h-4" />
               구독 취소
-            </MenuItemContent>
-          </MenuItem>
-        </DropdownMenu>
+            </div>
+          </li>
+        </ul>
       )}
-    </Wrapper>
+    </div>
   );
 }

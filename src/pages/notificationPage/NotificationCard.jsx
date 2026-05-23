@@ -1,108 +1,5 @@
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { COLORS } from '../../constants/appConstants';
 import { clickNotification } from '../../services/api/notification';
-
-const CardContainer = styled.div`
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  align-self: stretch;
-  width: 100%;
-  text-decoration: none;
-  padding: 24px 20px 10px 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-  cursor: pointer;
-  background-color: ${({ read }) =>
-    read ? 'transparent' : 'rgba(0, 30, 255, 0.06)'};
-`;
-
-const Image = styled.img`
-  border-radius: 20px;
-  overflow: hidden;
-  width: 95px;
-  height: 95px;
-`;
-
-const DetailsContainer = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
-`;
-
-const TitleText = styled.div`
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-word;
-  width: 100%;
-  height: 45px;
-  color: ${COLORS.BLACK};
-  font-family: 'Pretendard Variable';
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 1.4;
-`;
-
-const TimeContainer = styled.div`
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  text-align: right;
-  font-size: 12px;
-  font-weight: 600;
-  color: gray;
-  font-family: 'Pretendard Variable';
-`;
-
-const CardImageWrapper = styled.div`
-  object-fit: cover;
-  width: 95px;
-  height: 95px;
-`;
-
-const TitleContainer = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  gap: 6px;
-`;
-
-const Subject = styled.div`
-  width: fit-content;
-  font-family: 'Pretendard Variable';
-  padding: 3px 4px;
-  height: 20px;
-  display: flex;
-  gap: 4px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 4px;
-  background: rgba(84, 84, 84, 0.08);
-  font-size: 14px;
-  color: rgba(84, 84, 84);
-  font-weight: bold;
-`;
-
-const Keyword = styled.span`
-  font-family: 'Pretendard Variable';
-  font-size: 14px;
-  color: ${COLORS.BLUE_MEDIUM};
-  font-weight: bold;
-`;
-
-const BellIcon = styled.img`
-  width: 14px;
-  height: 14px;
-`;
 
 const NotificationCard = ({
   id,
@@ -154,26 +51,49 @@ const NotificationCard = ({
   };
 
   return (
-    <CardContainer onClick={handleCardClick} read={read}>
-      <CardImageWrapper>
-        <Image src={getSafeImageUrl(imageUrl)} alt={title} loading="lazy" />
-      </CardImageWrapper>
-      <DetailsContainer>
-        <TitleContainer>
-          <Subject>
-            <BellIcon
-              src={`${process.env.PUBLIC_URL}/icons/notification.svg`}
-              alt="notification"
-            />
-            {topicName}
-            {keywordName && <Keyword>: {keywordName}</Keyword>}
-          </Subject>
-
-          <TitleText>{title}</TitleText>
-          <TimeContainer>{getTimeAgo(notifiedAt)}</TimeContainer>
-        </TitleContainer>
-      </DetailsContainer>
-    </CardContainer>
+    <div
+      onClick={handleCardClick}
+      className={`flex items-start gap-4 w-full cursor-pointer px-5 pt-6 pb-2.5 border-b border-black/[0.04] ${
+        read ? 'bg-transparent' : 'bg-[rgba(0,30,255,0.06)]'
+      }`}
+    >
+      <div className="w-[95px] h-[95px] shrink-0">
+        <img
+          src={getSafeImageUrl(imageUrl)}
+          alt={title}
+          loading="lazy"
+          className="w-[95px] h-[95px] rounded-[20px] object-cover"
+        />
+      </div>
+      <div className="flex flex-col w-full gap-1.5">
+        <div className="flex w-fit items-center gap-1 px-1 py-[3px] rounded bg-black/[0.08] text-[rgba(84,84,84)] text-sm font-bold">
+          <img
+            src={`${process.env.PUBLIC_URL}/icons/notification.svg`}
+            alt="notification"
+            className="w-3.5 h-3.5"
+          />
+          {topicName}
+          {keywordName && (
+            <span className="text-[#0066b3] font-bold">: {keywordName}</span>
+          )}
+        </div>
+        <div
+          className="text-black text-base font-semibold leading-[1.4] overflow-hidden"
+          style={{
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            height: '45px',
+            wordBreak: 'break-word',
+          }}
+        >
+          {title}
+        </div>
+        <div className="w-full text-xs font-semibold text-gray-400 text-right truncate">
+          {getTimeAgo(notifiedAt)}
+        </div>
+      </div>
+    </div>
   );
 };
 

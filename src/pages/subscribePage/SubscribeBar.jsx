@@ -1,220 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
 import useSubscriptionStore from '../../store/useSubscriptionStore';
 import Swal from 'sweetalert2';
 import { getTopicSubscriptionsStatus, subscribeTopic } from '../../services/api/subscription';
 import SubscribeStatusDropdown from './SubscribeStatusDropdown';
-import { COLORS, LIMITS, Z_INDEX } from '../../constants/appConstants';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-`;
-
-const MenuBarContainer = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  overflow-x: auto;
-  white-space: nowrap;
-  background: ${COLORS.WHITE};
-  padding: ${({ highlight }) => (highlight ? '18px 10px 18px 12px' : '12px 10px 0px 16px')};
-  font-family: 'Pretendard Variable';
-  font-weight: 600;
-  box-sizing: border-box;
-`;
-
-const MenuItemContainer = styled.div`
-  width: 100%;
-  display: flex;
-  overflow-x: auto;
-  white-space: nowrap;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-`;
-
-const MenuItem = styled.div`
-  background-color: ${(props) => (props.isSelected ? COLORS.BLUE_MEDIUM : COLORS.WHITE)};
-  color: ${(props) => (props.isSelected ? COLORS.WHITE : COLORS.BLACK)};
-  display: flex;
-  height: fit-content;
-  padding: 8px 12px;
-  margin: 0 4px;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  border-radius: 600px;
-  border: 2px solid ${COLORS.OFF_WHITE};
-  cursor: pointer;
-`;
-
-const ViewAllButtonWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;  // 구독 설정과 툴팁 사이 여백
-`;
-
-const ViewAllButton = styled.div`
-  display: flex;
-  height: fit-content;
-  padding: 8px 12px;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  border-radius: 600px;
-  border: 2px solid ${COLORS.OFF_WHITE};
-  background-color: ${COLORS.WHITE};
-  cursor: pointer;
-  font-size: 14px;
-  white-space: nowrap;
-  box-sizing: border-box;
-  animation: ${({ highlight }) => highlight ? glowAnimation : 'none'} 1.5s infinite;
-
-  background-color: ${(props) =>
-    props.isSelected ? COLORS.LIGHT_GARY : COLORS.WHITE}; /* 항상 회색 유지 */
-  p {
-    margin: 0
-`;
-
-const InlineTooltip = styled.div`
-  background-color: ${COLORS.BLUE_BRIGHT};
-  color: ${COLORS.WHITE};
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: bold;
-  white-space: nowrap;
-  line-height: 1.4;
-  display: ${({ show }) => (show ? 'block' : 'none')};
-  animation: fadeIn 0.5s ease-in-out;
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-3px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-`;
-
-const ViewAllIcon = styled.img`
-  width: 18px;
-  aspect-ratio: 1;
-  object-fit: cover;
-`;
-
-const ModalOverlay = styled.div`
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: ${COLORS.OVERLAY_BLACK};
-  z-index: ${Z_INDEX.MODAL};
-`;
-
-const ModalContent = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  border-radius: 10px;
-  overflow-y: auto;
-  padding: 24px;
-  z-index: ${Z_INDEX.MODAL_TOP};
-  width: 90%;
-  height: 80%;
-`;
-
-const ModalHeaderIcon = styled.img`
-  aspect-ratio: 1;
-  width: 20px;
-  object-fit: contain;
-  object-position: center;
-`;
-
-const SubscribeButton = styled.button`
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: ${COLORS.BLUE_BRIGHT};
-  color: ${COLORS.WHITE};
-  font-family: 'Pretendard Variable', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 50px;
-  border: none;
-  cursor: pointer;
-  width: fit-content;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  gap: 8px;
-  &:hover {
-    background-color: ${COLORS.LIGHT_GARY};
-  }
-`;
-
-const ModalHeaderTitle = styled.h1`
-  color: ${COLORS.BLACK};
-  font-family: 'Pretendard Variable';
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 700;
-  letter-spacing: -0.2px;
-  margin: 0;
-`;
-
-const ModalHeader = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 0 0 16px 0;
-  gap: 8px;
-`;
-
-const MenuItemInModal = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid ${COLORS.LIGHT_GARY};
-  font-family: 'Pretendard Variable';
-  font-weight: 600;
-`;
-
-const CategoryTitle = styled.h2`
-  font-family: 'Pretendard Variable';
-  font-size: 30px;
-  font-weight: 700;
-  margin-top: 40px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid ${COLORS.LIGHT_GARY};
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-`;
-
-const NotificationBadge = styled.div`
-  width: 10px;
-  height: 10px;
-  background-color: red;
-  border-radius: 50%;
-  display: ${({ isRead }) => {
-    return isRead === false ? 'inline-block' : 'none';
-  }};
-`;
+import { LIMITS } from '../../constants/appConstants';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -228,12 +17,6 @@ const Toast = Swal.mixin({
   },
 });
 
-const glowAnimation = keyframes`
-  0% { box-shadow: 0 0 8px rgba(0, 114, 206, 0.6); }
-  50% { box-shadow: 0 0 15px rgba(0, 114, 206, 0.9); }
-  100% { box-shadow: 0 0 8px rgba(0, 114, 206, 0.6); }
-`;
-
 const SubscribeBar = ({ onTopicSelect, showGuide }) => {
   const {
     isTopicTabRead,
@@ -242,6 +25,7 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
     subscribeItems,
     fetchSubscribeItems,
   } = useSubscriptionStore();
+
   const [menuItems, setMenuItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -257,8 +41,6 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
       setSelectedTopic(topic);
       onTopicSelect(topic);
     }
-
-    // 클릭한 토픽의 읽음 상태를 업데이트
     markTopicAsRead(topic);
   };
 
@@ -266,22 +48,17 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
     setOpenCategory(openCategory === category ? null : category);
   };
 
-  // 구독 설정 데이터 불러오기 함수
   const fetchMenuItems = async () => {
     try {
       const response = await getTopicSubscriptionsStatus();
-      const datas = response.data;
-      setMenuItems(datas);
+      setMenuItems(response.data);
     } catch (error) {
       console.error('Error fetching menu items:', error);
     }
   };
 
-  // 구독 설정 버튼 클릭 시 API 호출 및 모달 열기
   const handleShowModal = async () => {
-    if (!showModal) {
-      await fetchMenuItems(); // 메뉴 아이템을 불러옴
-    }
+    if (!showModal) await fetchMenuItems();
     setShowModal(!showModal);
   };
 
@@ -292,144 +69,118 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
 
   useEffect(() => {
     const allTopicsRead =
-      subscribeItems.length > 0 &&
-      subscribeItems.every((item) => item.isRead === true);
-
-    // 모든 항목이 읽음 상태가 되었을 때만 isTopicTabRead를 업데이트
-    if (allTopicsRead && !isTopicTabRead) {
-      setIsTopicTabRead(true);
-    } else if (!allTopicsRead && !isTopicTabRead) {
-      // 읽지 않은 항목이 있는 경우, isTopicTabRead를 false로 설정
-      setIsTopicTabRead(false);
-    }
+      subscribeItems.length > 0 && subscribeItems.every((item) => item.isRead === true);
+    if (allTopicsRead && !isTopicTabRead) setIsTopicTabRead(true);
+    else if (!allTopicsRead && !isTopicTabRead) setIsTopicTabRead(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subscribeItems, isTopicTabRead]);
 
   const handleSubscribe = async (topic) => {
     if (isProcessing) return;
-
     setIsProcessing(true);
-
     try {
-      Toast.fire({
-        icon: 'info',
-        title: `${topic.koreanTopic} 구독 중`,
-      });
-
+      Toast.fire({ icon: 'info', title: `${topic.koreanTopic} 구독 중` });
       await subscribeTopic(topic.englishTopic);
-
-      // 구독에 성공한 후 사용자가 구독하고 있는 항목을 새로 불러오기
       await fetchMenuItems();
-
-      // 구독에 성공하면 isTopicTabRead를 false로 설정하여 읽지 않은 항목이 있음을 표시
       setIsTopicTabRead(false);
-
-      // Swal.fire({
-      //   icon: "success",
-      //   title: "구독 성공",
-      //   text: `${topic.koreanTopic}를 구독하셨습니다`,
-      // });
-
-      // 클릭한 토픽에만 애니메이션 효과 적용
-      setRingingTopics((prevState) => ({
-        ...prevState,
-        [topic.id]: true, // 해당 토픽의 아이콘에 애니메이션 적용
-      }));
-
-      setTimeout(() => {
-        setRingingTopics((prevState) => ({
-          ...prevState,
-          [topic.id]: false,
-        }));
-      }, 1000);
-
-      setMenuItems((prevMenuItems) =>
-        prevMenuItems.map((item) =>
-          item.koreanTopic === topic.koreanTopic
-            ? { ...item, subscribed: true }
-            : item,
-        ),
+      setRingingTopics((prev) => ({ ...prev, [topic.id]: true }));
+      setTimeout(() => setRingingTopics((prev) => ({ ...prev, [topic.id]: false })), 1000);
+      setMenuItems((prev) =>
+        prev.map((item) =>
+          item.koreanTopic === topic.koreanTopic ? { ...item, subscribed: true } : item
+        )
       );
     } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: '구독 실패',
-        text: '서버 에러',
-      });
-      console.error('Error subscribing to topic:', error);
+      Swal.fire({ icon: 'error', title: '구독 실패', text: '서버 에러' });
     } finally {
       setIsProcessing(false);
     }
   };
 
   const categorizeAndSortItems = (items) => {
-    const categories = {
-      학과: [],
-      단과대: [],
-      공지사항: [],
-      기숙사: [],
-      대학원: [],
-    };
-
+    const categories = { 학과: [], 단과대: [], 공지사항: [], 기숙사: [], 대학원: [] };
     items.forEach((item) => {
-      if (categories[item.classification]) {
-        categories[item.classification].push(item);
-      }
+      if (categories[item.classification]) categories[item.classification].push(item);
     });
-
-    Object.keys(categories).forEach((category) => {
-      categories[category].sort((a, b) => a.koreanOrder - b.koreanOrder);
+    Object.keys(categories).forEach((cat) => {
+      categories[cat].sort((a, b) => a.koreanOrder - b.koreanOrder);
     });
-
     return categories;
   };
 
   const categorizedItems = categorizeAndSortItems(menuItems);
 
   return (
-    <Container>
-      <MenuBarContainer highlight={showGuide}>
-        <ViewAllButtonWrapper>
-          <ViewAllButton isSelected={true} onClick={handleShowModal} highlight={showGuide}>
-            <ViewAllIcon src={`${process.env.PUBLIC_URL}/icons/gear.svg`} />
-            <p>구독 설정</p>
-          </ViewAllButton>
-          <InlineTooltip show={showGuide}>클릭해서 구독하기</InlineTooltip>
-        </ViewAllButtonWrapper>
+    <div className="flex flex-col items-center justify-center w-full">
+      <div
+        className={`w-full flex items-center overflow-x-auto whitespace-nowrap bg-white font-semibold box-border ${
+          showGuide ? 'py-[18px] px-[10px] pl-3' : 'pt-3 pb-0 px-[10px] pl-4'
+        }`}
+      >
+        <div className="flex items-center gap-2.5">
+          <div
+            onClick={handleShowModal}
+            className={`flex h-fit px-3 py-2 justify-center items-center gap-1 rounded-[600px] border-2 border-[#F5F5F5] bg-[#E0E0E0] cursor-pointer text-sm whitespace-nowrap box-border ${
+              showGuide ? 'animate-[glow_1.5s_infinite]' : ''
+            }`}
+          >
+            <img src={`${process.env.PUBLIC_URL}/icons/gear.svg`} alt="gear" className="w-[18px] aspect-square object-cover" />
+            <p className="m-0">구독 설정</p>
+          </div>
+          {showGuide && (
+            <div className="bg-[#0072CE] text-white px-2 py-1 rounded-xl text-[11px] font-bold whitespace-nowrap leading-[1.4] animate-[fadeIn_0.5s_ease-in-out]">
+              클릭해서 구독하기
+            </div>
+          )}
+        </div>
 
-        <MenuItemContainer>
+        <div className="w-full flex overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {Array.isArray(subscribeItems) ? (
             subscribeItems.map((item) => (
-              <MenuItem
+              <div
                 key={item.id}
                 onClick={() => handleTopicClick(item.englishTopic)}
-                isSelected={selectedTopic === item.englishTopic}
+                className={`flex h-fit px-3 py-2 mx-1 justify-center items-center gap-1 rounded-[600px] border-2 border-[#F5F5F5] cursor-pointer ${
+                  selectedTopic === item.englishTopic
+                    ? 'bg-[#0A5CA8] text-white'
+                    : 'bg-white text-black'
+                }`}
               >
                 <span>{item.koreanTopic}</span>
-                <NotificationBadge isRead={item.isRead} />
-              </MenuItem>
+                {item.isRead === false && (
+                  <div className="w-2.5 h-2.5 bg-red-500 rounded-full inline-block" />
+                )}
+              </div>
             ))
           ) : (
             <p>구독 항목이 없습니다</p>
           )}
-        </MenuItemContainer>
-      </MenuBarContainer>
+        </div>
+      </div>
 
       {showModal && (
         <>
-          <ModalOverlay onClick={() => setShowModal(false)} />
-          <ModalContent>
-            <ModalHeader>
-              <ModalHeaderIcon
+          <div
+            onClick={() => setShowModal(false)}
+            className="fixed top-0 left-0 w-full h-full bg-black/50 z-[1000]"
+          />
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-[10px] overflow-y-auto p-6 z-[1001] w-[90%] h-[80%]">
+            <div className="w-full flex items-center pb-4 gap-2">
+              <img
                 src={`${process.env.PUBLIC_URL}/icons/arrow_back.svg`}
+                alt="back"
+                className="w-5 aspect-square object-contain cursor-pointer"
                 onClick={() => setShowModal(false)}
               />
-              <ModalHeaderTitle>전체 구독 항목</ModalHeaderTitle>
-            </ModalHeader>
+              <h1 className="text-black text-lg font-bold tracking-[-0.2px] m-0">전체 구독 항목</h1>
+            </div>
 
             {Object.keys(categorizedItems).map((category) => (
               <div key={category}>
-                <CategoryTitle onClick={() => handleCategoryClick(category)}>
+                <h2
+                  className="text-3xl font-bold mt-10 pb-2.5 border-b border-[#E0E0E0] flex justify-between items-center cursor-pointer"
+                  onClick={() => handleCategoryClick(category)}
+                >
                   {category}
                   <img
                     src={
@@ -438,13 +189,15 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
                         : `${process.env.PUBLIC_URL}/icons/arrow_right.svg`
                     }
                     alt="arrow"
-                    style={{ width: '24px', height: '24px' }}
+                    className="w-6 h-6"
                   />
-                </CategoryTitle>
-
+                </h2>
                 {openCategory === category &&
                   categorizedItems[category].map((item) => (
-                    <MenuItemInModal key={item.id}>
+                    <div
+                      key={item.id}
+                      className="flex justify-between items-center py-2.5 border-b border-[#E0E0E0] font-semibold"
+                    >
                       <div>{item.koreanTopic}</div>
                       <div>
                         {item.subscribed ? (
@@ -454,19 +207,22 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
                             ringing={ringingTopics[item.id]}
                           />
                         ) : (
-                          <SubscribeButton onClick={() => handleSubscribe(item)}>
+                          <button
+                            onClick={() => handleSubscribe(item)}
+                            className="inline-flex justify-center items-center px-5 py-2.5 bg-[#0072CE] text-white text-base font-semibold rounded-[50px] border-none cursor-pointer shadow-sm gap-2 hover:bg-[#E0E0E0]"
+                          >
                             구독
-                          </SubscribeButton>
+                          </button>
                         )}
                       </div>
-                    </MenuItemInModal>
+                    </div>
                   ))}
               </div>
             ))}
-          </ModalContent>
+          </div>
         </>
       )}
-    </Container>
+    </div>
   );
 };
 

@@ -1,164 +1,19 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Z_INDEX, COLORS } from '../constants/appConstants';
 import { registerInfo } from '../services/api/user';
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100vh;
-  padding: 20px;
-  background-color: #f8f8f8;
-`;
-
-const Title = styled.h1`
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: ${COLORS.BLACK};
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 400px;
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const InputContainer = styled.div`
-  display: flex;
-  align-items: center;
-  border: 1px solid ${(props) => (props.hasError ? 'red' : COLORS.BORDER_GARY)};
-  border-radius: 4px;
-  margin-bottom: 20px;
-  width: 100%;
-`;
-
-const Input = styled.input`
-  flex: 1;
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 10px;
-  color: ${COLORS.BLACK};
-  background-color: ${(props) => (props.readOnly ? COLORS.OFF_WHITE : 'transparent')};
-  border-radius: 4px;
-  width: 100%;
-  box-sizing: border-box;
-  &:disabled {
-    background-color: transparent;
-  }
-`;
-
-const SelectButton = styled.button`
-  background-color: ${COLORS.BLUE_BRIGHT};
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 10px;
-  font-size: 14px;
-  cursor: pointer;
-  &:hover {
-    background-color: #084a89;
-  }
-`;
-
-const Label = styled.label`
-  white-space: nowrap;
-  font-size: 17px;
-  color: ${COLORS.DARK_GRAY_TEXT};
-  margin-bottom: 8px;
-  font-weight: bold;
-  margin: 5px 0 7px 0;
-  font-weight: 600;
-  flex-grow: 1;
-`;
-
-const LabelWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const SubmitButton = styled.button`
-  padding: 10px;
-  background-color: ${(props) => (props.disabled ? COLORS.BORDER_GARY : COLORS.BLUE_BRIGHT)};
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
-  &:hover {
-    background-color: ${(props) => (props.disabled ? COLORS.BORDER_GARY : '#218838')};
-  }
-`;
-
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: ${COLORS.OVERLAY_BLACK};
-  z-index: ${Z_INDEX.MODAL};
-`;
-
-const ModalContent = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: ${Z_INDEX.MODAL_TOP};
-  width: 90%;
-  max-width: 600px;
-  height: 80%;
-  overflow-y: auto;
-`;
-
-const ModalHeaderTitle = styled.h1`
-  color: ${COLORS.BLACK};
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0;
-`;
-
-const Error = styled.div`
-  display: flex;
-  justify-content: start;
-  width: 100%;
-  color: red;
-  padding-left: 10px;
-  font-size: 0.8em;
-  min-height: 20px;
-`;
-
-const MenuItemInModal = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid ${COLORS.LIGHT_GARY};
-  font-weight: 600;
-  cursor: pointer;
-  &:hover {
-    background-color: #f8f8f8;
-  }
-`;
+const departmentList = [
+  '간호학과','건설시스템공학과','건축학과','경영인텔리전스학과','경영학과','경제학과',
+  '경제정치사회융합학부','교통시스템공학과','국방디지털융합학과','국어국문학과',
+  '글로벌경영학과','금융공학과','기계공학과','디지털미디어학과','문화콘텐츠학과',
+  '물리학과','미래모빌리티공학과','불어불문학과','사이버보안학과','사학과','사회학과',
+  '산업공학과','생명과학과','소프트웨어학과','수학과','스포츠레저학과','심리학과',
+  '약학과','영어영문학과','융합시스템공학과','응용화학과','응용화학생명공학과',
+  '의학과','인공지능융합학과','자유전공학부','전자공학과','정치외교학과',
+  '지능형반도체공학과','첨단신소재공학과','프런티어과학학부','행정학과','화학공학과',
+  '화학과','환경안전공학과',
+];
 
 const RegisterMajor = () => {
   const location = useLocation();
@@ -168,78 +23,15 @@ const RegisterMajor = () => {
   const [hasError, setHasError] = useState(false);
   const navigate = useNavigate();
 
-  const departmentList = [
-    '간호학과',
-    '건설시스템공학과',
-    '건축학과',
-    '경영인텔리전스학과',
-    '경영학과',
-    '경제학과',
-    '경제정치사회융합학부',
-    '교통시스템공학과',
-    '국방디지털융합학과',
-    '국어국문학과',
-    '글로벌경영학과',
-    '금융공학과',
-    '기계공학과',
-    '디지털미디어학과',
-    '문화콘텐츠학과',
-    '물리학과',
-    '미래모빌리티공학과',
-    '불어불문학과',
-    '사이버보안학과',
-    '사학과',
-    '사회학과',
-    '산업공학과',
-    '생명과학과',
-    '소프트웨어학과',
-    '수학과',
-    '스포츠레저학과',
-    '심리학과',
-    '약학과',
-    '영어영문학과',
-    '융합시스템공학과',
-    '응용화학과',
-    '응용화학생명공학과',
-    '의학과',
-    '인공지능융합학과',
-    '자유전공학부',
-    '전자공학과',
-    '정치외교학과',
-    '지능형반도체공학과',
-    '첨단신소재공학과',
-    '프런티어과학학부',
-    '행정학과',
-    '화학공학과',
-    '화학과',
-    '환경안전공학과',
-  ];
-
   const handleMajorSubmit = async (e) => {
     e.preventDefault();
-
-    if (!major) {
-      setHasError(true);
-      return;
-    }
-
+    if (!major) { setHasError(true); return; }
     try {
-      console.log('email', email);
       await registerInfo({ major });
-      Swal.fire({
-        icon: 'success',
-        title: '학과 등록 성공',
-        text: '구독 페이지로 이동합니다.',
-      });
-
-      // 학과 등록 이후 구독 페이지로 이동하면서 showGuide 전달
+      Swal.fire({ icon: 'success', title: '학과 등록 성공', text: '구독 페이지로 이동합니다.' });
       navigate('/subscribe', { state: { showGuide: true } });
     } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: '등록 실패',
-        text: '학과 등록 중 문제가 발생했습니다.',
-      });
+      Swal.fire({ icon: 'error', title: '등록 실패', text: '학과 등록 중 문제가 발생했습니다.' });
       console.error(error);
     }
   };
@@ -250,65 +42,69 @@ const RegisterMajor = () => {
     setShowModal(false);
   };
 
+  const inputClass = 'flex-1 border-none outline-none text-base font-semibold px-2.5 py-2.5 bg-transparent rounded w-full box-border';
+
   return (
-    <Container>
-      <Title>학과 등록</Title>
-      <Form onSubmit={handleMajorSubmit}>
-        <Label>이메일</Label>
-        <InputContainer>
-          <Input
-            type="email"
-            value={email}
-            readOnly
-            placeholder="이메일"
-            required
-          />
-        </InputContainer>
+    <div className="flex flex-col items-center justify-center w-full min-h-screen px-5 py-5 bg-[#f8f8f8]">
+      <h1 className="text-2xl font-bold mb-5 text-black">학과 등록</h1>
+      <form
+        onSubmit={handleMajorSubmit}
+        className="flex flex-col w-full max-w-[400px] bg-white p-5 rounded-[10px] shadow-[0_4px_8px_rgba(0,0,0,0.1)]"
+      >
+        <label className="text-[17px] text-gray-600 font-semibold my-1.5">이메일</label>
+        <div className="flex items-center border border-[#cdcdcd] rounded mb-5 w-full">
+          <input type="email" value={email} readOnly placeholder="이메일" required className={inputClass + ' bg-gray-50'} />
+        </div>
 
-        <Label>이름</Label>
-        <InputContainer>
-          <Input
-            type="text"
-            value={name}
-            readOnly
-            placeholder="이름"
-            required
-          />
-        </InputContainer>
+        <label className="text-[17px] text-gray-600 font-semibold my-1.5">이름</label>
+        <div className="flex items-center border border-[#cdcdcd] rounded mb-5 w-full">
+          <input type="text" value={name} readOnly placeholder="이름" required className={inputClass + ' bg-gray-50'} />
+        </div>
 
-        <LabelWrapper>
-          <Label>소속</Label>
-          {hasError && <Error>* 학과를 선택해주세요.</Error>}
-        </LabelWrapper>
-        <InputContainer hasError={hasError}>
-          <Input type="text" value={major} placeholder="소속" disabled />
-          <SelectButton type="button" onClick={() => setShowModal(true)}>
+        <div className="flex items-center justify-between w-full mb-1.5">
+          <label className="text-[17px] text-gray-600 font-semibold">소속</label>
+          {hasError && <div className="text-red-500 pl-2.5 text-[0.8em]">* 학과를 선택해주세요.</div>}
+        </div>
+        <div className={`flex items-center border rounded mb-5 w-full ${hasError ? 'border-red-500' : 'border-[#cdcdcd]'}`}>
+          <input type="text" value={major} placeholder="소속" disabled className={inputClass + ' bg-transparent'} />
+          <button
+            type="button"
+            onClick={() => setShowModal(true)}
+            className="bg-[#0066b3] text-white border-none rounded px-2.5 py-2.5 text-sm cursor-pointer hover:bg-[#004f8a] transition-colors whitespace-nowrap"
+          >
             선택하기
-          </SelectButton>
-        </InputContainer>
+          </button>
+        </div>
 
-        <SubmitButton type="submit" disabled={!major}>
+        <button
+          type="submit"
+          disabled={!major}
+          className={`py-2.5 text-white border-none rounded text-base cursor-pointer transition-colors ${
+            major ? 'bg-[#0066b3] hover:bg-[#004f8a]' : 'bg-[#cdcdcd] cursor-not-allowed'
+          }`}
+        >
           등록
-        </SubmitButton>
-      </Form>
+        </button>
+      </form>
 
       {showModal && (
         <>
-          <ModalOverlay onClick={() => setShowModal(false)} />
-          <ModalContent>
-            <ModalHeaderTitle>학과 선택</ModalHeaderTitle>
+          <div onClick={() => setShowModal(false)} className="fixed top-0 left-0 w-full h-full bg-black/50 z-[1000]" />
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-5 rounded-[10px] shadow-[0_4px_8px_rgba(0,0,0,0.2)] z-[1001] w-[90%] max-w-[600px] h-[80%] overflow-y-auto">
+            <h1 className="text-black text-lg font-bold m-0 mb-4">학과 선택</h1>
             {departmentList.map((dept) => (
-              <MenuItemInModal
+              <div
                 key={dept}
                 onClick={() => handleDepartmentSelect(dept)}
+                className="flex justify-between items-center py-2.5 border-b border-[#e5e5e5] font-semibold cursor-pointer hover:bg-[#f8f8f8] transition-colors"
               >
                 {dept}
-              </MenuItemInModal>
+              </div>
             ))}
-          </ModalContent>
+          </div>
         </>
       )}
-    </Container>
+    </div>
   );
 };
 

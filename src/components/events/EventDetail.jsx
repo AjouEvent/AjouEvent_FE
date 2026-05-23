@@ -1,197 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import CalendarModal from '../CalendarModal';
 import TabBar from '../TabBar';
 import Swal from 'sweetalert2';
 import EventBanner from './EventBanner';
 import ImageModal from './ImageModal';
-import { Z_INDEX, STORAGE_KEYS, COLORS } from '../../constants/appConstants';
+import { STORAGE_KEYS } from '../../constants/appConstants';
 import { getEventDetail, getAuthEventDetail, likeEvent, unlikeEvent } from '../../services/api/event';
-
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  font-family: 'Pretendard Variable';
-`;
-
-const EventContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-`;
-
-const Title = styled.h2`
-  font-size: 24px;
-  margin-bottom: 10px;
-  margin: 0;
-`;
-
-const Content = styled.div`
-  font-size: 16px;
-  margin-bottom: 10px;
-`;
-
-const Line = styled.div`
-  margin: 0;
-`;
-
-const Writer = styled.p`
-  font-size: 14px;
-  margin-bottom: 5px;
-`;
-
-const Subject = styled.div`
-  width: fit-content;
-  padding: 3px 4px;
-  height: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 4px;
-  background: rgba(84, 84, 84, 0.08);
-  font-size: 14px;
-  color: rgba(84, 84, 84);
-  font-weight: bold;
-`;
-
-const TitleContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-  align-self: stretch;
-  color: ${COLORS.BLACK};
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 130%; /* 26px */
-`;
-
-const ContentContaioner = styled.div`
-  width: calc(100%-48px);
-  margin: 16px 24px 0px 24px;
-  margin-bottom: 68px;
-`;
-
-const SubtitleContainer = styled.section`
-  width: 100%;
-  justify-content: space-between;
-  display: flex;
-  gap: 20px;
-  font:
-    700 12px 'Pretendard Variable',
-    sans-serif;
-`;
-
-const StyledDate = styled.time`
-  color: rgba(0, 0, 0, 0.4);
-  line-height: 130%;
-`;
-
-const Stats = styled.div`
-  align-self: start;
-  display: flex;
-  gap: 8px;
-  color: #c2c8d1;
-  white-space: nowrap;
-  text-align: center;
-`;
-
-const StatItem = styled.div`
-  display: flex;
-  padding-right: 20px;
-  gap: 4px;
-`;
-
-const StatIcon = styled.img`
-  aspect-ratio: 1;
-  object-fit: auto;
-  object-position: center;
-  width: 14px;
-`;
-
-const StatValue = styled.span`
-  font-family: 'Pretendard Variable';
-`;
-
-const HorizontalLine = styled.hr`
-  width: 312px;
-  height: 1px;
-  margin: 24px 0 24px 0;
-  background: rgba(0, 0, 0, 0.08);
-  border: 0;
-`;
-
-const BottomContainer = styled.div`
-  width: 100%;
-  z-index: ${Z_INDEX.NAV};
-  position: fixed;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  background-color: ${COLORS.WHITE};
-  border-top: 1px solid rgba(35, 102, 175, 0.08);
-  padding: 8px 12px; /* 양쪽에 여백 추가 */
-  gap: 4px; /* <<< 여기 추가 (북마크와 버튼 사이 거리) */
-`;
-
-const BookmarkContainer = styled.div`
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-`;
-
-const BottomImage = styled.img`
-  width: 30px;
-  height: 30px;
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: 8px; /* 버튼 사이 여백 추가 */
-  flex: 1; /* 남는 공간 차지 */
-`;
-
-const BottomButton = styled.button`
-  flex: 1;
-  height: 50px; /* 버튼 높이도 조금 줄여서 여유 느낌 */
-  font-family: 'Pretendard Variable';
-  font-size: 14px;
-  color: ${COLORS.BLUE_SECONDARY};
-  font-weight: 600;
-  background-color: rgba(35, 102, 175, 0.08);
-  border: none;
-  border-radius: 8px; /* 버튼 모서리 둥글게 */
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  white-space: nowrap;
-`;
-
-function Stat({ iconSrc, value, altText }) {
-  return (
-    <StatItem>
-      <StatIcon src={iconSrc} alt={altText} loading="lazy" />
-      <StatValue>{value}</StatValue>
-    </StatItem>
-  );
-}
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
-
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
-
   return `${year}년 ${month}월 ${day}일 ${hours}:${minutes}`;
 };
 
@@ -200,10 +23,10 @@ const getCookie = (name) => {
   const ca = document.cookie.split(';');
   for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
-    while (c.charAt(0) === ' ') c = c.substring(1, c.length); // 앞의 공백을 제거
-    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length); // 쿠키 이름이 일치하는 경우 값 반환
+    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
   }
-  return null; // 쿠키가 없는 경우 null 반환
+  return null;
 };
 
 const EventDetail = () => {
@@ -219,40 +42,26 @@ const EventDetail = () => {
       try {
         const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
         const alreadyViewClubEventNum = getCookie('AlreadyViewClubEventNum');
-        console.log(alreadyViewClubEventNum);
         let response;
 
         if (accessToken) {
           response = await getAuthEventDetail(id);
         } else {
           const config = alreadyViewClubEventNum
-            ? {
-                headers: {
-                  Cookie: `AlreadyViewClubEventNum=${alreadyViewClubEventNum}`,
-                },
-                withCredentials: true,
-              }
+            ? { headers: { Cookie: `AlreadyViewClubEventNum=${alreadyViewClubEventNum}` }, withCredentials: true }
             : { withCredentials: true };
-
           response = await getEventDetail(id, config);
         }
 
-        if (response.data.content) {
-          setContent(response.data.content.split('\\n'));
-        }
+        if (response.data.content) setContent(response.data.content.split('\\n'));
         setEvent(response.data);
       } catch (error) {
         console.error('Error fetching event:', error);
         if (error.response && error.response.status === 401) {
-          Swal.fire({
-            icon: 'error',
-            title: '세션 만료',
-            text: '다시 로그인 해주세요.',
-          });
+          Swal.fire({ icon: 'error', title: '세션 만료', text: '다시 로그인 해주세요.' });
         }
       }
     };
-
     fetchEvent();
   }, [id]);
 
@@ -260,11 +69,7 @@ const EventDetail = () => {
     if (event && event.url) {
       window.location.href = event.url;
     } else {
-      Swal.fire({
-        icon: 'warning',
-        title: 'url 에러',
-        text: '바로가기 가능한 url이 없습니다.',
-      });
+      Swal.fire({ icon: 'warning', title: 'url 에러', text: '바로가기 가능한 url이 없습니다.' });
     }
   };
 
@@ -273,76 +78,74 @@ const EventDetail = () => {
     setIsImageModalOpen(true);
   };
 
-  const handleCalendarClick = () => {
-    setIsCalendarModalOpen(true);
-  };
+  const handleCalendarClick = () => setIsCalendarModalOpen(true);
 
   const handleStarClick = async () => {
     try {
       if (event.star) {
         await unlikeEvent(id);
-        setEvent((prevEvent) => ({
-          ...prevEvent,
-          star: false,
-          likesCount: prevEvent.likesCount - 1,
-        }));
+        setEvent((prev) => ({ ...prev, star: false, likesCount: prev.likesCount - 1 }));
       } else {
         await likeEvent(id);
-        setEvent((prevEvent) => ({
-          ...prevEvent,
-          star: true,
-          likesCount: prevEvent.likesCount + 1,
-        }));
+        setEvent((prev) => ({ ...prev, star: true, likesCount: prev.likesCount + 1 }));
       }
     } catch (error) {
       console.error('Error toggling like:', error);
-      Swal.fire({
-        icon: 'error',
-        title: '좋아요 에러',
-        text: '로그인이 필요한 기능입니다.',
-      });
+      Swal.fire({ icon: 'error', title: '좋아요 에러', text: '로그인이 필요한 기능입니다.' });
     }
   };
 
   return (
-    <Container>
+    <div className="w-full h-full overflow-y-auto">
       {event ? (
-        <EventContainer>
-          <TabBar Title={'공지사항'} />
+        <div className="w-full h-full overflow-y-auto">
+          <TabBar Title="공지사항" />
           <EventBanner images={event.imgUrl} onImageClick={handleImageClick} />
-          <ContentContaioner>
-            <TitleContainer>
-              <Subject>{event.subject}</Subject>
-              <Title>{event.title}</Title>
-              <SubtitleContainer>
-                <StyledDate>{formatDate(event.createdAt)}</StyledDate>
-                <Stats>
-                  <Stat
-                    iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/62c7bb15f5fd13739601caff1be349795102bd00b8ccfe603cd2e43498657c46?apiKey=75213697ab8e4fbfb70997e546d69efb&"
-                    value={event.viewCount}
-                    altText="Statistic icon 1"
-                  />
-                  <Stat
-                    onClick={handleStarClick}
-                    iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/52d95bd6c4badc487be46d013f44cd23b9800d5d1e753fb3a364bcb97b18044f?apiKey=75213697ab8e4fbfb70997e546d69efb&"
-                    value={event.likesCount}
-                    altText="Statistic icon 2"
-                  />
-                </Stats>
-              </SubtitleContainer>
-            </TitleContainer>
-            <HorizontalLine />
-            <Content>
+          <div className="mx-6 mt-4 mb-[68px]">
+            <div className="flex flex-col items-start gap-3 text-black text-xl font-bold leading-[130%]">
+              <div className="w-fit px-1 py-[3px] h-5 flex justify-center items-center rounded bg-black/[0.08] text-sm text-[rgba(84,84,84)] font-bold">
+                {event.subject}
+              </div>
+              <h2 className="text-2xl mb-2.5 m-0">{event.title}</h2>
+              <section className="w-full justify-between flex gap-5 font-bold text-xs">
+                <time className="text-black/40 leading-[130%]">{formatDate(event.createdAt)}</time>
+                <div className="flex gap-2 self-start text-[#c2c8d1] whitespace-nowrap text-center">
+                  <div className="flex pr-5 gap-1">
+                    <img
+                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/62c7bb15f5fd13739601caff1be349795102bd00b8ccfe603cd2e43498657c46?apiKey=75213697ab8e4fbfb70997e546d69efb&"
+                      alt="조회수"
+                      className="w-3.5 aspect-square object-auto"
+                      loading="lazy"
+                    />
+                    <span className="text-xs">{event.viewCount}</span>
+                  </div>
+                  <div className="flex pr-5 gap-1">
+                    <img
+                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/52d95bd6c4badc487be46d013f44cd23b9800d5d1e753fb3a364bcb97b18044f?apiKey=75213697ab8e4fbfb70997e546d69efb&"
+                      alt="좋아요"
+                      className="w-3.5 aspect-square object-auto"
+                      loading="lazy"
+                    />
+                    <span className="text-xs">{event.likesCount}</span>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <hr className="w-[312px] h-px my-6 bg-black/[0.08] border-0" />
+            <div className="text-base mb-2.5">
               {content.map((line, index) => (
-                <Line key={index}>{line}</Line>
+                <div key={index}>{line}</div>
               ))}
-            </Content>
-            <Writer>작성자: {event.writer}</Writer>
-            
-          </ContentContaioner>
-          <BottomContainer>
-            <BookmarkContainer onClick={handleStarClick}>
-              <BottomImage
+            </div>
+            <p className="text-sm mb-1.5">작성자: {event.writer}</p>
+          </div>
+
+          <div className="w-full z-[5] fixed bottom-0 flex items-center bg-white border-t border-[#2366AF]/[0.08] px-3 py-2 gap-1">
+            <div
+              onClick={handleStarClick}
+              className="w-10 h-10 flex items-center justify-center cursor-pointer"
+            >
+              <img
                 loading="lazy"
                 src={
                   event.star
@@ -350,13 +153,25 @@ const EventDetail = () => {
                     : `${process.env.PUBLIC_URL}/icons/EmptyBookmarkIcon.svg`
                 }
                 alt="Bookmark"
+                className="w-[30px] h-[30px]"
               />
-            </BookmarkContainer>
-            <ButtonGroup>
-              <BottomButton onClick={handleRedirect}>사이트 바로가기</BottomButton>
-              <BottomButton onClick={handleCalendarClick}>캘린더에 추가</BottomButton>
-            </ButtonGroup>
-          </BottomContainer>
+            </div>
+            <div className="flex gap-2 flex-1">
+              <button
+                onClick={handleRedirect}
+                className="flex-1 h-[50px] text-sm text-[#2366AF] font-semibold bg-[rgba(35,102,175,0.08)] border-none rounded-lg cursor-pointer flex justify-center items-center whitespace-nowrap"
+              >
+                사이트 바로가기
+              </button>
+              <button
+                onClick={handleCalendarClick}
+                className="flex-1 h-[50px] text-sm text-[#2366AF] font-semibold bg-[rgba(35,102,175,0.08)] border-none rounded-lg cursor-pointer flex justify-center items-center whitespace-nowrap"
+              >
+                캘린더에 추가
+              </button>
+            </div>
+          </div>
+
           {isImageModalOpen && (
             <ImageModal
               images={event.imgUrl}
@@ -371,11 +186,11 @@ const EventDetail = () => {
               content={content}
             />
           )}
-        </EventContainer>
+        </div>
       ) : (
-        <p>Loading...</p>
+        <p className="p-4">Loading...</p>
       )}
-    </Container>
+    </div>
   );
 };
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import {
   option1List,
   아주대공지사항,
@@ -8,35 +7,36 @@ import {
   대학원,
   기숙사,
 } from '../../constants/searchDropOption';
-import { COLORS } from '../../constants/appConstants';
 
-function FilterOption({
-  label,
-  options,
-  selectedValue,
-  setSelectedValue,
-  icon,
-}) {
+function FilterOption({ label, options, selectedValue, setSelectedValue, icon }) {
   return (
-    <FilterOptionWrapper>
-      <FilterOptionContent icon={icon}>
-        <Select
+    <div className="flex w-[150px] flex-col justify-center bg-white border border-[rgba(229,232,235,1)] rounded-full">
+      <div
+        className="flex flex-col gap-[9px] px-4 py-2"
+        style={{
+          backgroundImage: `url(${icon})`,
+          backgroundSize: '24px 24px',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'right 8px center',
+        }}
+      >
+        <select
           value={selectedValue}
-          onChange={(e) => {
-            setSelectedValue(e.target.value);
-          }}
+          onChange={(e) => setSelectedValue(e.target.value)}
+          className="appearance-none outline-none border-none bg-transparent text-sm font-medium tracking-[-0.98px] pr-2.5"
+          style={{ fontFamily: 'Pretendard Variable' }}
         >
-          <Option value="" disabled>
+          <option value="" disabled>
             {label} 선택
-          </Option>
+          </option>
           {options.map((option, index) => (
-            <Option key={index} value={option}>
+            <option key={index} value={option}>
               {option}
-            </Option>
+            </option>
           ))}
-        </Select>
-      </FilterOptionContent>
-    </FilterOptionWrapper>
+        </select>
+      </div>
+    </div>
   );
 }
 
@@ -55,52 +55,33 @@ function SearchDropBox({
   setSavedOption2,
 }) {
   const [option2List, setOption2List] = useState([]);
+
   useEffect(() => {
     switch (option1) {
       case '아주대 공지사항':
         setSavedOption1(option1);
         setOption2List(아주대공지사항);
-        if (아주대공지사항.includes(savedOption2)) {
-          setOption2(savedOption2);
-        } else {
-          setOption2('');
-        }
+        setOption2(아주대공지사항.includes(savedOption2) ? savedOption2 : '');
         break;
       case '학과 공지사항':
         setSavedOption1(option1);
         setOption2List(학과공지사항);
-        if (학과공지사항.includes(savedOption2)) {
-          setOption2(savedOption2);
-        } else {
-          setOption2('');
-        }
+        setOption2(학과공지사항.includes(savedOption2) ? savedOption2 : '');
         break;
       case '단과대 공지사항':
         setSavedOption1(option1);
         setOption2List(단과대공지사항);
-        if (단과대공지사항.includes(savedOption2)) {
-          setOption2(savedOption2);
-        } else {
-          setOption2('');
-        }
+        setOption2(단과대공지사항.includes(savedOption2) ? savedOption2 : '');
         break;
       case '기숙사':
         setSavedOption1(option1);
         setOption2List(기숙사);
-        if (기숙사.includes(savedOption2)) {
-          setOption2(savedOption2);
-        } else {
-          setOption2('');
-        }
+        setOption2(기숙사.includes(savedOption2) ? savedOption2 : '');
         break;
       case '대학원':
         setSavedOption1(option1);
         setOption2List(대학원);
-        if (대학원.includes(savedOption2)) {
-          setOption2(savedOption2);
-        } else {
-          setOption2('');
-        }
+        setOption2(대학원.includes(savedOption2) ? savedOption2 : '');
         break;
       default:
         setOption1('아주대학교-일반');
@@ -113,28 +94,17 @@ function SearchDropBox({
 
   useEffect(() => {
     const fetchDataAndUpdateState = async () => {
-      // option2가 선택되지 않았으면 API 요청을 하지 않음
       if (!option2) return;
-
-      await Promise.all([
-        setPage(0),
-        setHasMore(true),
-        setEvents([]),
-        setSavedOption2(option2),
-      ]);
-
+      await Promise.all([setPage(0), setHasMore(true), setEvents([]), setSavedOption2(option2)]);
       fetchData();
-
-      console.log('type changed to ' + option2);
     };
-
     fetchDataAndUpdateState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [option2]);
 
   return (
-    <Container>
-      <FilterRow>
+    <div className="flex flex-col items-stretch justify-center px-3.5 py-3.5 mb-1.5 w-full text-sm font-medium text-[#1b1e26] tracking-[-0.98px] shadow-[0_4px_10px_#e5e5e5]">
+      <div className="flex items-stretch justify-center gap-4">
         <FilterOption
           label="단체"
           options={option1List}
@@ -149,79 +119,9 @@ function SearchDropBox({
           setSelectedValue={setOption2}
           icon="https://cdn.builder.io/api/v1/image/assets/TEMP/9316045d2a3d77a8384125accfe4d605dfbbba2237b9dcf5c74d5f74feb0de83?apiKey=75213697ab8e4fbfb70997e546d69efb&"
         />
-      </FilterRow>
-    </Container>
+      </div>
+    </div>
   );
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
-  padding: 14px;
-  margin-bottom: 6px;
-  width: 100%;
-  font-family: 'Pretendard Variable';
-  font-size: 14px;
-  color: #1b1e26;
-  font-weight: 500;
-  text-align: center;
-  letter-spacing: -0.98px;
-  box-shadow: 0 4px 10px #e5e5e5;
-`;
-
-const FilterRow = styled.div`
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  gap: 16px;
-`;
-
-const FilterOptionWrapper = styled.div`
-  display: flex;
-  width: 150px;
-  flex-direction: column;
-  justify-content: center;
-  background-color: ${COLORS.WHITE};
-  border: 1px solid rgba(229, 232, 235, 1);
-  border-radius: 50px;
-`;
-
-const FilterOptionContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-  padding: 8px 16px;
-  background-image: url(${(props) => props.icon});
-  background-size: 24px 24px;
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-`;
-
-const Select = styled.select`
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  font-family: 'Pretendard Variable';
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  letter-spacing: -0.98px;
-  appearance: none;
-  outline: none;
-  border: none;
-  background: transparent;
-  padding-right: 10px;
-`;
-
-const Option = styled.option`
-  font-family: 'Pretendard Variable';
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  letter-spacing: -0.98px;
-`;
 
 export default SearchDropBox;

@@ -1,74 +1,14 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import useNotificationStore from '../store/useNotificationStore';
-import { LIMITS, Z_INDEX } from '../constants/appConstants';
-
-const StickyContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  right: 0;
-  top: 0;
-  gap: 6px;
-  z-index: ${Z_INDEX.DROPDOWN};
-  padding: 10px;
-`;
-
-const TapIconContainer = styled.div`
-  position: relative;
-  display: inline-block;
-`;
-
-const TapIcon = styled.img`
-  aspect-ratio: 1;
-  width: 40px;
-  object-fit: cover;
-  object-position: center;
-  opacity: 0.75;
-  cursor: pointer;
-`;
-
-const Badge = styled.span`
-  position: absolute;
-  top: 0;
-  right: 0;
-  background-color: red;
-  color: white;
-  font-size: 8px;
-  font-weight: bold;
-  padding: 4px 6px;
-  border-radius: 99%;
-  width: 15px;
-  height: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-family: 'Pretendard Variable, sans-serif';
-`;
-
-const TapText = styled.span`
-  display: flex;
-  cursor: pointer;
-  font-family: 'Pretendard Variable', serif;
-  background-color: #4784be;
-  color: white;
-  font-weight: 600;
-  height: 40px;
-  align-items: center;
-  text-align: center;
-  padding: 0 16px;
-  border-radius: 99px;
-`;
+import { LIMITS } from '../constants/appConstants';
 
 const HelpBox = () => {
   const navigate = useNavigate();
   const { unreadNotificationCount, fetchUnreadNotificationCount } = useNotificationStore();
 
   useEffect(() => {
-    fetchUnreadNotificationCount(); // 처음 마운트될 때 최신 알림 개수 가져오기
+    fetchUnreadNotificationCount();
   }, [fetchUnreadNotificationCount]);
 
   const handleBellClick = () => {
@@ -85,30 +25,38 @@ const HelpBox = () => {
   };
 
   return (
-    <StickyContainer>
-      <TapIconContainer onClick={handleBellClick}>
-        <TapIcon
+    <div className="fixed right-0 top-0 z-[100] flex items-center gap-1.5 p-2.5">
+      <div className="relative inline-block cursor-pointer" onClick={handleBellClick}>
+        <img
           loading="lazy"
           src={`${process.env.PUBLIC_URL}/icons/notiOn.svg`}
           alt="bellIcon"
+          className="w-10 aspect-square object-cover opacity-75 cursor-pointer"
         />
-        {unreadNotificationCount > 0 &&
-          (unreadNotificationCount < LIMITS.NOTIFICATION_BADGE_MAX ? (
-            <Badge>{unreadNotificationCount}</Badge>
-          ) : (
-            <Badge>99+</Badge>
-          ))}
-      </TapIconContainer>
+        {unreadNotificationCount > 0 && (
+          <span className="absolute top-0 right-0 bg-red-500 text-white text-[8px] font-bold rounded-full w-[15px] h-[15px] flex items-center justify-center">
+            {unreadNotificationCount < LIMITS.NOTIFICATION_BADGE_MAX
+              ? unreadNotificationCount
+              : '99+'}
+          </span>
+        )}
+      </div>
 
-      <TapIcon
+      <img
         onClick={handleInstallClicked}
         loading="lazy"
         src={`${process.env.PUBLIC_URL}/icons/InstallAppOn.svg`}
         alt="installIcon"
+        className="w-10 aspect-square object-cover opacity-75 cursor-pointer"
       />
 
-      <TapText onClick={handleTeamInfoClicked}>팀소개</TapText>
-    </StickyContainer>
+      <span
+        onClick={handleTeamInfoClicked}
+        className="flex cursor-pointer bg-[#4784be] text-white font-semibold h-10 items-center text-center px-4 rounded-full"
+      >
+        팀소개
+      </span>
+    </div>
   );
 };
 

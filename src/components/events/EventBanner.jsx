@@ -1,86 +1,81 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Carousel from "react-bootstrap/Carousel";
-import { COLORS } from '../../constants/appConstants';
-
-const BannerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: ${COLORS.WHITE};
-  width: 100%;
-  height: 100vw;
-`;
-
-const CarouselItemImage = styled.img`
-  width: 100%;
-  height: 100vw;
-  object-fit: contain;
-  cursor: pointer; // 커서 스타일 추가
-`;
-
-const StyledCarouselControlPrevIcon = styled.span`
-  filter: invert(50%);
-`;
-
-const StyledCarouselControlNextIcon = styled.span`
-  filter: invert(50%);
-`;
+import React, { useState, useRef } from 'react';
 
 export default function EventBanner({ images, onImageClick }) {
   const [index, setIndex] = useState(0);
+  const touchStartX = useRef(null);
 
-  const handleSelect = (selectedIndex) => {
-    setIndex(selectedIndex);
+  const next = () => setIndex((i) => (i + 1) % images.length);
+  const prev = () => setIndex((i) => (i - 1 + images.length) % images.length);
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
   };
 
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const delta = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(delta) > 50) delta > 0 ? next() : prev();
+    touchStartX.current = null;
+  };
+
+  if (!images || images.length === 0) return null;
+
   return (
-    <BannerContainer>
-      <Carousel
-        activeIndex={index}
-        onSelect={handleSelect}
-        controls={images.length > 1} // 이미지가 여러 개일 때만 화살표 표시
-        interval={null}
-        touch={true}
-        style={{ width: "100vw", height: "100vw" }}
-        prevIcon={
-          images.length > 1 && (
-            <StyledCarouselControlPrevIcon className="carousel-control-prev-icon" />
-          )
-        }
-        nextIcon={
-          images.length > 1 && (
-            <StyledCarouselControlNextIcon className="carousel-control-next-icon" />
-          )
-        }
+    <div className="flex flex-col items-center justify-center bg-white w-full h-[100vw]">
+      <div
+        className="relative w-full h-[100vw] overflow-hidden"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
-        {images.map((src, idx) => (
-          <Carousel.Item key={idx}>
-            <CarouselItemImage
-              src={src}
-              alt={`Slide ${idx + 1}`}
-              onClick={() => onImageClick(idx)}
-            />
-          </Carousel.Item>
-        ))}
-      </Carousel>
+        <div
+          className="flex h-full transition-transform duration-300 ease-in-out"
+          style={{ transform: `translateX(-${index * 100}%)` }}
+        >
+          {images.map((src, idx) => (
+            <div key={idx} className="min-w-full h-full flex-shrink-0">
+              <img
+                src={src}
+                alt={`Slide ${idx + 1}`}
+                className="w-full h-full object-contain cursor-pointer"
+                onClick={() => onImageClick(idx)}
+              />
+            </div>
+          ))}
+        </div>
+
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={prev}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg leading-none"
+            >
+              ‹
+            </button>
+            <button
+              onClick={next}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg leading-none"
+            >
+              ›
+            </button>
+          </>
+        )}
+      </div>
 
       {images.length > 1 && (
-        <div className="carousel-indicators">
+        <div className="flex justify-center items-center gap-2 mt-2">
           {images.map((_, idx) => (
             <button
               key={idx}
-              type="button"
-              onClick={() => handleSelect(idx)}
-              className={index === idx ? "active" : ""}
-              aria-current={index === idx ? "true" : undefined}
-              aria-label={`Slide ${idx + 1}`}
-            ></button>
+              onClick={() => setIndex(idx)}
+              className={`rounded-full transition-all ${
+                index === idx
+                  ? 'bg-[#434a52] w-5 h-[15px] opacity-100'
+                  : 'bg-gray-400 w-2.5 h-2.5 opacity-50'
+              }`}
+            />
           ))}
         </div>
       )}
-    </BannerContainer>
+    </div>
   );
 }

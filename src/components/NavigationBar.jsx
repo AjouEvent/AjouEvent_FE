@@ -1,70 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PWAPrompt from 'react-ios-pwa-prompt';
 import useSubscriptionStore from '../store/useSubscriptionStore';
-import { Z_INDEX, COLORS } from '../constants/appConstants';
-
-const NavWrapper = styled.nav`
-  z-index: ${Z_INDEX.NAV};
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background-color: ${COLORS.WHITE};
-  flex-direction: column;
-  font-size: 12px;
-  font-family: 'Pretendard Variable';
-  color: #b8bfc6;
-  font-weight: 700;
-  text-align: center;
-  line-height: 150%;
-  padding: 12px 0px 20px;
-`;
-
-const NavItems = styled.ul`
-  display: flex;
-  gap: 8px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-`;
-
-const NavItem = styled.li`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 0 14px;
-  align-items: center;
-  color: ${(props) => (props.active ? COLORS.BLUE_SECONDARY : '#b8bfc6')};
-  cursor: pointer;
-  position: relative;
-`;
-
-const NavIcon = styled.img`
-  width: 24px;
-  aspect-ratio: 1;
-  object-fit: cover;
-  filter: ${(props) => (props.active ? 'none' : 'grayscale(100%)')};
-`;
-
-const NavLabel = styled.span`
-  margin-top: 4px;
-  color: inherit;
-`;
-
-const Badge = styled.div`
-  position: absolute;
-  top: 0;
-  right: 10px;
-  width: 8px;
-  height: 8px;
-  background-color: red;
-  border-radius: 50%;
-`;
 
 const items = [
   {
@@ -109,22 +46,16 @@ function NavigationBar() {
   const navigate = useNavigate();
   const currentPath = location.pathname;
 
-  // 전역 상태에서 읽음 상태 관리 (서버 변수명 그대로 사용)
   const { isSubscribedTabRead, fetchMemberStatus } = useSubscriptionStore();
 
   const [isIOS, setIsIOS] = useState(false);
   const [shouldShowPWAPrompt, setShouldShowPWAPrompt] = useState(false);
 
   useEffect(() => {
-    // fetchMemberStatus(); // 페이지 로드 시 사용자 구독 상태 가져오기
-    // iOS 장치인지 확인
     const isDeviceIOS =
       /iPad|iPhone|iPod/.test(window.navigator.userAgent) && !window.MSStream;
     setIsIOS(isDeviceIOS);
-
-    if (isDeviceIOS) {
-      setShouldShowPWAPrompt(true); // iOS 장치일 때 프롬프트 표시
-    }
+    if (isDeviceIOS) setShouldShowPWAPrompt(true);
   }, []);
 
   const handleNavItemClick = (link) => {
@@ -134,29 +65,32 @@ function NavigationBar() {
 
   return (
     <>
-      <NavWrapper>
-        <NavItems>
+      <nav className="fixed bottom-0 left-0 z-[5] w-full bg-white border-t border-black/[0.08] flex justify-center flex-col text-xs font-bold text-center text-[#b8bfc6] pb-5 pt-3">
+        <ul className="flex gap-2 list-none p-0 m-0">
           {items.map((item, index) => {
             const isActive = currentPath === item.link;
             return (
-              <NavItem
+              <li
                 key={index}
-                active={isActive}
+                className={`flex flex-col flex-1 px-3.5 items-center cursor-pointer relative ${
+                  isActive ? 'text-[#2366AF]' : 'text-[#b8bfc6]'
+                }`}
                 onClick={() => handleNavItemClick(item.link)}
               >
-                <NavIcon
+                <img
                   src={isActive ? item.srcFilled : item.srcEmpty}
                   alt={item.alt}
-                  active={isActive}
+                  className={`w-6 aspect-square object-cover ${isActive ? '' : 'grayscale'}`}
                 />
-                <NavLabel>{item.label}</NavLabel>
-                {/* 구독 탭에 뱃지 표시 */}
-                {item.label === '구독' && isSubscribedTabRead === false && <Badge />}
-              </NavItem>
+                <span className="mt-1">{item.label}</span>
+                {item.label === '구독' && isSubscribedTabRead === false && (
+                  <div className="absolute top-0 right-2.5 w-2 h-2 bg-red-500 rounded-full" />
+                )}
+              </li>
             );
           })}
-        </NavItems>
-      </NavWrapper>
+        </ul>
+      </nav>
 
       {isIOS && (
         <PWAPrompt

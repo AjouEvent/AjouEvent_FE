@@ -1,96 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import NavigationBar from '../../components/NavigationBar';
 import LocationBar from '../../components/LocationBar';
 import { clearAuth } from '../../utils/auth';
 import { getUserInfo } from '../../services/api/user';
 import Swal from 'sweetalert2';
-import { STORAGE_KEYS, COLORS } from '../../constants/appConstants';
-
-const AppContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: ${COLORS.WHITE};
-  height: 100vh;
-  overflow-y: hidden;
-  width: 100vw;
-  overflow-x: hidden;
-`;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-`;
-
-const UserInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: start;
-  font-family: 'Pretendard Variable', serif;
-  padding: 20px 40px 10px 40px;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-  h3 {
-    margin-bottom: 1.6rem;
-  }
-`;
-
-const LogoutBtnWapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-`;
-
-const StyledLink = styled(Link)`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border-radius: 0.5rem;
-  padding: 8px;
-  border: 1px solid #b8b8b8;
-  width: 85%;
-  height: fit-content;
-  color: gray;
-  font-size: 0.8rem;
-  text-decoration: none;
-  text-align: center;
-  font-family: 'Pretendard Variable';
-`;
-
-const MenuList = styled.ul`
-  list-style: none;
-  margin: 0;
-  padding: 20px 0;
-`;
-
-const MenuItem = styled.li`
-  border-bottom: 1px solid #eee;
-  padding: 10px 20px;
-  font-family: 'Pretendard Variable', serif;
-  font-size: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${COLORS.OFF_WHITE};
-  }
-`;
-
-const ArrowIcon = styled.span`
-  font-size: 1rem;
-  color: gray;
-`;
+import { STORAGE_KEYS } from '../../constants/appConstants';
 
 const MyPage = () => {
   const [user, setUser] = useState({});
@@ -102,7 +17,6 @@ const MyPage = () => {
       navigate('/login');
       return;
     }
-
     const fetchUserInfo = async () => {
       try {
         const response = await getUserInfo();
@@ -111,17 +25,10 @@ const MyPage = () => {
         console.error(error);
       }
     };
-
     fetchUserInfo();
   }, [accessToken, navigate]);
 
-  const handleEditClick = () => {
-    navigate('/profile-modification', {
-      state: {
-        user,
-      },
-    });
-  };
+  const handleEditClick = () => navigate('/profile-modification', { state: { user } });
 
   const handleFeedBackClick = () => {
     window.open(
@@ -131,50 +38,50 @@ const MyPage = () => {
   };
 
   const handleLogoutBtnClick = () => {
-    Swal.fire({
-      icon: 'success',
-      title: '로그아웃 성공',
-      text: '로그아웃 했습니다.',
-    });
+    Swal.fire({ icon: 'success', title: '로그아웃 성공', text: '로그아웃 했습니다.' });
     clearAuth();
   };
 
   return (
-    <AppContainer>
-      <Container>
+    <div className="flex flex-col items-center justify-center bg-white h-screen overflow-y-hidden w-screen overflow-x-hidden">
+      <div className="flex flex-col w-full h-full text-center">
         <LocationBar location="마이페이지" />
-        <UserInfo>
-          <h3>회원정보</h3>
-          <p>이름: {user.name}</p>
-          <p>전공: {user.major}</p>
-          <p>이메일: {user.email}</p>
-        </UserInfo>
-        <LogoutBtnWapper>
-          <StyledLink onClick={handleLogoutBtnClick} to="/login">
+        <div className="flex flex-col justify-start items-start px-10 pt-5 pb-2.5 border-t border-black/[0.08]">
+          <h3 className="mb-6">회원정보</h3>
+          <p className="m-0 mb-1">이름: {user.name}</p>
+          <p className="m-0 mb-1">전공: {user.major}</p>
+          <p className="m-0 mb-1">이메일: {user.email}</p>
+        </div>
+        <div className="flex items-center justify-center w-full my-3">
+          <Link
+            onClick={handleLogoutBtnClick}
+            to="/login"
+            className="flex flex-wrap items-center justify-center bg-white rounded-lg p-2 border border-[#b8b8b8] w-[85%] text-gray-500 text-[0.8rem] no-underline text-center"
+          >
             로그아웃
-          </StyledLink>
-        </LogoutBtnWapper>
-        <MenuList>
-          <MenuItem onClick={handleEditClick}>
-            회원정보 수정 <ArrowIcon>›</ArrowIcon>
-          </MenuItem>
-          <MenuItem>
-            자주묻는질문 <ArrowIcon>›</ArrowIcon>
-          </MenuItem>
-          <MenuItem>
-            공지사항 <ArrowIcon>›</ArrowIcon>
-          </MenuItem>
-          <MenuItem>
-            버전 <ArrowIcon>›</ArrowIcon>
-          </MenuItem>
-          <MenuItem>
-            피드백 / 오류 제보
-            <ArrowIcon onClick={handleFeedBackClick}>›</ArrowIcon>
-          </MenuItem>
-        </MenuList>
-      </Container>
+          </Link>
+        </div>
+        <ul className="list-none m-0 py-5 px-0">
+          {[
+            { label: '회원정보 수정', onClick: handleEditClick },
+            { label: '자주묻는질문' },
+            { label: '공지사항' },
+            { label: '버전' },
+            { label: '피드백 / 오류 제보', onClick: handleFeedBackClick },
+          ].map(({ label, onClick }) => (
+            <li
+              key={label}
+              onClick={onClick}
+              className="border-b border-[#eee] px-5 py-2.5 text-base flex justify-between items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            >
+              {label}
+              <span className="text-base text-gray-400">›</span>
+            </li>
+          ))}
+        </ul>
+      </div>
       <NavigationBar />
-    </AppContainer>
+    </div>
   );
 };
 

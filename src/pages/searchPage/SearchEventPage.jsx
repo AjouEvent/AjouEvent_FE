@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
-import styled from 'styled-components';
 import NavigationBar from '../../components/NavigationBar';
 import SearchDropBox from './SearchDropBox';
 import SearchBar from '../../components/SearchBar';
@@ -7,24 +6,8 @@ import useUIStore from '../../store/useUIStore';
 import { KtoECodes } from '../../constants/departmentCodes';
 import LocationBar from '../../components/LocationBar';
 import SearchEvent from './SearchEvent';
-import { LIMITS, COLORS } from '../../constants/appConstants';
+import { LIMITS } from '../../constants/appConstants';
 import { getEventsByCategory } from '../../services/api/event';
-
-const AppContainer = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background-color: ${COLORS.WHITE};
-`;
-
-const MainContentContaioner = styled.div`
-  display: flex;
-  width: 100vw;
-  overflow-x: hidden;
-  align-items: center;
-  flex-direction: column;
-  padding: 0 0 80px 0;
-`;
 
 export default function SearchEventPage() {
   const {
@@ -46,7 +29,6 @@ export default function SearchEventPage() {
   const [keyword, setKeyword] = useState(savedKeyword);
   const [option1, setOption1] = useState(savedOption1);
   const [option2, setOption2] = useState(savedOption2);
-
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
@@ -57,17 +39,13 @@ export default function SearchEventPage() {
 
   const fetchData = useCallback(async () => {
     if (loading || !hasMore || isError) return;
-
     setLoading(true);
     try {
       const response = await getEventsByCategory(KtoECodes[option2], page, pageSize, keyword);
       const newEvents = response.data.result;
-
       setEvents((prevEvents) => {
         const eventIds = new Set(prevEvents.map((event) => event.eventId));
-        const filteredEvents = newEvents.filter(
-          (event) => !eventIds.has(event.eventId),
-        );
+        const filteredEvents = newEvents.filter((event) => !eventIds.has(event.eventId));
         return [...prevEvents, ...filteredEvents];
       });
       if (response.data.hasNext) {
@@ -84,32 +62,21 @@ export default function SearchEventPage() {
     }
   }, [loading, hasMore, isError, page, pageSize, option2, keyword]);
 
-  // Handle infinite scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !loading && hasMore) {
-          fetchData();
-        }
+        if (entries[0].isIntersecting && !loading && hasMore) fetchData();
       },
       { threshold: 1 },
     );
-
     const currentRef = bottomRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
+    if (currentRef) observer.observe(currentRef);
+    return () => { if (currentRef) observer.unobserve(currentRef); };
   }, [loading, hasMore, fetchData]);
 
   return (
-    <AppContainer>
-      <MainContentContaioner>
+    <div className="flex items-center flex-col bg-white">
+      <div className="flex w-full overflow-x-hidden items-center flex-col pb-20">
         <LocationBar location="전체 이벤트 검색" />
         <SearchDropBox
           setPage={setPage}
@@ -144,8 +111,8 @@ export default function SearchEventPage() {
           hasMore={hasMore}
           isError={isError}
         />
-      </MainContentContaioner>
+      </div>
       <NavigationBar />
-    </AppContainer>
+    </div>
   );
 }

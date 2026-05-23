@@ -1,207 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import GetUserPermission from '../../services/fcm/GetUserPermission';
 import Swal from 'sweetalert2';
-import { Z_INDEX, STORAGE_KEYS, COLORS } from '../../constants/appConstants';
-
-const Container = styled.div`
-  z-index: ${Z_INDEX.PAGE};
-  display: block;
-  padding-top: 6rem;
-  width: 90%;
-  height: 100vh;
-  background-color: transparent;
-  margin-bottom: 4rem;
-  font-family: 'Pretendard Variable';
-`;
-
-const LogoWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const Logo = styled.div`
-  width: 100px;
-  height: 100px;
-  background: url('../image/AjouUniversity-logo.png') no-repeat center center;
-  background-size: contain;
-`;
-
-const Heading = styled.h1`
-  color: ${COLORS.BLACK};
-  font-size: 32px;
-  font-weight: 700;
-  margin: 0;
-  text-align: left;
-  font-family: 'Pretendard Variable';
-`;
-
-const HeadingWrapper = styled.div`
-  display: flex;
-  width: 90%;
-  max-width: 680px;
-  align-items: start;
-  justify-content: baseline;
-  padding-left: 1rem;
-`;
-
-// 새로 추가된 스타일
-const StyledParagraph = styled.p`
-  color: ${COLORS.BLACK};
-  font-size: 15px;
-  font-family: 'Pretendard Variable';
-  margin-top: 10px; /* 상단 여백 추가 */
-  margin-bottom: 10px; /* 하단 여백 추가 */
-`;
-
-const HighlightedText = styled.span`
-  color: red;
-  font-weight: bold;
-`;
-
-const Form = styled.form`
-  width: 100%;
-  margin: 10px auto 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Separator = styled.div`
-  display: block;
-  margin: 10px auto 10px;
-  max-width: 680px;
-  text-align: center;
-  height: 10px;
-  position: relative;
-  background: transparent;
-  color: rgba(255, 255, 255);
-  width: 90%;
-  max-width: 680px;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 8px;
-    left: 0;
-    background: rgba(120, 120, 120, 0.5);
-    height: 1px;
-    width: 50%;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 8px;
-    right: 0;
-    background: rgba(120, 120, 120, 0.5);
-    height: 1px;
-    width: 50%;
-  }
-`;
-
-const GoogleLoginButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 90%;
-  max-width: 680px;
-  height: 50px;
-  margin: 16px auto 0;
-  background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.1); // 테두리 색상 설정
-  border-radius: 30px;
-  cursor: pointer;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  padding-left: 8px; // 왼쪽 여백 8dp
-  padding-right: 8px; // 오른쪽 여백 8dp
-
-  &:hover {
-    background-color: ${COLORS.OFF_WHITE};
-  }
-
-  .icon {
-    width: 18px; // 로고 크기
-    height: 18px;
-    margin-right: 24px; // 로고와 텍스트 사이 간격 24dp
-  }
-
-  span {
-    text-align: center;
-    color: ${COLORS.BLACK};
-    color: rgba(0, 0, 0, 0.54); // 폰트 컬러 54% 투명도
-    font-size: 14px;
-    font-family: 'Pretendard Variable', sans-serif;
-    font-weight: 500;
-    font-style: normal;
-  }
-`;
-
-const BottomLinks = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 20px auto;
-  font-size: 14px;
-  color: #6f6f6f;
-  width: 90%;
-  max-width: 680px;
-
-  span {
-    color: ${COLORS.BLACK};
-  }
-
-  a {
-    color: ${COLORS.BLUE_BRIGHT};
-    text-decoration: none;
-    font-weight: 700;
-  }
-`;
-
-const Description = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  color: #999999;
-  margin: 20px 0 10px 0;
-  font-size: 13px;
-  width: 100%;
-  text-align: center;
-  line-height: 1.6;
-  padding: 0 1rem 0 1rem;
-  .contact {
-    p {
-      font-weight: 600;
-      margin: 0;
-    }
-    .contact-info {
-      justify-content: center;
-      align-items: center;
-      display: flex;
-      gap: 10px;
-    }
-  }
-`;
-
-const LoadingOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 24px;
-  z-index: ${Z_INDEX.MODAL};
-`;
+import { STORAGE_KEYS } from '../../constants/appConstants';
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -216,7 +18,7 @@ const Login = () => {
       Swal.fire({
         icon: 'error',
         title: '알림 토큰 미등록',
-        text: '’홈화면에 추가’를 통해 설치 / 알림 설정(허용)을 확인해주세요 ',
+        text: "‘홈화면에 추가’를 통해 설치 / 알림 설정(허용)을 확인해주세요",
       });
       return;
     }
@@ -225,53 +27,79 @@ const Login = () => {
   };
 
   return (
-    <Container>
-      {isLoading && <LoadingOverlay>알림 서비스 등록 중 ...</LoadingOverlay>}
+    <div className="z-10 block pt-24 w-[90%] h-screen bg-transparent mb-16">
+      {isLoading && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center text-white text-2xl z-[1000]">
+          알림 서비스 등록 중 ...
+        </div>
+      )}
 
-      <Form>
-        <HeadingWrapper>
-          <Heading>로그인</Heading>
-        </HeadingWrapper>
-        <HeadingWrapper>
-          <StyledParagraph>
-            기본 로그인이 <HighlightedText>구글 로그인</HighlightedText>으로
-            통합되었습니다.
-          </StyledParagraph>
-        </HeadingWrapper>
-      </Form>
-      <GoogleLoginButton onClick={handleGoogleButtonClicked}>
-        <FcGoogle className="icon" />
-        <span>Google 계정으로 로그인</span>
-      </GoogleLoginButton>
-      <Separator></Separator>
-      <BottomLinks>
-        <span>아직 회원이 아니신가요?</span>
-        <Link to="/privacy-agreement">회원가입</Link>
-      </BottomLinks>
-      <LogoWrapper>
-        <Logo />
-      </LogoWrapper>
-      <Description>
+      <form className="w-full mx-2.5 flex flex-col justify-center items-center">
+        <div className="flex w-[90%] max-w-[680px] items-start justify-start pl-4">
+          <h1 className="text-black text-[32px] font-bold m-0 text-left">로그인</h1>
+        </div>
+        <div className="flex w-[90%] max-w-[680px] items-start justify-start pl-4">
+          <p className="text-black text-[15px] mt-2.5 mb-2.5">
+            기본 로그인이 <span className="text-red-500 font-bold">구글 로그인</span>으로 통합되었습니다.
+          </p>
+        </div>
+      </form>
+
+      <button
+        onClick={handleGoogleButtonClicked}
+        className="flex items-center justify-center w-[90%] max-w-[680px] h-[50px] mx-auto mt-4 bg-white border border-black/10 rounded-[30px] cursor-pointer shadow-[0_2px_4px_rgba(0,0,0,0.1)] px-2 hover:bg-gray-50 transition-colors"
+      >
+        <FcGoogle className="w-[18px] h-[18px] mr-6" />
+        <span className="text-center text-black/[0.54] text-sm font-medium">
+          Google 계정으로 로그인
+        </span>
+      </button>
+
+      <div className="block mx-auto my-2.5 w-[90%] max-w-[680px] h-[10px] relative">
+        <span className="absolute top-2 left-0 right-0 h-px bg-black/20" />
+      </div>
+
+      <div className="flex justify-between items-center mx-auto my-5 text-sm text-[#6f6f6f] w-[90%] max-w-[680px]">
+        <span className="text-black">아직 회원이 아니신가요?</span>
+        <Link to="/privacy-agreement" className="text-[#0066b3] no-underline font-bold">
+          회원가입
+        </Link>
+      </div>
+
+      <div className="flex justify-center items-center mb-5">
+        <div
+          className="w-[100px] h-[100px] bg-no-repeat bg-center bg-contain"
+          style={{ backgroundImage: "url('../image/AjouUniversity-logo.png')" }}
+        />
+      </div>
+
+      <div className="flex flex-col justify-between text-[#999] my-5 text-[13px] w-full text-center leading-[1.6] px-4">
         <div>
-          <p>
-            * AjouEvent는 2024-1학기 아주대학교 파란학기제에서<br /> 
+          <p className="m-0">
+            * AjouEvent는 2024-1학기 아주대학교 파란학기제에서<br />
             진행한 프로젝트로 아주대학교 공식 서비스가 아닙니다.
           </p>
-          <p>* AjouEvent 계정은 아주대학교 포탈 계정과 무관합니다.</p>
+          <p className="m-0">* AjouEvent 계정은 아주대학교 포탈 계정과 무관합니다.</p>
         </div>
-        <div className="contact">
-          <p> 서비스 문의</p>
-          <div className="contact-info">
-            <a href="mailto:jysim0326@ajou.ac.kr?subject=ajouevent 서비스 문의">
+        <div className="mt-3">
+          <p className="font-semibold m-0">서비스 문의</p>
+          <div className="flex justify-center items-center gap-2.5">
+            <a
+              href="mailto:jysim0326@ajou.ac.kr?subject=ajouevent 서비스 문의"
+              className="text-[#999] no-underline"
+            >
               BE: 심재엽
             </a>
-            <a href="mailto:ysc0731@ajou.ac.kr?subject=ajouevent 서비스 문의">
+            <a
+              href="mailto:ysc0731@ajou.ac.kr?subject=ajouevent 서비스 문의"
+              className="text-[#999] no-underline"
+            >
               FE: 윤석찬
             </a>
           </div>
         </div>
-      </Description>
-    </Container>
+      </div>
+    </div>
   );
 };
 

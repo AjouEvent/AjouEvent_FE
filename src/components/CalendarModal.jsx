@@ -1,107 +1,6 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import { addEventToCalendar } from '../services/api/event';
-import { Z_INDEX, COLORS } from '../constants/appConstants';
-
-const ModalBackgroundContainer = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: ${COLORS.OVERLAY_BLACK};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: ${Z_INDEX.CALENDAR};
-`;
-
-const ModalContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 80%;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  h2 {
-    margin: 8px 0 24px 0;
-  }
-`;
-
-const Input = styled.input`
-  font-family: 'Pretendard Variable';
-  width: auto;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid ${COLORS.BORDER_GARY};
-  border-radius: 4px;
-`;
-
-const TextArea = styled.textarea`
-  font-family: 'Pretendard Variable';
-  width: auto;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid ${COLORS.BORDER_GARY};
-  border-radius: 4px;
-`;
-
-const ErrorText = styled.p`
-  color: red;
-  font-size: 0.8rem;
-  margin-top: -8px;
-  margin-bottom: 10px;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-top: 20px;
-  gap: 10px;
-  width: 100%;
-`;
-
-const ContentContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-top: 20px;
-  gap: 10px;
-  width: 100%;
-`;
-
-const Button = styled.button`
-  width: 50%;
-  font-family: 'Pretendard Variable';
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  color: white;
-`;
-
-const CancelButton = styled(Button)`
-  background-color: #b4b4b4;
-`;
-
-const SubmitButton = styled(Button)`
-  background-color: #47bcff;
-`;
-
-const ResetButton = styled(Button)`
-  background-color: #ff8181;
-  padding: 0 6px;
-  width: fit-content;
-  margin-bottom: 4px;
-  font-size: 0.7rem;
-`;
-
-const InputLabel = styled.p`
-  font-family: 'Pretendard Variable';
-  font-weight: 600;
-  margin-bottom: 4px;
-`;
 
 function CalendarModal({ setIsModalOpen, title, content }) {
   const currentTime = new Date();
@@ -118,43 +17,15 @@ function CalendarModal({ setIsModalOpen, title, content }) {
   const [startDateError, setStartDateError] = useState('');
   const [endDateError, setEndDateError] = useState('');
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  const handleCancel = () => setIsModalOpen(false);
 
   const handleSubmit = async () => {
     let hasError = false;
-    if (!summary.trim()) {
-      setSummaryError('제목을 입력해 주세요');
-      hasError = true;
-    } else {
-      setSummaryError('');
-    }
-
-    if (!description.trim()) {
-      setDescriptionError('내용을 입력해 주세요');
-      hasError = true;
-    } else {
-      setDescriptionError('');
-    }
-
-    if (!startDate) {
-      setStartDateError('시작 날짜를 선택해 주세요');
-      hasError = true;
-    } else {
-      setStartDateError('');
-    }
-
-    if (!endDate) {
-      setEndDateError('종료 날짜를 선택해 주세요');
-      hasError = true;
-    } else {
-      setEndDateError('');
-    }
-
-    if (hasError) {
-      return;
-    }
+    if (!summary.trim()) { setSummaryError('제목을 입력해 주세요'); hasError = true; } else setSummaryError('');
+    if (!description.trim()) { setDescriptionError('내용을 입력해 주세요'); hasError = true; } else setDescriptionError('');
+    if (!startDate) { setStartDateError('시작 날짜를 선택해 주세요'); hasError = true; } else setStartDateError('');
+    if (!endDate) { setEndDateError('종료 날짜를 선택해 주세요'); hasError = true; } else setEndDateError('');
+    if (hasError) return;
 
     const formatDateTime = (datetime) => {
       if (datetime.includes(':')) {
@@ -174,18 +45,10 @@ function CalendarModal({ setIsModalOpen, title, content }) {
 
     try {
       await addEventToCalendar(eventData);
-      Swal.fire({
-        icon: 'success',
-        title: '구글 캘린더 등록 성공',
-        text: '구글캘린더에 이벤트가 등록되었습니다.',
-      });
+      Swal.fire({ icon: 'success', title: '구글 캘린더 등록 성공', text: '구글캘린더에 이벤트가 등록되었습니다.' });
       setIsModalOpen(false);
     } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: '구글 캘린더 등록 실패',
-        text: '소셜로그인으로 로그인한 사용자만 이용가능한 서비스 입니다.',
-      });
+      Swal.fire({ icon: 'error', title: '구글 캘린더 등록 실패', text: '소셜로그인으로 로그인한 사용자만 이용가능한 서비스 입니다.' });
       console.error('There was an error submitting the event!', error);
     }
   };
@@ -193,74 +56,94 @@ function CalendarModal({ setIsModalOpen, title, content }) {
   const handleStartDateChange = (e) => {
     const newStartDate = e.target.value;
     setStartDate(newStartDate);
-    if (newStartDate > endDate) {
-      setEndDate(newStartDate);
-    }
+    if (newStartDate > endDate) setEndDate(newStartDate);
   };
 
   const handleEndDateChange = (e) => {
     const newEndDate = e.target.value;
     setEndDate(newEndDate);
-    if (newEndDate < startDate) {
-      setStartDate(newEndDate);
-    }
+    if (newEndDate < startDate) setStartDate(newEndDate);
   };
 
-  const handleResetSummary = () => {
-    setSummary('');
-  };
-
-  const handleResetDescription = () => {
-    setDescription('');
-  };
+  const inputClass = 'w-full px-2.5 py-2.5 mb-2.5 border border-[#cdcdcd] rounded text-sm outline-none focus:border-[#0066b3] transition-colors';
+  const labelClass = 'font-semibold mb-1 text-sm';
+  const errorClass = 'text-red-500 text-[0.8rem] -mt-2 mb-2.5';
 
   return (
-    <ModalBackgroundContainer>
-      <ModalContainer>
-        <h1>이벤트 캘린더 등록</h1>
-        <ContentContainer>
-          <InputLabel>제목</InputLabel>
-          <ResetButton onClick={handleResetSummary}>초기화</ResetButton>
-        </ContentContainer>
-        <Input
+    <div className="fixed top-0 left-0 w-screen h-screen bg-black/50 flex justify-center items-center z-[1200]">
+      <div className="flex flex-col bg-white p-5 rounded-lg w-[80%] shadow-[0_2px_10px_rgba(0,0,0,0.1)]">
+        <h1 className="text-xl font-bold mb-6">이벤트 캘린더 등록</h1>
+
+        <div className="flex justify-between items-end mb-1">
+          <p className={labelClass}>제목</p>
+          <button
+            onClick={() => setSummary('')}
+            className="bg-red-400 text-white px-1.5 py-0 text-[0.7rem] rounded cursor-pointer border-none mb-1"
+          >
+            초기화
+          </button>
+        </div>
+        <input
           type="text"
           placeholder="제목을 입력해 주세요"
           value={summary}
           onChange={(e) => setSummary(e.target.value)}
+          className={inputClass}
         />
-        {summaryError && <ErrorText>{summaryError}</ErrorText>}
-        <ContentContainer>
-          <InputLabel>내용</InputLabel>
-          <ResetButton onClick={handleResetDescription}>초기화</ResetButton>
-        </ContentContainer>
-        <TextArea
+        {summaryError && <p className={errorClass}>{summaryError}</p>}
+
+        <div className="flex justify-between items-end mb-1">
+          <p className={labelClass}>내용</p>
+          <button
+            onClick={() => setDescription('')}
+            className="bg-red-400 text-white px-1.5 py-0 text-[0.7rem] rounded cursor-pointer border-none mb-1"
+          >
+            초기화
+          </button>
+        </div>
+        <textarea
           placeholder="내용을 입력해 주세요"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          className={inputClass}
+          rows={4}
         />
-        {descriptionError && <ErrorText>{descriptionError}</ErrorText>}
-        <InputLabel>시작 날짜</InputLabel>
-        <Input
+        {descriptionError && <p className={errorClass}>{descriptionError}</p>}
+
+        <p className={labelClass}>시작 날짜</p>
+        <input
           type="datetime-local"
-          placeholder="시작 날짜를 선택해 주세요"
           value={startDate}
           onChange={handleStartDateChange}
+          className={inputClass}
         />
-        {startDateError && <ErrorText>{startDateError}</ErrorText>}
-        <InputLabel>종료 날짜</InputLabel>
-        <Input
+        {startDateError && <p className={errorClass}>{startDateError}</p>}
+
+        <p className={labelClass}>종료 날짜</p>
+        <input
           type="datetime-local"
-          placeholder="종료 날짜를 선택해 주세요"
           value={endDate}
           onChange={handleEndDateChange}
+          className={inputClass}
         />
-        {endDateError && <ErrorText>{endDateError}</ErrorText>}
-        <ButtonContainer>
-          <CancelButton onClick={handleCancel}>취소</CancelButton>
-          <SubmitButton onClick={handleSubmit}>등록</SubmitButton>
-        </ButtonContainer>
-      </ModalContainer>
-    </ModalBackgroundContainer>
+        {endDateError && <p className={errorClass}>{endDateError}</p>}
+
+        <div className="flex justify-between pt-5 gap-2.5 w-full">
+          <button
+            onClick={handleCancel}
+            className="w-1/2 py-2.5 px-5 border-none rounded cursor-pointer text-white bg-[#b4b4b4]"
+          >
+            취소
+          </button>
+          <button
+            onClick={handleSubmit}
+            className="w-1/2 py-2.5 px-5 border-none rounded cursor-pointer text-white bg-[#47bcff]"
+          >
+            등록
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 

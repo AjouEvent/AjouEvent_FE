@@ -1,175 +1,21 @@
-import styled from 'styled-components';
-import EmptyStarIcon from '../icons/EmptyStarIcon';
-import FilledStarIcon from '../icons/FilledStarIcon';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
-import { COLORS } from '../../constants/appConstants';
+import EmptyStarIcon from '../icons/EmptyStarIcon';
+import FilledStarIcon from '../icons/FilledStarIcon';
 import { likeEvent, unlikeEvent } from '../../services/api/event';
 
-const CardContainer = styled.div`
-  display: flex;
-  align-items: ${(props) => (props.$hasKeyword ? 'flex-start' : 'center')};
-  gap: ${(props) => (props.$hasKeyword ? '16px' : '1rem')};
-  align-self: stretch;
-  width: ${(props) => (props.$hasKeyword ? 'calc(100vw - 40px)' : '100%')};
-  height: ${(props) => (props.$hasKeyword ? '144px' : '5rem')};
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-  cursor: pointer;
-  ${(props) => (props.$hasKeyword ? 'margin-top: 24px;' : 'padding: 0.5rem 0;')}
-  ${(props) => (props.$hasKeyword ? 'text-decoration: none;' : '')}
-`;
-
-const Image = styled.img`
-  border-radius: ${(props) => (props.$hasKeyword ? '20px' : '0.5rem')};
-  overflow: hidden;
-  width: ${(props) => (props.$hasKeyword ? '120px' : '100%')};
-  height: ${(props) => (props.$hasKeyword ? '120px' : '100%')};
-`;
-
-const DetailsContainer = styled.div`
-  display: flex;
-  height: ${(props) => (props.$hasKeyword ? 'auto' : '100%')};
-  width: ${(props) => (props.$hasKeyword ? 'auto' : 'calc(100% - 5rem)')};
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: ${(props) => (props.$hasKeyword ? '0' : '0.2rem')};
-  ${(props) => (props.$hasKeyword ? 'flex-grow: 1;' : '')}
-`;
-
-const TitleText = styled.div`
-  display: flex;
-  width: 100%;
-  height: ${(props) => (props.$hasKeyword ? '40px' : 'fit-content')};
-  color: ${(props) => (props.$hasKeyword ? COLORS.BLACK : 'black')};
-  font-family: 'Pretendard Variable', sans-serif;
-  font-size: ${(props) => (props.$hasKeyword ? '16px' : '12px')};
-  font-style: normal;
-  font-weight: 600;
-  line-height: 120%;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  word-break: keep-all;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const SubDetailContainer = styled.div`
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  font-size: 10px;
-  font-weight: 600;
-  color: gray;
-  font-family: 'Pretendard Variable';
-`;
-
-const LikeContainer = styled.div`
-  display: flex;
-  width: ${(props) => (props.$hasKeyword ? '30px' : '1rem')};
-  height: ${(props) => (props.$hasKeyword ? 'auto' : '1rem')};
-  justify-content: ${(props) => (props.$hasKeyword ? 'space-between' : 'center')};
-  align-items: center;
-`;
-
-const TagContaioner = styled.div`
-  display: flex;
-  width: 100%;
-  height: fit-content;
-  justify-content: space-between;
-  align-items: end;
-`;
-
-const CardImageWapper = styled.div`
-  object-fit: cover;
-  width: ${(props) => (props.$hasKeyword ? '120px' : '4rem')};
-  height: ${(props) => (props.$hasKeyword ? '120px' : '4rem')};
-`;
-
-const TitleContainer = styled.div`
-  display: flex;
-  width: 100%;
-  height: fit-content;
-  flex-direction: column;
-  gap: ${(props) => (props.$hasKeyword ? '6px' : '0.2rem')};
-`;
-
-const Subject = styled.div`
-  width: fit-content;
-  padding: 3px 4px;
-  height: ${(props) => (props.$hasKeyword ? '20px' : '1rem')};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 4px;
-  background: rgba(84, 84, 84, 0.08);
-  font-size: ${(props) => (props.$hasKeyword ? '14px' : '10px')};
-  color: rgba(84, 84, 84);
-  font-weight: ${(props) => (props.$hasKeyword ? 'bold' : '700')};
-  font-family: 'Pretendard Variable', sans-serif;
-`;
-
-const Stats = styled.div`
-  align-self: start;
-  display: flex;
-  color: #c2c8d1;
-  white-space: nowrap;
-  text-align: center;
-  ${(props) => (props.$hasKeyword ? '' : 'gap: 0.5rem;')}
-`;
-
-const StatItem = styled.div`
-  display: flex;
-  gap: 4px;
-  ${(props) => (props.$hasKeyword ? 'padding-right: 20px;' : '')}
-`;
-
-const StatIcon = styled.img`
-  aspect-ratio: 1;
-  object-fit: auto;
-  object-position: center;
-  width: ${(props) => (props.$hasKeyword ? '14px' : '0.75rem')};
-`;
-
-const StatValue = styled.span`
-  font-size: 12px;
-  font-family: 'Pretendard Variable';
-`;
-
-const ImageWapper = styled.div`
-  width: 25px;
-  height: 25px;
-  object-fit: cover;
-  cursor: pointer;
-`;
-
-const KeywordContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  height: 30px;
-`;
-
-const BellIcon = styled.img`
-  width: 18px;
-  height: 18px;
-`;
-
-const KeywordText = styled.div`
-  font-size: 16px;
-  font-weight: bold;
-  color: ${COLORS.DARK_GRAY_TEXT};
-`;
-
-function Stat({ iconSrc, value, altText, $hasKeyword }) {
+function Stat({ iconSrc, value, altText, hasKeyword }) {
   return (
-    <StatItem $hasKeyword={$hasKeyword}>
-      <StatIcon $hasKeyword={$hasKeyword} src={iconSrc} alt={altText} loading="lazy" />
-      <StatValue>{value}</StatValue>
-    </StatItem>
+    <div className={`flex gap-1 ${hasKeyword ? 'pr-5' : ''}`}>
+      <img
+        src={iconSrc}
+        alt={altText}
+        loading="lazy"
+        className={`aspect-square object-auto object-center ${hasKeyword ? 'w-3.5' : 'w-3'}`}
+      />
+      <span className="text-xs">{value}</span>
+    </div>
   );
 }
 
@@ -188,17 +34,15 @@ const EventCard = ({
   const [likes, setLikes] = useState(likesCount);
   const navigate = useNavigate();
 
-  // HTTP 이미지 URL을 HTTPS로 변환
   const getSafeImageUrl = (url) => {
     if (url.startsWith('http://')) {
       return `https://images.weserv.nl/?url=${encodeURIComponent(url)}`;
     }
-    return url; // HTTPS URL은 그대로 반환
+    return url;
   };
 
   const handleStarClick = async (e) => {
     e.stopPropagation();
-
     try {
       if (cardStar) {
         await unlikeEvent(id);
@@ -211,11 +55,7 @@ const EventCard = ({
       }
     } catch (error) {
       console.error('Error toggling like:', error);
-      Swal.fire({
-        icon: 'error',
-        title: '좋아요 에러',
-        text: '로그인이 필요한 기능입니다.',
-      });
+      Swal.fire({ icon: 'error', title: '좋아요 에러', text: '로그인이 필요한 기능입니다.' });
     }
   };
 
@@ -227,62 +67,98 @@ const EventCard = ({
   const formattedContent = content ? content.replace(/\\n/g, ' ') : '';
 
   return (
-    <CardContainer $hasKeyword={hasKeyword} onClick={handleCardClick}>
-      <CardImageWapper $hasKeyword={hasKeyword}>
-        <Image $hasKeyword={hasKeyword} src={getSafeImageUrl(imgUrl)} alt={title} loading="lazy" />
-      </CardImageWapper>
-      <DetailsContainer $hasKeyword={hasKeyword}>
-        <TitleContainer $hasKeyword={hasKeyword}>
+    <div
+      className={`flex cursor-pointer border-b border-black/[0.04] ${
+        hasKeyword
+          ? 'items-start gap-4 w-[calc(100vw-40px)] h-36 mt-6 no-underline'
+          : 'items-center gap-4 w-full h-20 py-2'
+      }`}
+      onClick={handleCardClick}
+    >
+      <div
+        className={`object-cover flex-shrink-0 ${hasKeyword ? 'w-[120px] h-[120px]' : 'w-16 h-16'}`}
+      >
+        <img
+          className={`overflow-hidden object-cover w-full h-full ${hasKeyword ? 'rounded-[20px]' : 'rounded-lg'}`}
+          src={getSafeImageUrl(imgUrl)}
+          alt={title}
+          loading="lazy"
+        />
+      </div>
+
+      <div
+        className={`flex flex-col items-start justify-between ${
+          hasKeyword ? 'h-auto flex-grow gap-0' : 'h-full w-[calc(100%-4rem)] gap-[0.2rem]'
+        }`}
+      >
+        <div className={`flex w-full flex-col ${hasKeyword ? 'gap-1.5' : 'gap-[0.2rem]'}`}>
           {hasKeyword ? (
             <div>
-              <KeywordContainer>
-                <BellIcon
+              <div className="flex items-center gap-1 h-[30px]">
+                <img
                   src={`${process.env.PUBLIC_URL}/icons/alarm_filled.svg`}
                   alt="Notification Bell"
+                  className="w-[18px] h-[18px]"
                 />
-                <KeywordText>{keyword}</KeywordText>
-              </KeywordContainer>
-              <TitleText $hasKeyword={hasKeyword}>{title}</TitleText>
-              <Subject $hasKeyword={hasKeyword}>{subject}</Subject>
+                <div className="text-base font-bold text-[#333]">{keyword}</div>
+              </div>
+              <div className="flex w-full h-10 text-black font-semibold text-base leading-[120%] line-clamp-2 break-keep overflow-hidden">
+                {title}
+              </div>
+              <div className="w-fit px-1 py-[3px] h-5 flex justify-center items-center rounded bg-black/[0.08] text-sm text-[rgba(84,84,84)] font-bold">
+                {subject}
+              </div>
             </div>
           ) : (
             <>
-              <TitleText>{title}</TitleText>
-              <SubDetailContainer>{formattedContent}</SubDetailContainer>
+              <div className="flex w-full text-black font-semibold text-xs leading-[120%] line-clamp-2 break-keep overflow-hidden">
+                {title}
+              </div>
+              <div className="w-full overflow-hidden whitespace-nowrap text-ellipsis text-[10px] font-semibold text-gray-500">
+                {formattedContent}
+              </div>
             </>
           )}
-        </TitleContainer>
-        <TagContaioner>
-          <Stats $hasKeyword={hasKeyword}>
-            {!hasKeyword && <Subject>{subject}</Subject>}
+        </div>
+
+        <div className="flex w-full justify-between items-end">
+          <div className={`flex self-start text-[#c2c8d1] whitespace-nowrap text-center ${!hasKeyword ? 'gap-2' : ''}`}>
+            {!hasKeyword && (
+              <div className="w-fit px-1 py-[3px] h-4 flex justify-center items-center rounded bg-black/[0.08] text-[10px] text-[rgba(84,84,84)] font-bold">
+                {subject}
+              </div>
+            )}
             <Stat
-              $hasKeyword={hasKeyword}
+              hasKeyword={hasKeyword}
               iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/62c7bb15f5fd13739601caff1be349795102bd00b8ccfe603cd2e43498657c46?apiKey=75213697ab8e4fbfb70997e546d69efb&"
               value={viewCount}
-              altText="Statistic icon 1"
+              altText="조회수"
             />
             <Stat
-              $hasKeyword={hasKeyword}
-              onClick={handleStarClick}
+              hasKeyword={hasKeyword}
               iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/52d95bd6c4badc487be46d013f44cd23b9800d5d1e753fb3a364bcb97b18044f?apiKey=75213697ab8e4fbfb70997e546d69efb&"
               value={likes}
-              altText="Statistic icon 2"
+              altText="좋아요"
             />
-          </Stats>
-          <LikeContainer $hasKeyword={hasKeyword} onClick={handleStarClick}>
+          </div>
+
+          <div
+            className={`flex justify-center items-center cursor-pointer ${hasKeyword ? 'w-[30px] h-auto' : 'w-4 h-4'}`}
+            onClick={handleStarClick}
+          >
             {hasKeyword ? (
-              <ImageWapper>
+              <div className="w-[25px] h-[25px] object-cover cursor-pointer">
                 {cardStar ? <FilledStarIcon /> : <EmptyStarIcon />}
-              </ImageWapper>
+              </div>
             ) : cardStar ? (
               <FilledStarIcon />
             ) : (
               <EmptyStarIcon />
             )}
-          </LikeContainer>
-        </TagContaioner>
-      </DetailsContainer>
-    </CardContainer>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

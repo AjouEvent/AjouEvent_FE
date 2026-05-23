@@ -1,36 +1,17 @@
-import React from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-
-const StyledLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 5rem;
-  height: 5rem;
-  margin: 0 1rem 0 1rem;
-  object-fit: contain;
-`;
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 function NavButton(props) {
   return (
-    <>
-      {props.selected ? (
-        <StyledLink to={`${props.link}`}>
-          <img
-            src={`${process.env.PUBLIC_URL}/icons/Nav${props.icon}On.svg`}
-            alt={`${props.icon}`}
-          />
-        </StyledLink>
-      ) : (
-        <StyledLink to={`${props.link}`}>
-          <img
-            src={`${process.env.PUBLIC_URL}/icons/Nav${props.icon}Off.svg`}
-            alt={`${props.icon}`}
-          />
-        </StyledLink>
-      )}
-    </>
+    <Link
+      to={`${props.link}`}
+      className="flex items-center justify-center w-20 h-20 mx-4 object-contain"
+    >
+      <img
+        src={`${process.env.PUBLIC_URL}/icons/Nav${props.icon}${props.selected ? 'On' : 'Off'}.svg`}
+        alt={`${props.icon}`}
+      />
+    </Link>
   );
 }
 

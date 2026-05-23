@@ -1,51 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import SearchIcon from './icons/SearchIcon';
-import { COLORS } from '../constants/appConstants';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 14px 20px 10px 20px;
-  width: 100%;
-`;
-
-const InputContentContainer = styled.div`
-  display: flex;
-  width: 100%;
-  height: 36px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  background-color: ${COLORS.WHITE};
-  border: 1px solid rgba(229, 232, 235, 1);
-  border-radius: 50px;
-`;
-
-const InputBox = styled.input`
-  display: flex;
-  width: 84%;
-  flex-direction: column;
-  justify-content: center;
-  background-color: ${COLORS.WHITE};
-  border: none;
-  outline: none;
-  font-family: 'Pretendard Variable';
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  letter-spacing: -0.98px;
-  margin-left: 16px;
-`;
-
-const IconWapper = styled.div`
-  margin-right: 16px;
-  padding-top: 4px;
-  cursor: pointer;
-`;
 
 const SearchBar = ({
   keyword,
@@ -59,11 +13,11 @@ const SearchBar = ({
 
   const handleSearchClick = async () => {
     await Promise.all([
-      setPage(0),
-      setHasMore(true),
-      setEvents([]),
+      setPage && setPage(0),
+      setHasMore && setHasMore(true),
+      setEvents && setEvents([]),
       setKeyword(inputTerm),
-      setSavedKeyword(inputTerm),
+      setSavedKeyword && setSavedKeyword(inputTerm),
     ]);
   };
 
@@ -74,20 +28,21 @@ const SearchBar = ({
   };
 
   return (
-    <Container>
-      <InputContentContainer>
-        <InputBox
+    <div className="flex flex-col items-center justify-center px-5 pt-3.5 pb-2.5 w-full">
+      <div className="flex w-full h-9 flex-row justify-between items-center bg-white border border-[rgba(229,232,235,1)] rounded-full">
+        <input
           type="text"
           value={inputTerm}
           onChange={(e) => setInputTerm(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="검색어를 입력해 주세요"
+          className="flex w-[84%] bg-white border-none outline-none text-sm font-medium ml-4 tracking-[-0.98px]"
         />
-        <IconWapper onClick={handleSearchClick}>
+        <div className="mr-4 pt-1 cursor-pointer" onClick={handleSearchClick}>
           <SearchIcon />
-        </IconWapper>
-      </InputContentContainer>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 };
 

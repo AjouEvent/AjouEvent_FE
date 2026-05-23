@@ -1,92 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { clearAuth } from '../utils/auth';
 import dialog from '../utils/dialog';
-import { Z_INDEX, STORAGE_KEYS } from '../constants/appConstants';
-
-const TopBarContainer = styled.div`
-  z-index: ${Z_INDEX.NAV};
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  width: 100vw;
-  height: 3rem;
-  padding: 1rem 0 1rem 0;
-  background-color: rgb(0, 102, 179);
-`;
-
-const LogoContainer = styled(Link)`
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  width: 50%;
-  height: 100%;
-  height: inherit;
-  background-color: inherit;
-  text-decoration: none;
-`;
-
-const BtnContainer = styled.div`
-  display: flex;
-  justify-content: right;
-  align-items: center;
-  width: 50%;
-  height: 100%;
-  height: inherit;
-  background-color: inherit;
-`;
-
-const LogoText = styled.span`
-  font-family: 'Spoqa Han Sans Neo';
-  align-items: center;
-  width: 12rem;
-  height: 1.5rem;
-  font-weight: 700;
-  font-size: 0.9rem;
-  line-height: 1.5rem;
-  color: white;
-  margin-left: 1rem;
-`;
-
-const AlarmImg = styled.img`
-  width: 4vw;
-  height: 4vh;
-`;
-
-const StyledLink = styled(Link)`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  background-color: ${(props) => props.bgcolor};
-  padding: 0.2rem 0.6rem;
-  border-radius: 0.5rem;
-  border: 0;
-  width: 5rem;
-  height: 1.4rem;
-  color: ${(props) => props.color};
-  font-size: 0.8rem;
-  text-decoration: none;
-  margin: 0 1rem 0 1rem;
-`;
+import { STORAGE_KEYS } from '../constants/appConstants';
 
 export default function TopBar() {
   const handleAlarmClick = () => {};
-
   const [isSignIn, setIsSignIn] = useState(false);
 
   useEffect(() => {
     const id = localStorage.getItem(STORAGE_KEYS.USER_ID);
-    if (id) {
-      setIsSignIn(true);
-    } else {
-      setIsSignIn(false);
-    }
+    setIsSignIn(!!id);
   }, []);
 
   const handleLogoutBtnClick = () => {
@@ -96,31 +20,39 @@ export default function TopBar() {
   };
 
   return (
-    <TopBarContainer>
-      <LogoContainer to="/">
-        <LogoText>아주대 공지사항 알림</LogoText>
-      </LogoContainer>
-      <BtnContainer>
-        <AlarmImg
+    <div className="fixed top-0 left-0 right-0 z-[5] flex flex-wrap items-center w-full h-12 px-0 py-4 bg-[#0066b3]">
+      <Link
+        to="/"
+        className="flex justify-start items-center w-1/2 h-full no-underline bg-[#0066b3]"
+      >
+        <span className="font-bold text-[0.9rem] text-white ml-4 leading-6 w-48">
+          아주대 공지사항 알림
+        </span>
+      </Link>
+      <div className="flex justify-end items-center w-1/2 h-full bg-[#0066b3]">
+        <img
           alt="알람"
           src={`${process.env.PUBLIC_URL}/icons/mdi_bell.svg`}
           onClick={handleAlarmClick}
+          className="w-[4vw] h-[4vh]"
         />
         {isSignIn ? (
-          <StyledLink
+          <Link
             onClick={handleLogoutBtnClick}
-            bgcolor={'white'}
-            color={'black'}
             to="/login"
+            className="flex flex-wrap items-center justify-center bg-white rounded-lg border-0 w-20 h-[1.4rem] text-black text-[0.8rem] no-underline mx-4"
           >
             로그아웃
-          </StyledLink>
+          </Link>
         ) : (
-          <StyledLink bgcolor={'white'} color={'black'} to="/login">
+          <Link
+            to="/login"
+            className="flex flex-wrap items-center justify-center bg-white rounded-lg border-0 w-20 h-[1.4rem] text-black text-[0.8rem] no-underline mx-4"
+          >
             로그인
-          </StyledLink>
+          </Link>
         )}
-      </BtnContainer>
-    </TopBarContainer>
+      </div>
+    </div>
   );
 }

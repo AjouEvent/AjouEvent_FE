@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import NavigationBar from '../../components/NavigationBar';
 import GetUserPermission from '../../services/fcm/GetUserPermission';
 import LocationBar from '../../components/LocationBar';
@@ -8,162 +7,20 @@ import HomeBanner from './HomeBanner';
 import HomeHotEvent from './HomeHotEvent';
 import DailyModal from '../../components/DailyModal';
 import HelpBox from '../../components/HelpBox';
-import { Z_INDEX, STORAGE_KEYS, COLORS } from '../../constants/appConstants';
+import { STORAGE_KEYS } from '../../constants/appConstants';
 import { getBannerImages } from '../../services/api/event';
-
-const AppContainer = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background-color: ${COLORS.WHITE};
-`;
-
-const MainContentContainer = styled.div`
-  display: flex;
-  width: 100vw;
-  overflow-x: hidden;
-  align-items: center;
-  flex-direction: column;
-  padding: 0 0 80px 0;
-`;
-
-const InstallPromptContainer = styled.div`
-  position: fixed;
-  z-index: ${Z_INDEX.MODAL};
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: ${COLORS.OVERLAY_BLACK};
-`;
-
-const ModalContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: white;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 500px;
-  border-radius: 20px;
-  font-family: 'Pretendard Variable';
-`;
-
-const ModalBody = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin-top: 10px;
-  gap: 20px;
-`;
-
-const InstallButton = styled.button`
-  background-color: ${COLORS.BLUE_MEDIUM};
-  color: ${COLORS.WHITE};
-  padding: 15px 50px;
-  font-size: 20px;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  margin: 0 auto;
-  width: 80%;
-  max-width: 300px;
-  display: block;
-  padding: 10px 20px;
-  background-color: ${COLORS.BLUE_SECONDARY};
-  color: white;
-  text-decoration: none;
-  border-radius: 50px;
-  font-weight: bold;
-  text-align: center;
-
-  &:hover {
-    background-color: ${COLORS.BLUE_DARK};
-  }
-`;
-
-// Style for the push notification prompt
-const PushNotificationPromptContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh; /* 전체 화면 높이 */
-  width: 100vw; /* 전체 화면 너비 */
-  position: fixed; /* 화면에 고정 */
-  top: 0;
-  left: 0;
-  background-color: ${COLORS.WHITE}; /* 흰색 배경 */
-  color: ${COLORS.BLACK}; /* 검은색 텍스트 (흰색 배경에 잘 보이도록) */
-  z-index: ${Z_INDEX.MODAL}; /* 가장 위에 표시되도록 설정 */
-  padding: 20px;
-  text-align: center;
-`;
-
-const PushNotificationPromptButton = styled.button`
-  background-color: ${COLORS.BLUE_MEDIUM};
-  color: ${COLORS.WHITE};
-  padding: 15px 50px;
-  font-size: 18px;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  margin-top: 20px;
-  width: 80%;
-  max-width: 300px;
-`;
-
-const LaterOption = styled.div`
-  margin-top: 20px;
-  color: #808080;
-  cursor: pointer;
-  font-size: 12px;
-  display: block;
-  margin: 10px auto;
-  text-align: center;
-  color: ${COLORS.OVERLAY_BLACK};
-`;
-
-const BellIcon = styled.img`
-  width: 100px;
-  height: 100px;
-  margin-bottom: 20px;
-`;
-
-const LogoImage = styled.img`
-  width: 45%;
-`;
-
-const TitleText = styled.h2`
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: -5px;
-  text-align: center;
-`;
-
-const ParagraphText = styled.p`
-  font-size: 14px;
-  color: #6c757d;
-  margin-bottom: 20px;
-  text-align: center;
-`;
 
 export default function HomePage() {
   const [showModal, setShowModal] = useState(false);
   const [isPWAInstalled, setIsPWAInstalled] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState(null); // PWA 설치 프롬프트 저장
-  const [showInstallPrompt, setShowInstallPrompt] = useState(false); // 설치 프롬프트 표시 여부
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [, setIsLoading] = useState(false);
   const [bannerImages, setBannerImages] = useState([]);
-  const [showPushNotificationPrompt, setShowPushNotificationPrompt] =
-    useState(false);
+  const [showPushNotificationPrompt, setShowPushNotificationPrompt] = useState(false);
 
-  const navigate = useNavigate(); // useNavigate 훅 사용
+  const navigate = useNavigate();
+
   useEffect(() => {
     GetUserPermission(setIsLoading);
   }, []);
@@ -171,14 +28,12 @@ export default function HomePage() {
   const isKakaoTalkBrowser = () => /KAKAOTALK/i.test(navigator.userAgent);
 
   const openExternalBrowser = (url = window.location.href) => {
-      const kakaoUrl = `kakaotalk://web/openExternal?url=${encodeURIComponent(url)}`;
-      window.location.href = kakaoUrl;
+    const kakaoUrl = `kakaotalk://web/openExternal?url=${encodeURIComponent(url)}`;
+    window.location.href = kakaoUrl;
   };
 
   useEffect(() => {
-      if (isKakaoTalkBrowser()) {
-          openExternalBrowser();
-      }
+    if (isKakaoTalkBrowser()) openExternalBrowser();
   }, []);
 
   useEffect(() => {
@@ -193,7 +48,6 @@ export default function HomePage() {
         setIsLoading(false);
       }
     };
-
     fetchBannerImages();
   }, []);
 
@@ -209,42 +63,27 @@ export default function HomePage() {
     }
 
     const dismissedUntil = localStorage.getItem(STORAGE_KEYS.MODAL_DISMISSED_UNTIL);
-    if (dismissedUntil) {
-      const now = new Date();
-      if (new Date(dismissedUntil) > now) {
-        return;
-      }
-    }
+    if (dismissedUntil && new Date(dismissedUntil) > new Date()) return;
 
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
-      console.log('PWA 설치여부', isPWAInstalled);
       if (!isPWAInstalled) {
-        setDeferredPrompt(e); // 이벤트 저장
-        setShowInstallPrompt(true); // 설치 프롬프트 표시
+        setDeferredPrompt(e);
+        setShowInstallPrompt(true);
       }
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-    return () => {
-      window.removeEventListener(
-        'beforeinstallprompt',
-        handleBeforeInstallPrompt,
-      );
-    };
+    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
   }, [isPWAInstalled]);
 
   const handleInstallClick = () => {
     if (deferredPrompt) {
-      deferredPrompt.prompt(); // 설치 프롬프트 실행
+      deferredPrompt.prompt();
       deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt');
-        } else {
-          console.log('User dismissed the install prompt');
-        }
-        setDeferredPrompt(null); // 설치 후 초기화
+        if (choiceResult.outcome === 'accepted') console.log('User accepted the install prompt');
+        else console.log('User dismissed the install prompt');
+        setDeferredPrompt(null);
         setShowInstallPrompt(false);
       });
     }
@@ -252,64 +91,82 @@ export default function HomePage() {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setShowInstallPrompt(false); // showInstallPrompt 상태도 false로 설정
+    setShowInstallPrompt(false);
   };
 
   const handleAllowNotifications = () => {
     GetUserPermission(setIsLoading);
     setShowPushNotificationPrompt(false);
-    navigate('/privacy-agreement'); // 푸시 알림 설정 후 페이지 이동
+    navigate('/privacy-agreement');
   };
 
   return (
-    <AppContainer>
+    <div className="flex items-center flex-col bg-white">
       {showInstallPrompt && (
-        <InstallPromptContainer>
-          <ModalContent>
-            <ModalBody>
-              <LogoImage
+        <div className="fixed z-[1000] left-0 top-0 w-full h-full flex justify-center items-center bg-black/50">
+          <div className="flex flex-col items-center bg-white p-5 border border-[#888] w-4/5 max-w-[500px] rounded-[20px]">
+            <div className="flex flex-col items-center text-center mt-2.5 gap-5">
+              <img
                 src={`${process.env.PUBLIC_URL}/logo196.png`}
                 alt="Modal"
+                className="w-[45%]"
               />
-              <TitleText>
+              <h2 className="text-[22px] font-bold mb-[-5px] text-center">
                 AjouEvent를 설치하고 <br /> 공지사항 알림을 받아보세요!
-              </TitleText>
-              <ParagraphText>
+              </h2>
+              <p className="text-sm text-[#6c757d] mb-5 text-center">
                 앱에서 공지사항, 키워드 구독을 통해 <br />
                 푸시 알림을 받을 수 있어요.
-              </ParagraphText>
-            </ModalBody>
-            <InstallButton onClick={handleInstallClick}>설치</InstallButton>
-            <LaterOption onClick={handleCloseModal}>나중에 설치</LaterOption>
-          </ModalContent>
-        </InstallPromptContainer>
+              </p>
+            </div>
+            <button
+              onClick={handleInstallClick}
+              className="w-4/5 max-w-[300px] block px-5 py-2.5 bg-[#2366AF] text-white no-underline rounded-[50px] font-bold text-center text-xl border-none cursor-pointer hover:bg-[#1A4F8B]"
+            >
+              설치
+            </button>
+            <div
+              onClick={handleCloseModal}
+              className="mt-5 text-black/50 cursor-pointer text-xs block mx-auto text-center"
+            >
+              나중에 설치
+            </div>
+          </div>
+        </div>
       )}
 
       {showPushNotificationPrompt && (
-        <PushNotificationPromptContainer>
-          <BellIcon
+        <div className="flex flex-col items-center justify-center h-screen w-screen fixed top-0 left-0 bg-white text-black z-[1000] p-5 text-center">
+          <img
             alt="알람"
             src={`${process.env.PUBLIC_URL}/icons/notiOn.svg`}
+            className="w-[100px] h-[100px] mb-5"
           />
-          <h1>푸시 알림 받기</h1>
-          <p>푸시 알림을 설정하고 각종 공지사항, 키워드 알림을 받아보세요!</p>
-          <PushNotificationPromptButton onClick={handleAllowNotifications}>
+          <h1 className="text-2xl font-bold">푸시 알림 받기</h1>
+          <p className="text-base">푸시 알림을 설정하고 각종 공지사항, 키워드 알림을 받아보세요!</p>
+          <button
+            onClick={handleAllowNotifications}
+            className="bg-[#0A5CA8] text-white py-4 px-12 text-lg border-none rounded-[25px] cursor-pointer mt-5 w-4/5 max-w-[300px]"
+          >
             알림 받기
-          </PushNotificationPromptButton>
-          <LaterOption onClick={() => setShowPushNotificationPrompt(false)}>
+          </button>
+          <div
+            onClick={() => setShowPushNotificationPrompt(false)}
+            className="mt-5 text-black/50 cursor-pointer text-xs block mx-auto text-center"
+          >
             나중에 받을게요
-          </LaterOption>
-        </PushNotificationPromptContainer>
+          </div>
+        </div>
       )}
 
-      <MainContentContainer>
+      <div className="flex w-full overflow-x-hidden items-center flex-col pb-20">
         <HelpBox setIsLoading={setIsLoading} />
         <HomeBanner images={bannerImages} />
         <LocationBar location="이번주 인기글" />
         <HomeHotEvent />
-      </MainContentContainer>
+      </div>
       <NavigationBar />
       {showModal && <DailyModal onClose={handleCloseModal} />}
-    </AppContainer>
+    </div>
   );
 }

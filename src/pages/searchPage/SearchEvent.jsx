@@ -1,32 +1,9 @@
-import styled from 'styled-components';
 import EventCard from '../../components/events/EventCard';
-
-const FlexContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  width: 100%;
-  padding: 0.25rem 1.5rem;
-  gap: 0.5rem;
-`;
-
-const MessageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  width: 100%;
-  height: 100%;
-  font-family: 'Pretendard Variable';
-  font-size: 16px;
-  font-weight: 600;
-  color: gray;
-  padding: 16px;
-`;
 
 const SearchEvent = ({ events, bottomRef, loading, hasMore, isError }) => {
   return (
     <>
-      <FlexContainer>
+      <div className="flex justify-between flex-wrap w-full px-6 py-1 gap-2">
         {events.map((event, index) => (
           <EventCard
             key={`${event.eventId}-${index}`}
@@ -40,13 +17,23 @@ const SearchEvent = ({ events, bottomRef, loading, hasMore, isError }) => {
             star={event.star}
           />
         ))}
-      </FlexContainer>
-      <div ref={bottomRef} style={{ height: '1px' }}></div>
-      {loading && <MessageContainer>이벤트 불러 오는 중...</MessageContainer>}
-      {!hasMore && (
-        <MessageContainer>더 이상 불러올 이벤트가 없습니다.</MessageContainer>
+      </div>
+      <div ref={bottomRef} style={{ height: '1px' }} />
+      {loading && (
+        <div className="flex justify-center items-start w-full h-full text-base font-semibold text-gray-400 p-4">
+          이벤트 불러 오는 중...
+        </div>
       )}
-      {isError && <MessageContainer>서버 에러</MessageContainer>}
+      {!hasMore && (
+        <div className="flex justify-center items-start w-full h-full text-base font-semibold text-gray-400 p-4">
+          더 이상 불러올 이벤트가 없습니다.
+        </div>
+      )}
+      {isError && (
+        <div className="flex justify-center items-start w-full h-full text-base font-semibold text-gray-400 p-4">
+          서버 에러
+        </div>
+      )}
     </>
   );
 };

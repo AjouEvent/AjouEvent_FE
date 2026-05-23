@@ -1,31 +1,19 @@
 import { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import EventCard from '../../components/events/EventCard';
 import { getPopularEvents } from '../../services/api/event';
-
-const FlexContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  width: 100%;
-  padding: 0.25rem 1.5rem;
-  gap: 0.5rem;
-`;
 
 export default function HomeHotEvent() {
   const [events, setEvents] = useState([]);
   const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const loadHotEvent = async () => {
       if (isError || loading) return;
-
       setLoading(true);
       try {
         const response = await getPopularEvents();
-        const newEvents = response.data;
-
-        setEvents(newEvents);
+        setEvents(response.data);
       } catch (error) {
         console.error('Error fetching events:', error);
         setIsError(true);
@@ -39,7 +27,7 @@ export default function HomeHotEvent() {
 
   return (
     <>
-      <FlexContainer>
+      <div className="flex justify-between flex-wrap w-full px-6 py-1 gap-2">
         {events.map((event, index) => (
           <EventCard
             key={`${event.eventId}-${index}`}
@@ -53,8 +41,8 @@ export default function HomeHotEvent() {
             star={event.star}
           />
         ))}
-      </FlexContainer>
-      {isError && <p>서버 에러</p>}
+      </div>
+      {isError && <p className="text-red-500 text-sm px-6">서버 에러</p>}
     </>
   );
 }

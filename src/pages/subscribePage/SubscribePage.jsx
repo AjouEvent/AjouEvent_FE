@@ -1,136 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
 import useSubscriptionStore from '../../store/useSubscriptionStore';
 import NavigationBar from '../../components/NavigationBar';
 import LocationBar from '../../components/LocationBar';
 import SubscribeTab from './SubscribeTab';
 import KeywordTab from './KeywordTab';
-import { COLORS, STORAGE_KEYS } from '../../constants/appConstants';
-
-const AppContainer = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background-color: ${COLORS.WHITE};
-  font-family: 'Pretendard Variable';
-`;
-
-const MainContentContaioner = styled.div`
-  display: flex;
-  width: 100%;
-  overflow-x: hidden;
-  align-items: center;
-  flex-direction: column;
-  padding: 0 0 80px 0;
-`;
-
-const TemporaryContaioner = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  background-color: ${COLORS.WHITE};
-  height: 100vh;
-`;
-
-const StyledLink = styled(Link)`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  background-color: ${(props) => props.bgcolor};
-  border-radius: 0.5rem;
-  border: 1px solid gray;
-  width: 6rem;
-  height: 1.4rem;
-  color: ${(props) => props.color};
-  font-size: 0.8rem;
-  text-decoration: none;
-  margin: 0 1rem 0 1rem;
-`;
-
-const TabContainer = styled.div`
-  display: flex;
-  width: 100%;
-`;
-
-const Tab = styled.div`
-  flex: 1;
-  padding: 10px 20px;
-  cursor: pointer;
-  text-align: center;
-  border-bottom: ${(props) =>
-    props.active ? `2px solid ${COLORS.BLACK}` : `1px solid ${COLORS.BORDER_GARY}`};
-  color: ${(props) => (props.active ? COLORS.BLACK : COLORS.DARK_GRAY_TEXT)};
-  font-weight: ${(props) => (props.active ? 'bold' : 'normal')};
-  transition: background-color 0.3s ease;
-  position: relative;
-`;
-
-const Badge = styled.div`
-  position: absolute;
-  top: 0;
-  right: 20px;
-  width: 8px;
-  height: 8px;
-  background-color: red;
-  border-radius: 50%;
-`;
-
-const SubscribeContainer = styled.div`
-  width: 100%;
-`;
-
-const GuideMessage = styled.div`
-  width: 100%;
-  padding: 12px;
-  background-color: #f0f8ff;
-  font-size: 13px;
-  color: ${COLORS.BLUE_BRIGHT};
-  text-align: center;
-  font-weight: 600;
-  line-height: 1.5; /* 줄 간격 확보 */
-  word-break: keep-all; /* 단어 단위로 줄바꿈 */
-  white-space: normal; /* 강제 줄바꿈 허용 */
-
-  @media (max-width: 375px) {  // iPhone SE 같은 작은 화면 대응
-    font-size: 12px;
-    padding: 8px;
-  }
-
-  @media (max-width: 320px) {  // 더 작은 화면일 때
-    font-size: 11px;
-    padding: 6px;
-  }
-`;
+import { STORAGE_KEYS } from '../../constants/appConstants';
 
 export default function SubscribePage() {
   const location = useLocation();
   const { subscribeItems, subscribedKeywords, fetchSubscribedKeywords } = useSubscriptionStore();
-  const [activeTab, setActiveTab] = useState(
-    location.state?.activeTab || 'subscribe',
-  );
+  const [activeTab, setActiveTab] = useState(location.state?.activeTab || 'subscribe');
   const [showGuide, setShowGuide] = useState(false);
 
   const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
-  // 구독 아이템/키워드 변화 감지해 showGuide 판단
   useEffect(() => {
-    if (activeTab === 'subscribe') {
-      setShowGuide(subscribeItems.length === 0);
-    } else if (activeTab === 'keyword') {
-      setShowGuide(subscribedKeywords.length === 0);
-    }
+    if (activeTab === 'subscribe') setShowGuide(subscribeItems.length === 0);
+    else if (activeTab === 'keyword') setShowGuide(subscribedKeywords.length === 0);
   }, [subscribeItems, subscribedKeywords, activeTab]);
 
   useEffect(() => {
-    fetchSubscribedKeywords(); // 여기에서 가져와야 키워드 알림 탭의 뱃지를 보여줄 수 있음
+    fetchSubscribedKeywords();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getGuideMessage = (activeTab) => {
-    if (activeTab === 'subscribe') {
+  const getGuideMessage = (tab) => {
+    if (tab === 'subscribe')
       return (
         <>
           아직 구독한 항목이 없습니다.
@@ -138,7 +34,7 @@ export default function SubscribePage() {
           아래의 <strong>⚙️ 구독 설정</strong>에서 관심있는 공지를 구독해보세요!
         </>
       );
-    } else if (activeTab === 'keyword') {
+    if (tab === 'keyword')
       return (
         <>
           아직 구독한 키워드가 없습니다.
@@ -146,61 +42,76 @@ export default function SubscribePage() {
           아래의 <strong>🔔 키워드 설정</strong>에서 관심있는 키워드를 구독해보세요!
         </>
       );
-    } else {
-      // 기본 메시지 (탭 선택 전이거나, 예외 상황 대비)
-      return (
-        <>
-          아직 구독한 항목이 없습니다.
-          <br />
-          아래의 톱니바퀴/종 모양의 <strong>'설정'</strong>에서 관심있는 공지를 구독해보세요!
-        </>
-      );
-    }
+    return (
+      <>
+        아직 구독한 항목이 없습니다.
+        <br />
+        아래의 톱니바퀴/종 모양의 <strong>'설정'</strong>에서 관심있는 공지를 구독해보세요!
+      </>
+    );
   };
 
   return (
-    <AppContainer>
+    <div className="flex items-center flex-col bg-white">
       {accessToken ? (
-        <MainContentContaioner>
+        <div className="flex w-full overflow-x-hidden items-center flex-col pb-20">
           <LocationBar location="구독" />
           {showGuide && (
-            <GuideMessage>
+            <div className="w-full px-3 py-3 bg-[#f0f8ff] text-sm text-[#0072CE] text-center font-semibold leading-[1.5] break-keep whitespace-normal">
               {getGuideMessage(activeTab)}
-            </GuideMessage>
+            </div>
           )}
-          <TabContainer>
-              <Tab active={activeTab === 'subscribe'} 
-                onClick={() => setActiveTab('subscribe')}>
-                구독 알림
-                {subscribeItems.some((item) => !item.isRead) && <Badge />}
-              </Tab>
-
-              <Tab active={activeTab === 'keyword'} 
-                onClick={() => setActiveTab('keyword')}>
-                키워드 알림
-                {subscribedKeywords.some((item) => !item.isRead) && <Badge />}
-              </Tab>
-          </TabContainer>
+          <div className="flex w-full">
+            <div
+              className={`flex-1 px-5 py-2.5 cursor-pointer text-center transition-colors duration-300 relative ${
+                activeTab === 'subscribe'
+                  ? 'border-b-2 border-black text-black font-bold'
+                  : 'border-b border-[#CDCDCD] text-[#333]'
+              }`}
+              onClick={() => setActiveTab('subscribe')}
+            >
+              구독 알림
+              {subscribeItems.some((item) => !item.isRead) && (
+                <div className="absolute top-0 right-5 w-2 h-2 bg-red-500 rounded-full" />
+              )}
+            </div>
+            <div
+              className={`flex-1 px-5 py-2.5 cursor-pointer text-center transition-colors duration-300 relative ${
+                activeTab === 'keyword'
+                  ? 'border-b-2 border-black text-black font-bold'
+                  : 'border-b border-[#CDCDCD] text-[#333]'
+              }`}
+              onClick={() => setActiveTab('keyword')}
+            >
+              키워드 알림
+              {subscribedKeywords.some((item) => !item.isRead) && (
+                <div className="absolute top-0 right-5 w-2 h-2 bg-red-500 rounded-full" />
+              )}
+            </div>
+          </div>
           {activeTab === 'subscribe' && (
-            <SubscribeContainer>
+            <div className="w-full">
               <SubscribeTab showGuide={showGuide} />
-            </SubscribeContainer>
+            </div>
           )}
           {activeTab === 'keyword' && (
-            <SubscribeContainer>
+            <div className="w-full">
               <KeywordTab showGuide={showGuide} />
-            </SubscribeContainer>
+            </div>
           )}
-        </MainContentContaioner>
+        </div>
       ) : (
-        <TemporaryContaioner>
+        <div className="flex items-center justify-center flex-col bg-white h-screen">
           <p>로그인이 필요한 서비스입니다</p>
-          <StyledLink bgcolor={'white'} color={'black'} to="/login">
+          <Link
+            to="/login"
+            className="flex flex-wrap items-center justify-center bg-white rounded-lg border border-gray-400 w-24 h-[1.4rem] text-black text-sm no-underline mx-4"
+          >
             로그인
-          </StyledLink>
-        </TemporaryContaioner>
+          </Link>
+        </div>
       )}
       <NavigationBar />
-    </AppContainer>
+    </div>
   );
 }

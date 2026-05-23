@@ -1,30 +1,12 @@
-import React from "react";
-import styled from "styled-components";
-import { COLORS } from '../constants/appConstants';
-
-const LocationWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 26px 0px 26px 0px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-`;
-
-const LocationTitle = styled.h1`
-  margin: 0 0 0 24px;
-  color: ${COLORS.BLACK};
-  font-family: "Pretendard Variable";
-  font-size: 26px;
-  font-style: normal;
-  font-weight: 700;
-  letter-spacing: -0.2px;
-`;
+import React from 'react';
 
 const LocationBar = ({ location }) => {
   return (
-    <LocationWrapper>
-      <LocationTitle>{location}</LocationTitle>
-    </LocationWrapper>
+    <div className="w-full flex items-center py-[26px] border-b border-black/[0.08]">
+      <h1 className="m-0 ml-6 text-black text-[26px] font-bold tracking-[-0.2px]">
+        {location}
+      </h1>
+    </div>
   );
 };
 

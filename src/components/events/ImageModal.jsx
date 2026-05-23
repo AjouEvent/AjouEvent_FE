@@ -1,118 +1,58 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { LIMITS, Z_INDEX } from '../../constants/appConstants';
-
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: ${Z_INDEX.MODAL};
-`;
-
-const ModalContent = styled.div`
-  position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
-  width: auto;
-  height: auto;
-  border-radius: 8px;
-  overflow: auto;
-`;
-
-const Image = styled.img`
-  width: 100%;
-  height: 100%;
-  max-width: 100vw;
-  max-height: 100vh;
-  object-fit: contain; 
-  border-radius: 8px;
-`;
-
-const ArrowButton = styled.button`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 2rem;
-  color: white;
-  cursor: pointer;
-  &:focus {
-    outline: none;
-  }
-`;
-
-const PrevButton = styled(ArrowButton)`
-  left: 7px;
-  z-index: ${Z_INDEX.IMAGE_CONTROLS};
-  filter: invert(70%);
-`;
-
-const NextButton = styled(ArrowButton)`
-  right: 7px;
-  z-index: ${Z_INDEX.IMAGE_CONTROLS};
-  filter: invert(70%);
-`;
+import React, { useState } from 'react';
+import { LIMITS } from '../../constants/appConstants';
 
 function ImageModal({ images, currentIndex, onClose }) {
   const [index, setIndex] = useState(currentIndex);
   const [startX, setStartX] = useState(0);
 
   const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
+    if (e.target === e.currentTarget) onClose();
   };
 
-  const handlePrev = () => {
-    setIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : images.length - 1));
-  };
+  const handlePrev = () => setIndex((i) => (i > 0 ? i - 1 : images.length - 1));
+  const handleNext = () => setIndex((i) => (i < images.length - 1 ? i + 1 : 0));
 
-  const handleNext = () => {
-    setIndex((prevIndex) => (prevIndex < images.length - 1 ? prevIndex + 1 : 0));
-  };
+  const handleTouchStart = (e) => setStartX(e.touches[0].clientX);
 
-  // 터치 시작
-  const handleTouchStart = (e) => {
-    setStartX(e.touches[0].clientX);
-  };
-
-  // 터치 끝
   const handleTouchEnd = (e) => {
-    const endX = e.changedTouches[0].clientX;
-    const diffX = startX - endX;
-
-    // 왼쪽으로 스와이프한 경우 다음 이미지
-    if (diffX > LIMITS.SWIPE_THRESHOLD) {
-      handleNext();
-    }
-    // 오른쪽으로 스와이프한 경우 이전 이미지
-    else if (diffX < -LIMITS.SWIPE_THRESHOLD) {
-      handlePrev();
-    }
+    const diffX = startX - e.changedTouches[0].clientX;
+    if (diffX > LIMITS.SWIPE_THRESHOLD) handleNext();
+    else if (diffX < -LIMITS.SWIPE_THRESHOLD) handlePrev();
   };
 
   return (
-    <ModalOverlay onClick={handleOverlayClick}>
-      <ModalContent
+    <div
+      onClick={handleOverlayClick}
+      className="fixed top-0 left-0 w-full h-full bg-black/70 flex justify-center items-center z-[1000]"
+    >
+      <div
+        className="relative max-w-[90vw] max-h-[90vh] w-auto h-auto rounded-lg overflow-auto"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <Image src={images[index]} alt={`Image ${index + 1}`} />
+        <img
+          src={images[index]}
+          alt={`슬라이드 ${index + 1}`}
+          className="w-full h-full max-w-screen max-h-screen object-contain rounded-lg"
+        />
         {images.length > 1 && (
           <>
-            <PrevButton onClick={handlePrev}>&lt;</PrevButton>
-            <NextButton onClick={handleNext}>&gt;</NextButton>
+            <button
+              onClick={handlePrev}
+              className="absolute top-1/2 left-[7px] -translate-y-1/2 bg-transparent border-none text-4xl text-white cursor-pointer outline-none z-[1001] invert-[70%]"
+            >
+              &lt;
+            </button>
+            <button
+              onClick={handleNext}
+              className="absolute top-1/2 right-[7px] -translate-y-1/2 bg-transparent border-none text-4xl text-white cursor-pointer outline-none z-[1001] invert-[70%]"
+            >
+              &gt;
+            </button>
           </>
         )}
-      </ModalContent>
-    </ModalOverlay>
+      </div>
+    </div>
   );
 }
 

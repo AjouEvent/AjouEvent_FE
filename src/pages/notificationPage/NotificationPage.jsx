@@ -1,88 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import TabBar from '../../components/TabBar';
 import NotificationList from './NotificationList';
-import { COLORS } from '../../constants/appConstants';
 import { getUserKeywords } from '../../services/api/subscription';
 import { readAllNotifications } from '../../services/api/notification';
 import dialog from '../../utils/dialog';
-
-const AppContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: start;
-  width: 100%;
-  min-height: 100vh;
-`;
-
-const TabContainer = styled.div`
-  display: flex;
-  width: 100%;
-  border-bottom: 1px solid rgba(239, 237, 239, 0.2);
-`;
-
-const TabButton = styled.button`
-  flex: 1;
-  padding: 16px;
-  text-align: center;
-  font-size: 1.125rem;
-  font-family: 'Pretendard Variable', serif;
-  font-weight: 600;
-  border: none;
-  background: none;
-  color: ${(props) => (props.$active ? 'black' : 'gray')};
-  cursor: pointer;
-  border-bottom: ${(props) =>
-    props.$active ? '2px solid black' : '1px solid gray'};
-  transition: color 0.3s ease-in-out;
-`;
-
-const KeywordRegistrationBanner = styled.div`
-  display: flex;
-  padding: 16px;
-  width: 100%;
-  height: 60px;
-  background-color: rgba(0, 0, 0, 0.05);
-  justify-content: space-between;
-  align-items: center;
-  font-family: 'Pretendard Variable', serif;
-  font-size: 18px;
-  font-weight: 600;
-`;
-
-const StyledButton = styled.button`
-  background-color: ${COLORS.BLUE_MEDIUM};
-  color: ${COLORS.WHITE};
-  padding: 4px 14px;
-  font-size: 16px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-family: 'Pretendard Variable', serif;
-  font-weight: 500;
-  transition: background-color 0.3s ease-in-out;
-  &:hover {
-    background-color: ${COLORS.BLUE_DARK};
-  }
-`;
-
-const MarkAllAsReadButton = styled.button`
-  background-color: ${COLORS.BLUE_MEDIUM};
-  color: ${COLORS.WHITE};
-  padding: 4px 14px;
-  font-size: 16px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-family: 'Pretendard Variable', serif;
-  font-weight: 500;
-  transition: background-color 0.3s ease-in-out;
-  &:hover {
-    background-color: ${COLORS.BLUE_DARK};
-  }
-`;
 
 const NotificationPage = () => {
   const navigate = useNavigate();
@@ -90,7 +12,6 @@ const NotificationPage = () => {
   const [keywordCount, setKeywordCount] = useState(0);
   const [notifications, setNotifications] = useState(0);
 
-  // 키워드 개수 가져오기
   useEffect(() => {
     const fetchUserKeywords = async () => {
       try {
@@ -100,15 +21,12 @@ const NotificationPage = () => {
         console.error('Error fetching user keywords:', error);
       }
     };
-
     fetchUserKeywords();
   }, []);
 
-  // 알림 모두 읽음 처리 함수 (백엔드 readAll API 호출)
   const handleReadAllNotifications = async () => {
     const confirmed = await dialog.confirm('알림 읽음 처리', '정말 모든 알림을 읽음 처리할까요?');
     if (!confirmed) return;
-
     try {
       await readAllNotifications();
       dialog.success('읽음 처리 완료', '모든 알림을 읽음 처리했습니다.');
@@ -119,48 +37,56 @@ const NotificationPage = () => {
     }
   };
 
-  // 탭 변경 핸들러
-  const handleTabChange = (tab) => {
-    setCurrentTab(tab);
-  };
+  const handleTabChange = (tab) => setCurrentTab(tab);
 
-  // 키워드 설정 페이지 이동
-  const KeywordSettingButtonClick = () => {
-    navigate('/subscribe/keywordSubscribe');
-  };
+  const KeywordSettingButtonClick = () => navigate('/subscribe/keywordSubscribe');
 
   return (
-    <AppContainer>
+    <div className="flex flex-col items-center justify-start w-full min-h-screen">
       <TabBar
         Title="알림"
         RightComponent={
-          <MarkAllAsReadButton onClick={handleReadAllNotifications}>
+          <button
+            onClick={handleReadAllNotifications}
+            className="bg-[#0066b3] text-white px-3.5 py-1 text-base rounded-[10px] cursor-pointer font-medium hover:bg-[#004f8a] transition-colors"
+          >
             모두 읽음
-          </MarkAllAsReadButton>
+          </button>
         }
       />
-      <TabContainer>
-        <TabButton
-          $active={currentTab === 'topic'}
+      <div className="flex w-full border-b border-black/[0.08]">
+        <button
           onClick={() => handleTabChange('topic')}
+          className={`flex-1 py-4 text-center text-lg font-semibold border-none bg-transparent cursor-pointer transition-colors duration-300 ${
+            currentTab === 'topic'
+              ? 'text-black border-b-2 border-black'
+              : 'text-gray-400 border-b border-gray-400'
+          }`}
         >
           구독
-        </TabButton>
-        <TabButton
-          $active={currentTab === 'keyword'}
+        </button>
+        <button
           onClick={() => handleTabChange('keyword')}
+          className={`flex-1 py-4 text-center text-lg font-semibold border-none bg-transparent cursor-pointer transition-colors duration-300 ${
+            currentTab === 'keyword'
+              ? 'text-black border-b-2 border-black'
+              : 'text-gray-400 border-b border-gray-400'
+          }`}
         >
           키워드
-        </TabButton>
-      </TabContainer>
+        </button>
+      </div>
 
       {currentTab === 'keyword' && (
-        <KeywordRegistrationBanner>
+        <div className="flex w-full h-[60px] px-4 bg-black/[0.05] justify-between items-center text-lg font-semibold">
           <div>알림 등록한 키워드 {keywordCount}개</div>
-          <StyledButton onClick={KeywordSettingButtonClick}>
+          <button
+            onClick={KeywordSettingButtonClick}
+            className="bg-[#0066b3] text-white px-3.5 py-1 text-base rounded-[10px] cursor-pointer font-medium hover:bg-[#004f8a] transition-colors"
+          >
             키워드 설정
-          </StyledButton>
-        </KeywordRegistrationBanner>
+          </button>
+        </div>
       )}
 
       {currentTab === 'topic' ? (
@@ -174,7 +100,7 @@ const NotificationPage = () => {
           apiUrl={`${process.env.REACT_APP_BE_URL}/api/notification/keyword`}
         />
       )}
-    </AppContainer>
+    </div>
   );
 };
 
