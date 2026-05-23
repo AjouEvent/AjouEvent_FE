@@ -41,7 +41,8 @@ export default function HomePage() {
       setIsLoading(true);
       try {
         const response = await getBannerImages();
-        setBannerImages(response.data);
+        const data = response.data;
+        setBannerImages(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error('Error fetching banner images:', error);
       } finally {

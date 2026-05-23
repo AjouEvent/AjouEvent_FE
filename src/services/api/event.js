@@ -4,7 +4,7 @@ import axios from 'axios';
 const BASE_URL = process.env.REACT_APP_BE_URL;
 
 export const getBannerImages = () =>
-  axios.get(`${BASE_URL}/api/event/banner`);
+  api.get('/api/event/banner');
 
 export const getPopularEvents = () =>
   api.get('/api/event/popular');

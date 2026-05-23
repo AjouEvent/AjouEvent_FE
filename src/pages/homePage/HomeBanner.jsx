@@ -38,7 +38,7 @@ export default function HomeBanner({ images }) {
     window.location.href = url;
   };
 
-  if (!images || images.length === 0) {
+  if (!Array.isArray(images) || images.length === 0) {
     return <div className="w-full h-[100vw] bg-gray-100" />;
   }
 
