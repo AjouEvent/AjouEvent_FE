@@ -13,16 +13,20 @@ const TabBar = ({ Title, RightComponent }) => {
   };
 
   return (
-    <div className="w-full flex items-center justify-between px-6 py-4 gap-2">
+    <div className="w-full flex items-center justify-between px-4 py-3.5 bg-white border-b border-[#F0F2F5]">
       <div className="flex items-center gap-2">
-        <img
+        <button
           onClick={arrowBackClicked}
-          loading="lazy"
-          src={`${process.env.PUBLIC_URL}/icons/arrow_back.svg`}
-          alt="뒤로가기"
-          className="w-5 aspect-square object-contain cursor-pointer"
-        />
-        <div className="text-black text-lg font-bold">{Title}</div>
+          className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F2F4F6] active:bg-[#E5E8EB] transition-colors"
+        >
+          <img
+            loading="lazy"
+            src={`${process.env.PUBLIC_URL}/icons/arrow_back.svg`}
+            alt="뒤로가기"
+            className="w-5 h-5 object-contain opacity-70"
+          />
+        </button>
+        <span className="text-[#191F28] text-[17px] font-bold tracking-tight">{Title}</span>
       </div>
       <div className="flex items-center">{RightComponent}</div>
     </div>

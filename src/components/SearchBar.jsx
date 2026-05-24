@@ -28,19 +28,22 @@ const SearchBar = ({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center px-5 pt-3.5 pb-2.5 w-full">
-      <div className="flex w-full h-9 flex-row justify-between items-center bg-white border border-[rgba(229,232,235,1)] rounded-full">
+    <div className="flex flex-col items-center justify-center px-5 pt-3 pb-3 w-full">
+      <div className="flex w-full h-12 flex-row justify-between items-center bg-[#F2F4F6] rounded-xl">
         <input
           type="text"
           value={inputTerm}
           onChange={(e) => setInputTerm(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="검색어를 입력해 주세요"
-          className="flex w-[84%] bg-white border-none outline-none text-sm font-medium ml-4 tracking-[-0.98px]"
+          className="flex-1 bg-transparent border-none outline-none text-sm font-medium ml-4 text-[#191F28] placeholder:text-[#B0B8C1] tracking-tight"
         />
-        <div className="mr-4 pt-1 cursor-pointer" onClick={handleSearchClick}>
+        <button
+          onClick={handleSearchClick}
+          className="mr-4 flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[#E5E8EB] transition-colors"
+        >
           <SearchIcon />
-        </div>
+        </button>
       </div>
     </div>
   );

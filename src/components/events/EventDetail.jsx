@@ -96,54 +96,63 @@ const EventDetail = () => {
   };
 
   return (
-    <div className="w-full h-full overflow-y-auto">
+    <div className="w-full min-h-screen bg-white">
       {event ? (
-        <div className="w-full h-full overflow-y-auto">
+        <div className="w-full">
           <TabBar Title="공지사항" />
           <EventBanner images={event.imgUrl} onImageClick={handleImageClick} />
-          <div className="mx-6 mt-4 mb-[68px]">
-            <div className="flex flex-col items-start gap-3 text-black text-xl font-bold leading-[130%]">
-              <div className="w-fit px-1 py-[3px] h-5 flex justify-center items-center rounded bg-black/[0.08] text-sm text-[rgba(84,84,84)] font-bold">
-                {event.subject}
-              </div>
-              <h2 className="text-2xl mb-2.5 m-0">{event.title}</h2>
-              <section className="w-full justify-between flex gap-5 font-bold text-xs">
-                <time className="text-black/40 leading-[130%]">{formatDate(event.createdAt)}</time>
-                <div className="flex gap-2 self-start text-[#c2c8d1] whitespace-nowrap text-center">
-                  <div className="flex pr-5 gap-1">
-                    <img
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/62c7bb15f5fd13739601caff1be349795102bd00b8ccfe603cd2e43498657c46?apiKey=75213697ab8e4fbfb70997e546d69efb&"
-                      alt="조회수"
-                      className="w-3.5 aspect-square object-auto"
-                      loading="lazy"
-                    />
-                    <span className="text-xs">{event.viewCount}</span>
-                  </div>
-                  <div className="flex pr-5 gap-1">
-                    <img
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/52d95bd6c4badc487be46d013f44cd23b9800d5d1e753fb3a364bcb97b18044f?apiKey=75213697ab8e4fbfb70997e546d69efb&"
-                      alt="좋아요"
-                      className="w-3.5 aspect-square object-auto"
-                      loading="lazy"
-                    />
-                    <span className="text-xs">{event.likesCount}</span>
-                  </div>
+
+          <div className="px-5 pt-5 pb-32">
+            <span className="inline-flex px-2 py-0.5 rounded-lg bg-[#F2F4F6] text-xs text-[#6B7684] font-semibold mb-3">
+              {event.subject}
+            </span>
+            <h2 className="text-[#191F28] text-xl font-bold leading-[1.4] tracking-tight mb-3">
+              {event.title}
+            </h2>
+
+            <div className="flex items-center justify-between mb-5">
+              <time className="text-[#B0B8C1] text-xs font-medium">
+                {formatDate(event.createdAt)}
+              </time>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1">
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/62c7bb15f5fd13739601caff1be349795102bd00b8ccfe603cd2e43498657c46?apiKey=75213697ab8e4fbfb70997e546d69efb&"
+                    alt="조회수"
+                    className="w-3 h-3 object-contain opacity-50"
+                    loading="lazy"
+                  />
+                  <span className="text-xs text-[#6B7684]">{event.viewCount}</span>
                 </div>
-              </section>
+                <div className="flex items-center gap-1">
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/52d95bd6c4badc487be46d013f44cd23b9800d5d1e753fb3a364bcb97b18044f?apiKey=75213697ab8e4fbfb70997e546d69efb&"
+                    alt="좋아요"
+                    className="w-3 h-3 object-contain opacity-50"
+                    loading="lazy"
+                  />
+                  <span className="text-xs text-[#6B7684]">{event.likesCount}</span>
+                </div>
+              </div>
             </div>
-            <hr className="w-[312px] h-px my-6 bg-black/[0.08] border-0" />
-            <div className="text-base mb-2.5">
+
+            <div className="h-px bg-[#F2F4F6] mb-5" />
+
+            <div className="text-[#333D4B] text-sm leading-relaxed mb-4">
               {content.map((line, index) => (
                 <div key={index}>{line}</div>
               ))}
             </div>
-            <p className="text-sm mb-1.5">작성자: {event.writer}</p>
+
+            <p className="text-xs text-[#B0B8C1] mt-4">작성자: {event.writer}</p>
           </div>
 
-          <div className="w-full z-[5] fixed bottom-0 flex items-center bg-white border-t border-[#2366AF]/[0.08] px-3 py-2 gap-1">
-            <div
+          <div className="w-full z-[5] fixed bottom-0 flex items-center bg-white/95 backdrop-blur-xl border-t border-[#F0F2F5] px-4 py-3 gap-2 shadow-[0_-4px_24px_rgba(0,0,0,0.06)]" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
+            <button
               onClick={handleStarClick}
-              className="w-10 h-10 flex items-center justify-center cursor-pointer"
+              className={`w-12 h-12 flex items-center justify-center rounded-xl transition-colors flex-shrink-0 ${
+                event.star ? 'bg-[#FFF0F1] hover:bg-[#FFE0E3]' : 'hover:bg-[#F2F4F6] active:bg-[#E5E8EB]'
+              }`}
             >
               <img
                 loading="lazy"
@@ -153,19 +162,19 @@ const EventDetail = () => {
                     : `${process.env.PUBLIC_URL}/icons/EmptyBookmarkIcon.svg`
                 }
                 alt="Bookmark"
-                className="w-[30px] h-[30px]"
+                className="w-6 h-6"
               />
-            </div>
+            </button>
             <div className="flex gap-2 flex-1">
               <button
                 onClick={handleRedirect}
-                className="flex-1 h-[50px] text-sm text-[#2366AF] font-semibold bg-[rgba(35,102,175,0.08)] border-none rounded-lg cursor-pointer flex justify-center items-center whitespace-nowrap"
+                className="flex-1 h-12 text-sm text-[#3182F6] font-bold bg-[#EBF4FE] hover:bg-[#D6ECFE] active:bg-[#C5E4FD] border-none rounded-xl cursor-pointer flex justify-center items-center transition-colors"
               >
                 사이트 바로가기
               </button>
               <button
                 onClick={handleCalendarClick}
-                className="flex-1 h-[50px] text-sm text-[#2366AF] font-semibold bg-[rgba(35,102,175,0.08)] border-none rounded-lg cursor-pointer flex justify-center items-center whitespace-nowrap"
+                className="flex-1 h-12 text-sm text-[#003876] font-bold bg-[#EEF3FA] hover:bg-[#D5E2F2] active:bg-[#C0D5EC] border-none rounded-xl cursor-pointer flex justify-center items-center transition-colors"
               >
                 캘린더에 추가
               </button>
@@ -188,7 +197,9 @@ const EventDetail = () => {
           )}
         </div>
       ) : (
-        <p className="p-4">Loading...</p>
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-[#B0B8C1] text-sm">불러오는 중...</p>
+        </div>
       )}
     </div>
   );

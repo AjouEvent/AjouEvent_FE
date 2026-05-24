@@ -2,39 +2,37 @@ import EventCard from '../../components/events/EventCard';
 
 const SearchEvent = ({ events, bottomRef, loading, hasMore, isError }) => {
   return (
-    <>
-      <div className="flex justify-between flex-wrap w-full px-6 py-1 gap-2">
-        {events.map((event, index) => (
-          <EventCard
-            key={`${event.eventId}-${index}`}
-            id={event.eventId}
-            title={event.title}
-            subject={event.subject}
-            content={event.content}
-            imgUrl={event.imgUrl}
-            likesCount={event.likesCount}
-            viewCount={event.viewCount}
-            star={event.star}
-          />
-        ))}
-      </div>
+    <div className="w-full">
+      {events.map((event, index) => (
+        <EventCard
+          key={`${event.eventId}-${index}`}
+          id={event.eventId}
+          title={event.title}
+          subject={event.subject}
+          content={event.content}
+          imgUrl={event.imgUrl}
+          likesCount={event.likesCount}
+          viewCount={event.viewCount}
+          star={event.star}
+        />
+      ))}
       <div ref={bottomRef} style={{ height: '1px' }} />
       {loading && (
-        <div className="flex justify-center items-start w-full h-full text-base font-semibold text-gray-400 p-4">
-          이벤트 불러 오는 중...
+        <div className="flex justify-center items-center w-full text-sm text-[#B0B8C1] font-medium p-6">
+          이벤트 불러오는 중...
         </div>
       )}
-      {!hasMore && (
-        <div className="flex justify-center items-start w-full h-full text-base font-semibold text-gray-400 p-4">
+      {!loading && !hasMore && events.length === 0 && (
+        <div className="flex justify-center items-center w-full text-sm text-[#B0B8C1] font-medium p-12">
           더 이상 불러올 이벤트가 없습니다.
         </div>
       )}
       {isError && (
-        <div className="flex justify-center items-start w-full h-full text-base font-semibold text-gray-400 p-4">
+        <div className="flex justify-center items-center w-full text-sm text-[#F04452] font-medium p-6">
           서버 에러
         </div>
       )}
-    </>
+    </div>
   );
 };
 

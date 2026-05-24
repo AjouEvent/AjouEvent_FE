@@ -65,26 +65,30 @@ function NavigationBar() {
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 z-[5] w-full bg-white border-t border-black/[0.08] flex justify-center flex-col text-xs font-bold text-center text-[#b8bfc6] pb-5 pt-3">
-        <ul className="flex gap-2 list-none p-0 m-0">
+      <nav className="fixed bottom-0 left-0 z-[5] w-full bg-white/95 backdrop-blur-xl border-t border-[#F0F2F5] flex justify-center flex-col pt-1 shadow-[0_-4px_24px_rgba(0,0,0,0.06)]" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+        <ul className="flex list-none p-0 m-0 px-2">
           {items.map((item, index) => {
             const isActive = currentPath === item.link;
             return (
               <li
                 key={index}
-                className={`flex flex-col flex-1 px-3.5 items-center cursor-pointer relative ${
-                  isActive ? 'text-[#2366AF]' : 'text-[#b8bfc6]'
-                }`}
+                className="flex flex-col flex-1 items-center cursor-pointer relative"
                 onClick={() => handleNavItemClick(item.link)}
               >
-                <img
-                  src={isActive ? item.srcFilled : item.srcEmpty}
-                  alt={item.alt}
-                  className={`w-6 aspect-square object-cover ${isActive ? '' : 'grayscale'}`}
-                />
-                <span className="mt-1">{item.label}</span>
+                <div className={`flex flex-col items-center justify-center gap-0.5 w-full py-2 px-1 rounded-2xl transition-all duration-200 ${
+                  isActive ? 'bg-[#EBF4FE]' : ''
+                }`}>
+                  <img
+                    src={isActive ? item.srcFilled : item.srcEmpty}
+                    alt={item.alt}
+                    className={`w-[22px] h-[22px] object-cover transition-all duration-200 ${isActive ? '' : 'opacity-35'}`}
+                  />
+                  <span className={`text-[10px] font-bold tracking-tight transition-colors duration-200 ${
+                    isActive ? 'text-[#3182F6]' : 'text-[#B0B8C1]'
+                  }`}>{item.label}</span>
+                </div>
                 {item.label === '구독' && isSubscribedTabRead === false && (
-                  <div className="absolute top-0 right-2.5 w-2 h-2 bg-red-500 rounded-full" />
+                  <div className="absolute top-1.5 right-3 w-1.5 h-1.5 bg-[#F04452] rounded-full shadow-sm" />
                 )}
               </li>
             );

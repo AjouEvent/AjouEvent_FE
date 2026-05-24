@@ -25,45 +25,39 @@ const Login = () => {
   };
 
   return (
-    <div className="z-10 block pt-32 w-[90%] h-screen bg-transparent m-0">
-      <form className="w-full mx-2.5 flex flex-col justify-center items-center">
-        <div className="flex w-[90%] max-w-[680px] items-start justify-start pl-4">
-          <h1 className="text-black text-[32px] font-bold m-0 text-left">회원가입</h1>
+    <div className="flex flex-col min-h-screen bg-white px-6 pt-16 pb-10">
+      {isLoading && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center text-white text-base font-medium z-[1000]">
+          알림 서비스 등록 중 ...
         </div>
-      </form>
+      )}
+
+      <h1 className="text-[#191F28] text-3xl font-bold tracking-tight mb-2">회원가입</h1>
+      <p className="text-[#6B7684] text-sm mb-10">구글 계정으로 간편하게 가입하세요.</p>
 
       <button
         onClick={handleGoogleButtonClicked}
-        className="flex items-center justify-center w-[90%] max-w-[680px] h-[50px] mx-auto mt-4 bg-white border border-black/10 rounded-[30px] cursor-pointer shadow-[0_2px_4px_rgba(0,0,0,0.1)] px-2 hover:bg-gray-50 transition-colors"
+        className="flex items-center justify-center w-full h-14 bg-white border border-[#E5E8EB] rounded-xl cursor-pointer shadow-sm hover:bg-[#F9FAFB] transition-colors gap-3"
       >
-        <FcGoogle className="w-[18px] h-[18px] mr-6" />
-        <span className="text-center text-black/[0.54] text-sm font-medium">
-          Google 계정으로 가입
-        </span>
+        <FcGoogle className="w-5 h-5 flex-shrink-0" />
+        <span className="text-[#333D4B] text-sm font-semibold">Google 계정으로 가입</span>
       </button>
 
-      <div className="block mx-auto my-2.5 w-[90%] max-w-[680px] h-[10px] relative">
-        <span className="absolute top-2 left-0 right-0 h-px bg-black/20" />
+      <div className="flex items-center my-6">
+        <div className="flex-1 h-px bg-[#E5E8EB]" />
       </div>
 
-      <div className="flex justify-between items-center mx-auto my-5 mt-5 text-sm text-[#6f6f6f] w-[90%] max-w-[680px]">
-        <span className="text-black">이미 회원이신가요?</span>
-        <Link to="/login" className="text-[#0066b3] no-underline font-bold">로그인</Link>
+      <div className="flex justify-between items-center">
+        <span className="text-[#6B7684] text-sm">이미 회원이신가요?</span>
+        <Link to="/login" className="text-[#3182F6] no-underline text-sm font-bold">로그인</Link>
       </div>
 
-      <p className="text-[#999] my-10 text-sm w-full text-center leading-[1.8]">
-        * AjouEvent는 2024-1학기 아주대학교 파란학기제에서<br />
-        진행한 프로젝트로 아주대학교 공식 서비스가 아닙니다. <br />
-        * AjouEvent 계정은 아주대학교 포탈 계정과 무관합니다. <br />
-        서비스 문의: jysim0326@ajou.ac.kr <br />
+      <p className="text-[#B0B8C1] text-xs text-center leading-relaxed mt-auto pt-10">
+        AjouEvent는 2024-1학기 아주대학교 파란학기제에서<br />
+        진행한 프로젝트로 아주대학교 공식 서비스가 아닙니다.<br />
+        AjouEvent 계정은 아주대학교 포탈 계정과 무관합니다.<br />
+        서비스 문의: jysim0326@ajou.ac.kr
       </p>
-
-      <div className="flex justify-center items-center mb-5">
-        <div
-          className="w-[100px] h-[100px] bg-no-repeat bg-center bg-contain"
-          style={{ backgroundImage: "url('../image/AjouUniversity-logo.png')" }}
-        />
-      </div>
     </div>
   );
 };

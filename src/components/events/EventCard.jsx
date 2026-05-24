@@ -1,20 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
-import EmptyStarIcon from '../icons/EmptyStarIcon';
-import FilledStarIcon from '../icons/FilledStarIcon';
+import { Heart } from 'lucide-react';
 import { likeEvent, unlikeEvent } from '../../services/api/event';
 
 function Stat({ iconSrc, value, altText, hasKeyword }) {
   return (
-    <div className={`flex gap-1 ${hasKeyword ? 'pr-5' : ''}`}>
+    <div className={`flex items-center gap-1 ${hasKeyword ? 'pr-3' : ''}`}>
       <img
         src={iconSrc}
         alt={altText}
         loading="lazy"
-        className={`aspect-square object-auto object-center ${hasKeyword ? 'w-3.5' : 'w-3'}`}
+        className="w-3 h-3 object-contain opacity-40"
       />
-      <span className="text-xs">{value}</span>
+      <span className="text-[11px] text-[#8B95A1] font-medium">{value}</span>
     </div>
   );
 }
@@ -66,97 +65,109 @@ const EventCard = ({
   const hasKeyword = keyword != null;
   const formattedContent = content ? content.replace(/\\n/g, ' ') : '';
 
+  if (hasKeyword) {
+    return (
+      <div
+        className="flex cursor-pointer items-start gap-4 w-full py-5 border-b border-[#F5F6F8] hover:bg-[#FAFBFC] active:bg-[#F5F6F8] transition-colors px-5"
+        onClick={handleCardClick}
+      >
+        <div className="w-[90px] h-[90px] flex-shrink-0 rounded-2xl overflow-hidden bg-[#F2F4F6]">
+          <img
+            className="w-full h-full object-cover"
+            src={getSafeImageUrl(imgUrl)}
+            alt={title}
+            loading="lazy"
+          />
+        </div>
+
+        <div className="flex flex-col flex-1 gap-1.5 min-w-0">
+          <div className="flex items-center gap-1.5">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#EBF4FE] text-[#3182F6] text-[11px] font-bold">
+              <img
+                src={`${process.env.PUBLIC_URL}/icons/alarm_filled.svg`}
+                alt=""
+                className="w-3 h-3 opacity-80"
+              />
+              {keyword}
+            </span>
+          </div>
+          <div className="text-[#191F28] font-semibold text-sm leading-[1.45] line-clamp-2 break-keep">
+            {title}
+          </div>
+          <span className="inline-flex w-fit px-2 py-0.5 rounded-lg bg-[#F2F4F6] text-[11px] text-[#6B7684] font-semibold">
+            {subject}
+          </span>
+          <div className="flex items-center gap-3 mt-0.5">
+            <Stat
+              hasKeyword
+              iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/62c7bb15f5fd13739601caff1be349795102bd00b8ccfe603cd2e43498657c46?apiKey=75213697ab8e4fbfb70997e546d69efb&"
+              value={viewCount}
+              altText="조회수"
+            />
+            <Stat
+              hasKeyword
+              iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/52d95bd6c4badc487be46d013f44cd23b9800d5d1e753fb3a364bcb97b18044f?apiKey=75213697ab8e4fbfb70997e546d69efb&"
+              value={likes}
+              altText="좋아요"
+            />
+          </div>
+        </div>
+
+        <div
+          className="flex-shrink-0 w-8 h-8 flex items-center justify-center cursor-pointer rounded-xl hover:bg-[#F2F4F6] active:bg-[#E5E8EB] transition-colors"
+          onClick={handleStarClick}
+        >
+          <Heart
+            className={`w-5 h-5 transition-colors ${cardStar ? 'fill-[#FF4D6D] text-[#FF4D6D]' : 'text-[#C4C9D4]'}`}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
-      className={`flex cursor-pointer border-b border-black/[0.04] ${
-        hasKeyword
-          ? 'items-start gap-4 w-[calc(100vw-40px)] h-36 mt-6 no-underline'
-          : 'items-center gap-4 w-full h-20 py-2'
-      }`}
+      className="flex cursor-pointer items-center gap-3.5 w-full py-4 border-b border-[#F5F6F8] hover:bg-[#FAFBFC] active:bg-[#F5F6F8] transition-colors px-5"
       onClick={handleCardClick}
     >
-      <div
-        className={`object-cover flex-shrink-0 ${hasKeyword ? 'w-[120px] h-[120px]' : 'w-16 h-16'}`}
-      >
+      <div className="w-[62px] h-[62px] flex-shrink-0 rounded-xl overflow-hidden bg-[#F2F4F6]">
         <img
-          className={`overflow-hidden object-cover w-full h-full ${hasKeyword ? 'rounded-[20px]' : 'rounded-lg'}`}
+          className="w-full h-full object-cover"
           src={getSafeImageUrl(imgUrl)}
           alt={title}
           loading="lazy"
         />
       </div>
 
+      <div className="flex flex-col flex-1 min-w-0 gap-1">
+        <div className="text-[#191F28] font-semibold text-sm leading-[1.4] line-clamp-2 break-keep">
+          {title}
+        </div>
+        <div className="text-[#B0B8C1] text-xs truncate leading-snug">{formattedContent}</div>
+        <div className="flex items-center gap-2 mt-0.5">
+          <span className="inline-flex px-1.5 py-0.5 rounded-md bg-[#F2F4F6] text-[10px] text-[#6B7684] font-semibold">
+            {subject}
+          </span>
+          <Stat
+            iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/62c7bb15f5fd13739601caff1be349795102bd00b8ccfe603cd2e43498657c46?apiKey=75213697ab8e4fbfb70997e546d69efb&"
+            value={viewCount}
+            altText="조회수"
+          />
+          <Stat
+            iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/52d95bd6c4badc487be46d013f44cd23b9800d5d1e753fb3a364bcb97b18044f?apiKey=75213697ab8e4fbfb70997e546d69efb&"
+            value={likes}
+            altText="좋아요"
+          />
+        </div>
+      </div>
+
       <div
-        className={`flex flex-col items-start justify-between ${
-          hasKeyword ? 'h-auto flex-grow gap-0' : 'h-full w-[calc(100%-4rem)] gap-[0.2rem]'
-        }`}
+        className="flex-shrink-0 w-8 h-8 flex items-center justify-center cursor-pointer rounded-xl hover:bg-[#F2F4F6] active:bg-[#E5E8EB] transition-colors"
+        onClick={handleStarClick}
       >
-        <div className={`flex w-full flex-col ${hasKeyword ? 'gap-1.5' : 'gap-[0.2rem]'}`}>
-          {hasKeyword ? (
-            <div>
-              <div className="flex items-center gap-1 h-[30px]">
-                <img
-                  src={`${process.env.PUBLIC_URL}/icons/alarm_filled.svg`}
-                  alt="Notification Bell"
-                  className="w-[18px] h-[18px]"
-                />
-                <div className="text-base font-bold text-[#333]">{keyword}</div>
-              </div>
-              <div className="flex w-full h-10 text-black font-semibold text-base leading-[120%] line-clamp-2 break-keep overflow-hidden">
-                {title}
-              </div>
-              <div className="w-fit px-1 py-[3px] h-5 flex justify-center items-center rounded bg-black/[0.08] text-sm text-[rgba(84,84,84)] font-bold">
-                {subject}
-              </div>
-            </div>
-          ) : (
-            <>
-              <div className="flex w-full text-black font-semibold text-xs leading-[120%] line-clamp-2 break-keep overflow-hidden">
-                {title}
-              </div>
-              <div className="w-full overflow-hidden whitespace-nowrap text-ellipsis text-[10px] font-semibold text-gray-500">
-                {formattedContent}
-              </div>
-            </>
-          )}
-        </div>
-
-        <div className="flex w-full justify-between items-end">
-          <div className={`flex self-start text-[#c2c8d1] whitespace-nowrap text-center ${!hasKeyword ? 'gap-2' : ''}`}>
-            {!hasKeyword && (
-              <div className="w-fit px-1 py-[3px] h-4 flex justify-center items-center rounded bg-black/[0.08] text-[10px] text-[rgba(84,84,84)] font-bold">
-                {subject}
-              </div>
-            )}
-            <Stat
-              hasKeyword={hasKeyword}
-              iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/62c7bb15f5fd13739601caff1be349795102bd00b8ccfe603cd2e43498657c46?apiKey=75213697ab8e4fbfb70997e546d69efb&"
-              value={viewCount}
-              altText="조회수"
-            />
-            <Stat
-              hasKeyword={hasKeyword}
-              iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/52d95bd6c4badc487be46d013f44cd23b9800d5d1e753fb3a364bcb97b18044f?apiKey=75213697ab8e4fbfb70997e546d69efb&"
-              value={likes}
-              altText="좋아요"
-            />
-          </div>
-
-          <div
-            className={`flex justify-center items-center cursor-pointer ${hasKeyword ? 'w-[30px] h-auto' : 'w-4 h-4'}`}
-            onClick={handleStarClick}
-          >
-            {hasKeyword ? (
-              <div className="w-[25px] h-[25px] object-cover cursor-pointer">
-                {cardStar ? <FilledStarIcon /> : <EmptyStarIcon />}
-              </div>
-            ) : cardStar ? (
-              <FilledStarIcon />
-            ) : (
-              <EmptyStarIcon />
-            )}
-          </div>
-        </div>
+        <Heart
+          className={`w-5 h-5 transition-colors ${cardStar ? 'fill-[#FF4D6D] text-[#FF4D6D]' : 'text-[#C4C9D4]'}`}
+        />
       </div>
     </div>
   );

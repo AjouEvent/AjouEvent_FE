@@ -42,47 +42,48 @@ const NotificationPage = () => {
   const KeywordSettingButtonClick = () => navigate('/subscribe/keywordSubscribe');
 
   return (
-    <div className="flex flex-col items-center justify-start w-full min-h-screen">
+    <div className="flex flex-col items-center justify-start w-full min-h-screen bg-surface">
       <TabBar
         Title="알림"
         RightComponent={
           <button
             onClick={handleReadAllNotifications}
-            className="bg-[#0066b3] text-white px-3.5 py-1 text-base rounded-[10px] cursor-pointer font-medium hover:bg-[#004f8a] transition-colors"
+            className="border border-[#D5E2F2] text-[#003876] bg-[#EEF3FA] hover:bg-[#D5E2F2] active:bg-[#C0D5EC] px-3.5 py-1.5 text-xs font-bold rounded-xl cursor-pointer transition-colors border-0"
           >
             모두 읽음
           </button>
         }
       />
-      <div className="flex w-full border-b border-black/[0.08]">
-        <button
-          onClick={() => handleTabChange('topic')}
-          className={`flex-1 py-4 text-center text-lg font-semibold border-none bg-transparent cursor-pointer transition-colors duration-300 ${
-            currentTab === 'topic'
-              ? 'text-black border-b-2 border-black'
-              : 'text-gray-400 border-b border-gray-400'
-          }`}
-        >
-          구독
-        </button>
-        <button
-          onClick={() => handleTabChange('keyword')}
-          className={`flex-1 py-4 text-center text-lg font-semibold border-none bg-transparent cursor-pointer transition-colors duration-300 ${
-            currentTab === 'keyword'
-              ? 'text-black border-b-2 border-black'
-              : 'text-gray-400 border-b border-gray-400'
-          }`}
-        >
-          키워드
-        </button>
+
+      <div className="flex w-full bg-white px-4 py-2.5 border-b border-[#F0F2F5]">
+        <div className="flex w-full bg-[#F2F4F6] rounded-xl p-1 gap-1">
+          {['topic', 'keyword'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => handleTabChange(tab)}
+              className={`flex-1 py-2 text-center text-sm border-none cursor-pointer transition-all rounded-lg font-semibold ${
+                currentTab === tab
+                  ? 'bg-white text-[#191F28] shadow-sm'
+                  : 'bg-transparent text-[#B0B8C1] hover:text-[#6B7684]'
+              }`}
+            >
+              {tab === 'topic' ? '구독 알림' : '키워드 알림'}
+            </button>
+          ))}
+        </div>
       </div>
 
       {currentTab === 'keyword' && (
-        <div className="flex w-full h-[60px] px-4 bg-black/[0.05] justify-between items-center text-lg font-semibold">
-          <div>알림 등록한 키워드 {keywordCount}개</div>
+        <div className="flex w-full px-5 py-3.5 bg-[#F8FAFD] justify-between items-center border-b border-[#E8EDF5]">
+          <div className="flex items-center gap-1.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#3182F6]" />
+            <span className="text-[#333D4B] text-sm font-semibold">
+              등록된 키워드 <span className="text-[#3182F6] font-bold">{keywordCount}개</span>
+            </span>
+          </div>
           <button
             onClick={KeywordSettingButtonClick}
-            className="bg-[#0066b3] text-white px-3.5 py-1 text-base rounded-[10px] cursor-pointer font-medium hover:bg-[#004f8a] transition-colors"
+            className="bg-[#003876] hover:bg-[#002557] active:bg-[#001a3d] text-white px-3.5 py-1.5 text-xs font-bold rounded-xl cursor-pointer border-none transition-colors"
           >
             키워드 설정
           </button>

@@ -53,43 +53,52 @@ const NotificationCard = ({
   return (
     <div
       onClick={handleCardClick}
-      className={`flex items-start gap-4 w-full cursor-pointer px-5 pt-6 pb-2.5 border-b border-black/[0.04] ${
-        read ? 'bg-transparent' : 'bg-[rgba(0,30,255,0.06)]'
+      className={`relative flex items-start gap-3.5 w-full cursor-pointer px-5 py-4 border-b border-[#F5F6F8] hover:bg-[#FAFBFC] active:bg-[#F5F6F8] transition-colors ${
+        read ? 'bg-white' : 'bg-[#FAFCFF]'
       }`}
     >
-      <div className="w-[95px] h-[95px] shrink-0">
-        <img
-          src={getSafeImageUrl(imageUrl)}
-          alt={title}
-          loading="lazy"
-          className="w-[95px] h-[95px] rounded-[20px] object-cover"
-        />
-      </div>
-      <div className="flex flex-col w-full gap-1.5">
-        <div className="flex w-fit items-center gap-1 px-1 py-[3px] rounded bg-black/[0.08] text-[rgba(84,84,84)] text-sm font-bold">
+      {!read && (
+        <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#3182F6] rounded-r-full" />
+      )}
+      <div className="relative shrink-0">
+        <div className="w-[54px] h-[54px] rounded-2xl overflow-hidden bg-[#F2F4F6]">
           <img
-            src={`${process.env.PUBLIC_URL}/icons/notification.svg`}
-            alt="notification"
-            className="w-3.5 h-3.5"
+            src={getSafeImageUrl(imageUrl)}
+            alt={title}
+            loading="lazy"
+            className="w-full h-full object-cover"
           />
-          {topicName}
-          {keywordName && (
-            <span className="text-[#0066b3] font-bold">: {keywordName}</span>
-          )}
+        </div>
+        {!read && (
+          <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#3182F6] border-2 border-white" />
+        )}
+      </div>
+      <div className="flex flex-col flex-1 min-w-0 gap-1.5">
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <div className="flex w-fit items-center gap-1 px-2 py-0.5 rounded-full bg-[#EEF3FA] text-[#003876] text-[11px] font-bold">
+            <img
+              src={`${process.env.PUBLIC_URL}/icons/notification.svg`}
+              alt="notification"
+              className="w-2.5 h-2.5 opacity-60"
+            />
+            <span>{topicName}</span>
+            {keywordName && (
+              <span className="text-[#3182F6]">· {keywordName}</span>
+            )}
+          </div>
         </div>
         <div
-          className="text-black text-base font-semibold leading-[1.4] overflow-hidden"
+          className={`text-[14px] font-semibold leading-snug overflow-hidden ${read ? 'text-[#333D4B]' : 'text-[#191F28]'}`}
           style={{
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
-            height: '45px',
             wordBreak: 'break-word',
           }}
         >
           {title}
         </div>
-        <div className="w-full text-xs font-semibold text-gray-400 text-right truncate">
+        <div className="text-[11px] text-[#B0B8C1] font-medium">
           {getTimeAgo(notifiedAt)}
         </div>
       </div>

@@ -75,42 +75,46 @@ export default function SearchEventPage() {
   }, [loading, hasMore, fetchData]);
 
   return (
-    <div className="flex items-center flex-col bg-white">
+    <div className="flex items-center flex-col bg-[#F5F6F8] min-h-screen">
       <div className="flex w-full overflow-x-hidden items-center flex-col pb-20">
-        <LocationBar location="전체 이벤트 검색" />
-        <SearchDropBox
-          setPage={setPage}
-          setEvents={setEvents}
-          setHasMore={setHasMore}
-          fetchData={fetchData}
-          option1={option1}
-          setOption1={setOption1}
-          option2={option2}
-          setOption2={(newOption2) => {
-            setOption2(newOption2);
-            setPage(0);
-            setHasMore(true);
-          }}
-          savedOption1={savedOption1}
-          setSavedOption1={setSavedOption1}
-          savedOption2={savedOption2}
-          setSavedOption2={setSavedOption2}
-        />
-        <SearchBar
-          keyword={keyword}
-          setKeyword={setKeyword}
-          setPage={setPage}
-          setEvents={setEvents}
-          setSavedKeyword={setSavedKeyword}
-          setHasMore={setHasMore}
-        />
-        <SearchEvent
-          events={events}
-          bottomRef={bottomRef}
-          loading={loading}
-          hasMore={hasMore}
-          isError={isError}
-        />
+        <LocationBar location="공지사항 검색" />
+        <div className="w-full bg-white border-b border-[#F0F2F5]">
+          <SearchDropBox
+            setPage={setPage}
+            setEvents={setEvents}
+            setHasMore={setHasMore}
+            fetchData={fetchData}
+            option1={option1}
+            setOption1={setOption1}
+            option2={option2}
+            setOption2={(newOption2) => {
+              setOption2(newOption2);
+              setPage(0);
+              setHasMore(true);
+            }}
+            savedOption1={savedOption1}
+            setSavedOption1={setSavedOption1}
+            savedOption2={savedOption2}
+            setSavedOption2={setSavedOption2}
+          />
+          <SearchBar
+            keyword={keyword}
+            setKeyword={setKeyword}
+            setPage={setPage}
+            setEvents={setEvents}
+            setSavedKeyword={setSavedKeyword}
+            setHasMore={setHasMore}
+          />
+        </div>
+        <div className="w-full bg-white mt-1.5 border-t border-[#F0F2F5]">
+          <SearchEvent
+            events={events}
+            bottomRef={bottomRef}
+            loading={loading}
+            hasMore={hasMore}
+            isError={isError}
+          />
+        </div>
       </div>
       <NavigationBar />
     </div>

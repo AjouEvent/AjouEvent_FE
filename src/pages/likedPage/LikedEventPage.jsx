@@ -57,27 +57,29 @@ export default function LikedEventPage() {
   }, [loading, hasMore, fetchData]);
 
   return (
-    <div className="flex items-center flex-col bg-white">
+    <div className="flex items-center flex-col bg-[#F9FAFB] min-h-screen">
       {accessToken ? (
-        <div className="flex w-screen overflow-x-hidden items-center flex-col pb-20">
+        <div className="flex w-full overflow-x-hidden items-center flex-col pb-20">
           <LocationBar location="내가 찜한 이벤트" />
-          <SearchBar
-            keyword={keyword}
-            setKeyword={setKeyword}
-            setPage={setPage}
-            setEvents={setEvents}
-            setSavedKeyword={setSavedKeyword}
-            setHasMore={setHasMore}
-            fetchData={fetchData}
-          />
+          <div className="w-full bg-white">
+            <SearchBar
+              keyword={keyword}
+              setKeyword={setKeyword}
+              setPage={setPage}
+              setEvents={setEvents}
+              setSavedKeyword={setSavedKeyword}
+              setHasMore={setHasMore}
+              fetchData={fetchData}
+            />
+          </div>
           <LikedEvent events={events} bottomRef={bottomRef} loading={loading} hasMore={hasMore} />
         </div>
       ) : (
-        <div className="flex items-center justify-center flex-col bg-white h-screen">
-          <p>로그인이 필요한 서비스입니다</p>
+        <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+          <p className="text-[#6B7684] text-sm m-0">로그인이 필요한 서비스입니다</p>
           <Link
             to="/login"
-            className="flex flex-wrap items-center justify-center bg-white rounded-lg border border-gray-400 w-24 h-[1.4rem] text-black text-sm no-underline mx-4"
+            className="flex items-center justify-center bg-[#3182F6] hover:bg-[#1B6EE8] rounded-xl px-6 py-3 text-white text-sm font-semibold no-underline transition-colors"
           >
             로그인
           </Link>

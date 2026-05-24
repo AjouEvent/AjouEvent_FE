@@ -18,7 +18,7 @@ const PasswordConfirmation = ({ onConfirm }) => {
 
   useEffect(() => {
     if (password.length > 0 && !passwordRegEx.test(password)) {
-      setPasswordError('* 비밀번호 형식을 확인해주세요.');
+      setPasswordError('비밀번호 형식을 확인해주세요.');
     } else {
       setPasswordError('');
     }
@@ -56,55 +56,71 @@ const PasswordConfirmation = ({ onConfirm }) => {
   const arrowBackClicked = () => navigate('/mypage');
 
   return (
-    <div className="flex flex-col items-center p-5 w-full">
-      <div className="w-full flex items-center py-4 gap-2">
-        <img
+    <div className="flex flex-col min-h-screen bg-white px-5 pt-4">
+      <div className="flex items-center gap-3 py-4 mb-2">
+        <button
           onClick={arrowBackClicked}
-          loading="lazy"
-          src={`${process.env.PUBLIC_URL}/icons/arrow_back.svg`}
-          alt="뒤로가기"
-          className="w-5 aspect-square object-contain cursor-pointer"
-        />
-        <div className="text-black text-lg font-bold">마이페이지</div>
-      </div>
-      <h2 className="font-bold mb-5">비밀번호 재확인</h2>
-      <div className="flex flex-col mb-2.5 w-full">
-        <p className="m-0 text-sm font-semibold mb-0.5">이메일</p>
-        <input
-          type="text"
-          placeholder="example@ajou.ac.kr"
-          value={email}
-          readOnly
-          className="px-2.5 py-2.5 border border-[#cdcdcd] rounded text-base outline-none bg-gray-50"
-        />
-      </div>
-      <div className="flex flex-col mb-2.5 w-full">
-        <div className="flex items-center justify-between w-full mb-0.5">
-          <p className="m-0 text-sm font-semibold">비밀번호</p>
-          {passwordError && <div className="text-red-500 pl-5 text-[0.8em]">{passwordError}</div>}
-        </div>
-        <div className="relative flex items-center">
-          <input
-            type={isPasswordVisible ? 'text' : 'password'}
-            placeholder="비밀번호"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-2.5 py-2.5 border border-[#cdcdcd] rounded text-base outline-none"
+          className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-[#F2F4F6] transition-colors"
+        >
+          <img
+            loading="lazy"
+            src={`${process.env.PUBLIC_URL}/icons/arrow_back.svg`}
+            alt="뒤로가기"
+            className="w-5 aspect-square object-contain"
           />
-          <span
-            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-            className="absolute right-2.5 cursor-pointer"
-          >
-            <FontAwesomeIcon icon={isPasswordVisible ? faEye : faEyeSlash} className="opacity-50" />
-          </span>
-        </div>
+        </button>
+        <span className="text-[#191F28] text-lg font-bold tracking-tight">마이페이지</span>
       </div>
-      <button
-        onClick={handleSignIn}
-        className="px-5 py-2.5 bg-[#0066b3] text-white border-none rounded cursor-pointer mt-5 hover:bg-[#004f8a] transition-colors"
-      >
-        다음
-      </button>
+
+      <h2 className="text-[#191F28] text-xl font-bold tracking-tight mb-8">비밀번호 재확인</h2>
+
+      <form onSubmit={handleSignIn} className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[#6B7684] text-xs font-semibold">이메일</label>
+          <input
+            type="text"
+            placeholder="example@ajou.ac.kr"
+            value={email}
+            readOnly
+            className="w-full h-12 px-4 bg-[#F2F4F6] rounded-xl text-sm text-[#B0B8C1] outline-none border-0 cursor-default"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center justify-between">
+            <label className="text-[#6B7684] text-xs font-semibold">비밀번호</label>
+            {passwordError && (
+              <span className="text-[#F04452] text-xs">{passwordError}</span>
+            )}
+          </div>
+          <div className="relative flex items-center">
+            <input
+              type={isPasswordVisible ? 'text' : 'password'}
+              placeholder="비밀번호"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full h-12 pl-4 pr-12 bg-[#F2F4F6] rounded-xl text-sm text-[#191F28] outline-none border-0 focus:ring-2 focus:ring-[#3182F6] transition-all"
+            />
+            <button
+              type="button"
+              onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+              className="absolute right-4 bg-transparent border-none cursor-pointer p-0"
+            >
+              <FontAwesomeIcon
+                icon={isPasswordVisible ? faEye : faEyeSlash}
+                className="text-[#B0B8C1]"
+              />
+            </button>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          className="w-full h-14 bg-[#3182F6] hover:bg-[#1B6EE8] text-white rounded-xl font-bold text-base border-none cursor-pointer mt-4 transition-colors"
+        >
+          다음
+        </button>
+      </form>
     </div>
   );
 };

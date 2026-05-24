@@ -55,25 +55,26 @@ export default function KeywordTab({ showGuide }) {
   }, [hasMore, loading]);
 
   return (
-    <div className="flex items-center flex-col bg-white">
+    <div className="flex items-center flex-col bg-white w-full">
       <KeywordBar onKeywordSelect={handleKeywordSelect} showGuide={showGuide} />
       <SearchBar setKeyword={setSelectedKeyword} />
-      <div className="flex justify-between flex-wrap w-full px-6 py-1 gap-2">
+      <div className="w-full">
         {events.map((event, index) => (
           <EventCard
             key={`${event.eventId}-${index}`}
             id={event.eventId}
+            keyword={event.keyword}
             {...event}
           />
         ))}
       </div>
       {loading && (
-        <div className="flex justify-center items-start w-full text-base font-semibold text-gray-400 p-4">
+        <div className="flex justify-center items-center w-full text-sm text-[#B0B8C1] font-medium p-6">
           로딩중...
         </div>
       )}
       {isError && (
-        <div className="flex justify-center items-start w-full text-base font-semibold text-gray-400 p-4">
+        <div className="flex justify-center items-center w-full text-sm text-[#F04452] font-medium p-6">
           서버 에러
         </div>
       )}

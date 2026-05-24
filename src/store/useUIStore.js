@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 const useUIStore = create((set) => ({
   savedKeyword: '',
-  savedOption1: '',
+  savedOption1: '아주대 공지사항',
   savedOption2: '아주대학교-일반',
   isAuthorized: false,
 

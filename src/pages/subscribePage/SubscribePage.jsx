@@ -29,66 +29,64 @@ export default function SubscribePage() {
     if (tab === 'subscribe')
       return (
         <>
-          아직 구독한 항목이 없습니다.
-          <br />
+          아직 구독한 항목이 없습니다.<br />
           아래의 <strong>⚙️ 구독 설정</strong>에서 관심있는 공지를 구독해보세요!
         </>
       );
     if (tab === 'keyword')
       return (
         <>
-          아직 구독한 키워드가 없습니다.
-          <br />
+          아직 구독한 키워드가 없습니다.<br />
           아래의 <strong>🔔 키워드 설정</strong>에서 관심있는 키워드를 구독해보세요!
         </>
       );
     return (
       <>
-        아직 구독한 항목이 없습니다.
-        <br />
+        아직 구독한 항목이 없습니다.<br />
         아래의 톱니바퀴/종 모양의 <strong>'설정'</strong>에서 관심있는 공지를 구독해보세요!
       </>
     );
   };
 
   return (
-    <div className="flex items-center flex-col bg-white">
+    <div className="flex items-center flex-col bg-[#F9FAFB] min-h-screen">
       {accessToken ? (
         <div className="flex w-full overflow-x-hidden items-center flex-col pb-20">
           <LocationBar location="구독" />
+
           {showGuide && (
-            <div className="w-full px-3 py-3 bg-[#f0f8ff] text-sm text-[#0072CE] text-center font-semibold leading-[1.5] break-keep whitespace-normal">
+            <div className="w-full px-5 py-3 bg-[#EBF4FE] text-sm text-[#3182F6] text-center font-medium leading-relaxed break-keep">
               {getGuideMessage(activeTab)}
             </div>
           )}
-          <div className="flex w-full">
-            <div
-              className={`flex-1 px-5 py-2.5 cursor-pointer text-center transition-colors duration-300 relative ${
-                activeTab === 'subscribe'
-                  ? 'border-b-2 border-black text-black font-bold'
-                  : 'border-b border-[#CDCDCD] text-[#333]'
-              }`}
-              onClick={() => setActiveTab('subscribe')}
-            >
-              구독 알림
-              {subscribeItems.some((item) => !item.isRead) && (
-                <div className="absolute top-0 right-5 w-2 h-2 bg-red-500 rounded-full" />
-              )}
-            </div>
-            <div
-              className={`flex-1 px-5 py-2.5 cursor-pointer text-center transition-colors duration-300 relative ${
-                activeTab === 'keyword'
-                  ? 'border-b-2 border-black text-black font-bold'
-                  : 'border-b border-[#CDCDCD] text-[#333]'
-              }`}
-              onClick={() => setActiveTab('keyword')}
-            >
-              키워드 알림
-              {subscribedKeywords.some((item) => !item.isRead) && (
-                <div className="absolute top-0 right-5 w-2 h-2 bg-red-500 rounded-full" />
-              )}
+
+          <div className="flex w-full bg-white px-4 py-2.5 border-b border-[#F0F2F5]">
+            <div className="flex w-full bg-[#F2F4F6] rounded-xl p-1 gap-1">
+              {[
+                { key: 'subscribe', label: '구독 알림' },
+                { key: 'keyword', label: '키워드 알림' },
+              ].map(({ key, label }) => (
+                <button
+                  key={key}
+                  className={`relative flex-1 py-2 text-center text-sm font-semibold border-none cursor-pointer transition-all rounded-lg ${
+                    activeTab === key
+                      ? 'bg-white text-[#191F28] shadow-sm'
+                      : 'bg-transparent text-[#B0B8C1] hover:text-[#6B7684]'
+                  }`}
+                  onClick={() => setActiveTab(key)}
+                >
+                  {label}
+                  {key === 'subscribe' && subscribeItems.some((item) => !item.isRead) && (
+                    <div className="absolute top-1.5 right-3 w-1.5 h-1.5 bg-[#F04452] rounded-full" />
+                  )}
+                  {key === 'keyword' && subscribedKeywords.some((item) => !item.isRead) && (
+                    <div className="absolute top-1.5 right-3 w-1.5 h-1.5 bg-[#F04452] rounded-full" />
+                  )}
+                </button>
+              ))}
             </div>
           </div>
+
           {activeTab === 'subscribe' && (
             <div className="w-full">
               <SubscribeTab showGuide={showGuide} />
@@ -101,11 +99,11 @@ export default function SubscribePage() {
           )}
         </div>
       ) : (
-        <div className="flex items-center justify-center flex-col bg-white h-screen">
-          <p>로그인이 필요한 서비스입니다</p>
+        <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+          <p className="text-[#6B7684] text-sm m-0">로그인이 필요한 서비스입니다</p>
           <Link
             to="/login"
-            className="flex flex-wrap items-center justify-center bg-white rounded-lg border border-gray-400 w-24 h-[1.4rem] text-black text-sm no-underline mx-4"
+            className="flex items-center justify-center bg-[#3182F6] hover:bg-[#1B6EE8] rounded-xl px-6 py-3 text-white text-sm font-semibold no-underline transition-colors"
           >
             로그인
           </Link>

@@ -42,45 +42,65 @@ const RegisterMajor = () => {
     setShowModal(false);
   };
 
-  const inputClass = 'flex-1 border-none outline-none text-base font-semibold px-2.5 py-2.5 bg-transparent rounded w-full box-border';
-
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-screen px-5 py-5 bg-[#f8f8f8]">
-      <h1 className="text-2xl font-bold mb-5 text-black">학과 등록</h1>
-      <form
-        onSubmit={handleMajorSubmit}
-        className="flex flex-col w-full max-w-[400px] bg-white p-5 rounded-[10px] shadow-[0_4px_8px_rgba(0,0,0,0.1)]"
-      >
-        <label className="text-[17px] text-gray-600 font-semibold my-1.5">이메일</label>
-        <div className="flex items-center border border-[#cdcdcd] rounded mb-5 w-full">
-          <input type="email" value={email} readOnly placeholder="이메일" required className={inputClass + ' bg-gray-50'} />
+    <div className="flex flex-col min-h-screen bg-white px-5 pt-10 pb-10">
+      <h1 className="text-[#191F28] text-2xl font-bold tracking-tight mb-8">학과 등록</h1>
+
+      <form onSubmit={handleMajorSubmit} className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[#6B7684] text-xs font-semibold">이메일</label>
+          <input
+            type="email"
+            value={email}
+            readOnly
+            placeholder="이메일"
+            required
+            className="w-full h-12 px-4 bg-[#F2F4F6] rounded-xl text-sm text-[#B0B8C1] outline-none border-0 cursor-default"
+          />
         </div>
 
-        <label className="text-[17px] text-gray-600 font-semibold my-1.5">이름</label>
-        <div className="flex items-center border border-[#cdcdcd] rounded mb-5 w-full">
-          <input type="text" value={name} readOnly placeholder="이름" required className={inputClass + ' bg-gray-50'} />
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[#6B7684] text-xs font-semibold">이름</label>
+          <input
+            type="text"
+            value={name}
+            readOnly
+            placeholder="이름"
+            required
+            className="w-full h-12 px-4 bg-[#F2F4F6] rounded-xl text-sm text-[#B0B8C1] outline-none border-0 cursor-default"
+          />
         </div>
 
-        <div className="flex items-center justify-between w-full mb-1.5">
-          <label className="text-[17px] text-gray-600 font-semibold">소속</label>
-          {hasError && <div className="text-red-500 pl-2.5 text-[0.8em]">* 학과를 선택해주세요.</div>}
-        </div>
-        <div className={`flex items-center border rounded mb-5 w-full ${hasError ? 'border-red-500' : 'border-[#cdcdcd]'}`}>
-          <input type="text" value={major} placeholder="소속" disabled className={inputClass + ' bg-transparent'} />
-          <button
-            type="button"
-            onClick={() => setShowModal(true)}
-            className="bg-[#0066b3] text-white border-none rounded px-2.5 py-2.5 text-sm cursor-pointer hover:bg-[#004f8a] transition-colors whitespace-nowrap"
-          >
-            선택하기
-          </button>
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center justify-between">
+            <label className="text-[#6B7684] text-xs font-semibold">소속</label>
+            {hasError && <span className="text-[#F04452] text-xs">학과를 선택해주세요.</span>}
+          </div>
+          <div className={`flex items-center gap-2 ${hasError ? 'ring-2 ring-[#F04452] rounded-xl' : ''}`}>
+            <input
+              type="text"
+              value={major}
+              placeholder="소속 학과를 선택해주세요"
+              disabled
+              className="flex-1 h-12 px-4 bg-[#F2F4F6] rounded-xl text-sm text-[#333D4B] outline-none border-0 cursor-default"
+            />
+            <button
+              type="button"
+              onClick={() => setShowModal(true)}
+              className="h-12 px-4 bg-[#3182F6] hover:bg-[#1B6EE8] text-white rounded-xl text-sm font-semibold border-none cursor-pointer transition-colors whitespace-nowrap flex-shrink-0"
+            >
+              선택하기
+            </button>
+          </div>
         </div>
 
         <button
           type="submit"
           disabled={!major}
-          className={`py-2.5 text-white border-none rounded text-base cursor-pointer transition-colors ${
-            major ? 'bg-[#0066b3] hover:bg-[#004f8a]' : 'bg-[#cdcdcd] cursor-not-allowed'
+          className={`w-full h-14 rounded-xl font-bold text-base border-none cursor-pointer transition-all mt-4 ${
+            major
+              ? 'bg-[#3182F6] hover:bg-[#1B6EE8] text-white cursor-pointer'
+              : 'bg-[#E5E8EB] text-[#B0B8C1] cursor-not-allowed'
           }`}
         >
           등록
@@ -90,13 +110,13 @@ const RegisterMajor = () => {
       {showModal && (
         <>
           <div onClick={() => setShowModal(false)} className="fixed top-0 left-0 w-full h-full bg-black/50 z-[1000]" />
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-5 rounded-[10px] shadow-[0_4px_8px_rgba(0,0,0,0.2)] z-[1001] w-[90%] max-w-[600px] h-[80%] overflow-y-auto">
-            <h1 className="text-black text-lg font-bold m-0 mb-4">학과 선택</h1>
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-5 rounded-2xl shadow-lg z-[1001] w-[90%] max-w-[600px] h-[80%] overflow-y-auto">
+            <h2 className="text-[#191F28] text-lg font-bold m-0 mb-4 tracking-tight">학과 선택</h2>
             {departmentList.map((dept) => (
               <div
                 key={dept}
                 onClick={() => handleDepartmentSelect(dept)}
-                className="flex justify-between items-center py-2.5 border-b border-[#e5e5e5] font-semibold cursor-pointer hover:bg-[#f8f8f8] transition-colors"
+                className="flex justify-between items-center py-3 border-b border-[#F2F4F6] text-sm text-[#333D4B] font-medium cursor-pointer hover:bg-[#F9FAFB] transition-colors px-1"
               >
                 {dept}
               </div>

@@ -27,53 +27,45 @@ const KeywordBar = ({ onKeywordSelect, showGuide }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full">
-      <div
-        className={`w-full flex items-center overflow-x-auto whitespace-nowrap bg-white font-semibold box-border ${
-          showGuide ? 'py-[18px] px-[10px] pl-3' : 'pt-3 pb-0 px-[10px] pl-4'
-        }`}
-      >
-        <div className="flex items-center gap-2.5">
-          <div
-            onClick={() =>
-              navigate('/subscribe/keywordSubscribe', { state: { tab: 'keyword' } })
-            }
-            className={`flex h-fit px-3 py-2 justify-center items-center gap-1 rounded-[600px] border-2 border-[#F5F5F5] bg-[#E0E0E0] cursor-pointer text-sm whitespace-nowrap ${
-              showGuide ? 'animate-[glow_1.5s_infinite]' : ''
+    <div className="w-full flex items-center overflow-x-auto whitespace-nowrap bg-white px-4 py-3 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => navigate('/subscribe/keywordSubscribe', { state: { tab: 'keyword' } })}
+          className={`flex h-9 px-3 justify-center items-center gap-1.5 rounded-full border border-[#E5E8EB] bg-[#F2F4F6] cursor-pointer text-sm font-semibold whitespace-nowrap text-[#333D4B] hover:bg-[#E5E8EB] transition-colors ${
+            showGuide ? 'ring-2 ring-[#3182F6]' : ''
+          }`}
+        >
+          <img
+            src={`${process.env.PUBLIC_URL}/icons/alarm_filled.svg`}
+            alt="bell"
+            className="w-4 h-4 opacity-60"
+          />
+          <span>키워드 설정</span>
+        </button>
+        {showGuide && (
+          <span className="bg-[#3182F6] text-white px-2 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap">
+            클릭해서 구독하기
+          </span>
+        )}
+      </div>
+
+      <div className="flex gap-2 ml-2">
+        {subscribedKeywords.map((item, index) => (
+          <button
+            key={index}
+            onClick={() => handleKeywordClick(item)}
+            className={`flex h-9 px-3 justify-center items-center gap-1 rounded-full border text-sm font-semibold whitespace-nowrap cursor-pointer transition-colors ${
+              selectedKeyword?.encodedKeyword === item.encodedKeyword
+                ? 'bg-[#3182F6] border-[#3182F6] text-white'
+                : 'bg-white border-[#E5E8EB] text-[#333D4B] hover:bg-[#F9FAFB]'
             }`}
           >
-            <img
-              src={`${process.env.PUBLIC_URL}/icons/alarm_filled.svg`}
-              alt="bell"
-              className="w-[18px] aspect-square object-cover"
-            />
-            <p className="m-0">키워드 설정</p>
-          </div>
-          {showGuide && (
-            <div className="bg-[#0072CE] text-white px-2 py-1 rounded-xl text-[11px] font-bold whitespace-nowrap leading-[1.4]">
-              클릭해서 구독하기
-            </div>
-          )}
-        </div>
-
-        <div className="w-full flex overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          {subscribedKeywords.map((item, index) => (
-            <div
-              key={index}
-              onClick={() => handleKeywordClick(item)}
-              className={`flex h-fit px-3 py-2 mx-1 justify-center items-center gap-1 rounded-[600px] border-2 border-[#F5F5F5] cursor-pointer ${
-                selectedKeyword?.encodedKeyword === item.encodedKeyword
-                  ? 'bg-[#0A5CA8] text-white'
-                  : 'bg-white text-black'
-              }`}
-            >
-              {item.koreanKeyword}
-              {item.isRead === false && (
-                <div className="w-2.5 h-2.5 bg-red-500 rounded-full inline-block" />
-              )}
-            </div>
-          ))}
-        </div>
+            {item.koreanKeyword}
+            {item.isRead === false && (
+              <div className="w-1.5 h-1.5 bg-[#F04452] rounded-full" />
+            )}
+          </button>
+        ))}
       </div>
     </div>
   );

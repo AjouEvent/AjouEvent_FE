@@ -55,46 +55,51 @@ const PrivacyAgreement = () => {
 
   const isAllChecked = isChecked14 && isCheckedTerms && isCheckedPrivacy;
 
-  const checkboxClass = `
-    appearance-none w-5 h-5 border border-[#cdcdcd] rounded-full outline-none cursor-pointer transition-colors
-    checked:bg-[rgb(1,92,200)] checked:border-[rgb(1,92,200)]
-    relative
-  `;
+  const terms = [
+    { id: 'age-agreement', checked: isChecked14, setter: setIsChecked14, label: '(필수) 만 14세 이상입니다.', filePath: null },
+    { id: 'terms-agreement', checked: isCheckedTerms, setter: setIsCheckedTerms, label: '(필수) 서비스 이용약관에 동의', filePath: '/terms_of_service.html' },
+    { id: 'privacy-agreement', checked: isCheckedPrivacy, setter: setIsCheckedPrivacy, label: '(필수) 개인정보 수집이용에 동의', filePath: '/privacy_consent_form.html' },
+  ];
 
   return (
-    <div className="z-10 flex flex-col justify-center items-center h-screen w-full bg-[#f8f8f8] p-5">
-      <h1 className="text-black text-2xl font-bold text-left w-full max-w-[680px] mb-5">
-        AjouEvent 서비스 이용 약관에 <br />동의해주세요
+    <div className="flex flex-col min-h-screen bg-white px-5 pt-10 pb-10">
+      <h1 className="text-[#191F28] text-2xl font-bold tracking-tight mb-2">
+        AjouEvent 서비스 이용 약관에<br />동의해주세요
       </h1>
-      <p className="text-[#999] text-sm m-0 mb-5 max-w-[680px] w-full">
-        * AjouEvent는 2024-1학기 아주대학교 파란학기제로 진행한 프로젝트로 아주대학교 공식 서비스가 아닙니다. <br />
-        * AjouEvent 계정은 아주대학교 포탈 계정과 무관합니다.
+      <p className="text-[#B0B8C1] text-xs mb-8 leading-relaxed">
+        AjouEvent는 2024-1학기 아주대학교 파란학기제로 진행한 프로젝트로 아주대학교 공식 서비스가 아닙니다.<br />
+        AjouEvent 계정은 아주대학교 포탈 계정과 무관합니다.
       </p>
-      <form onSubmit={handleFormSubmit} className="w-full max-w-[680px] flex flex-col items-center gap-2.5">
-        <div className="flex items-center w-full gap-2.5">
-          <input type="checkbox" id="select-all" checked={isSelectAll} onChange={handleSelectAll} className="w-[18px] h-[18px]" />
-          <label htmlFor="select-all" className="text-base font-bold text-gray-700 ml-2.5">약관 전체 동의하기</label>
+
+      <form onSubmit={handleFormSubmit} className="flex flex-col gap-3 flex-1">
+        <div className="flex items-center gap-3 py-3 border-b border-[#E5E8EB]">
+          <input
+            type="checkbox"
+            id="select-all"
+            checked={isSelectAll}
+            onChange={handleSelectAll}
+            className="w-5 h-5 accent-[#3182F6] cursor-pointer"
+          />
+          <label htmlFor="select-all" className="text-[#191F28] text-sm font-bold cursor-pointer">
+            약관 전체 동의하기
+          </label>
         </div>
-        <hr className="w-full h-px m-0" />
-        {[
-          { id: 'age-agreement', checked: isChecked14, setter: setIsChecked14, label: '(필수) 만 14세 이상입니다.', filePath: null },
-          { id: 'terms-agreement', checked: isCheckedTerms, setter: setIsCheckedTerms, label: '(필수) 서비스 이용약관에 동의', filePath: '/terms_of_service.html' },
-          { id: 'privacy-agreement', checked: isCheckedPrivacy, setter: setIsCheckedPrivacy, label: '(필수) 개인정보 수집이용에 동의', filePath: '/privacy_consent_form.html' },
-        ].map(({ id, checked, setter, label, filePath }) => (
-          <div key={id} className="flex items-center gap-2.5 w-full">
+
+        {terms.map(({ id, checked, setter, label, filePath }) => (
+          <div key={id} className="flex items-center gap-3 py-2">
             <input
               type="checkbox"
               id={id}
               checked={checked}
               onChange={(e) => setter(e.target.checked)}
-              className={checkboxClass}
+              className="w-5 h-5 accent-[#3182F6] cursor-pointer flex-shrink-0"
             />
-            <label htmlFor={id} className="flex items-center w-full">
+            <label htmlFor={id} className="flex items-center flex-1 text-sm text-[#333D4B] cursor-pointer">
               {label}
               {filePath && (
                 <span
                   onClick={(e) => openModal(e, filePath, setter)}
-                  className="ml-auto text-[#cdcdcd] cursor-pointer"
+                  className="ml-auto text-[#3182F6] text-xs cursor-pointer font-medium"
                 >
                   보기
                 </span>
@@ -102,26 +107,31 @@ const PrivacyAgreement = () => {
             </label>
           </div>
         ))}
-        <button
-          type="submit"
-          disabled={!isAllChecked}
-          className={`w-full max-w-[680px] bg-[#0066b3] rounded-[10px] text-white font-bold border-none h-12 text-base outline-none text-center mt-2 transition-opacity ${
-            !isAllChecked ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer hover:opacity-80'
-          }`}
-        >
-          다음
-        </button>
+
+        <div className="mt-auto pt-6">
+          <button
+            type="submit"
+            disabled={!isAllChecked}
+            className={`w-full rounded-xl text-white font-bold border-none h-14 text-base transition-all ${
+              !isAllChecked
+                ? 'bg-[#E5E8EB] text-[#B0B8C1] cursor-not-allowed'
+                : 'bg-[#3182F6] hover:bg-[#1B6EE8] cursor-pointer'
+            }`}
+          >
+            다음
+          </button>
+        </div>
       </form>
 
       {isModalOpen && (
         <>
           <div onClick={closeModal} className="fixed top-0 left-0 w-full h-full bg-black/50 z-[999]" />
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-5 rounded-[10px] shadow-[0_4px_8px_rgba(0,0,0,0.2)] z-[1000] max-w-[500px] w-[90%] max-h-[80vh] overflow-y-auto">
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-5 rounded-2xl shadow-lg z-[1000] max-w-[500px] w-[90%] max-h-[80vh] overflow-y-auto">
             <h2 aria-hidden="true">{' '}</h2>
             <div dangerouslySetInnerHTML={{ __html: modalContent }} />
             <button
               onClick={handleModalConfirm}
-              className="w-full bg-[#0066b3] rounded-[10px] text-white font-bold border-none h-12 text-base cursor-pointer mt-2 hover:opacity-80 transition-opacity"
+              className="w-full bg-[#3182F6] hover:bg-[#1B6EE8] rounded-xl text-white font-bold border-none h-12 text-base cursor-pointer mt-4 transition-colors"
             >
               확인
             </button>

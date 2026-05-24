@@ -102,61 +102,60 @@ export default function HomePage() {
   };
 
   return (
-    <div className="flex items-center flex-col bg-white">
+    <div className="flex items-center flex-col bg-[#F9FAFB] min-h-screen">
       {showInstallPrompt && (
         <div className="fixed z-[1000] left-0 top-0 w-full h-full flex justify-center items-center bg-black/50">
-          <div className="flex flex-col items-center bg-white p-5 border border-[#888] w-4/5 max-w-[500px] rounded-[20px]">
-            <div className="flex flex-col items-center text-center mt-2.5 gap-5">
-              <img
-                src={`${process.env.PUBLIC_URL}/logo196.png`}
-                alt="Modal"
-                className="w-[45%]"
-              />
-              <h2 className="text-[22px] font-bold mb-[-5px] text-center">
-                AjouEvent를 설치하고 <br /> 공지사항 알림을 받아보세요!
-              </h2>
-              <p className="text-sm text-[#6c757d] mb-5 text-center">
-                앱에서 공지사항, 키워드 구독을 통해 <br />
-                푸시 알림을 받을 수 있어요.
-              </p>
-            </div>
+          <div className="flex flex-col items-center bg-white px-6 py-8 w-[85%] max-w-[400px] rounded-2xl shadow-lg">
+            <img
+              src={`${process.env.PUBLIC_URL}/logo196.png`}
+              alt="Modal"
+              className="w-20 h-20 rounded-2xl mb-5"
+            />
+            <h2 className="text-[#191F28] text-xl font-bold mb-2 text-center tracking-tight">
+              AjouEvent를 설치하고<br />공지사항 알림을 받아보세요!
+            </h2>
+            <p className="text-sm text-[#6B7684] mb-6 text-center leading-relaxed">
+              앱에서 공지사항, 키워드 구독을 통해<br />푸시 알림을 받을 수 있어요.
+            </p>
             <button
               onClick={handleInstallClick}
-              className="w-4/5 max-w-[300px] block px-5 py-2.5 bg-[#2366AF] text-white no-underline rounded-[50px] font-bold text-center text-xl border-none cursor-pointer hover:bg-[#1A4F8B]"
+              className="w-full py-3.5 bg-[#3182F6] hover:bg-[#1B6EE8] text-white rounded-xl font-bold text-base border-none cursor-pointer transition-colors"
             >
-              설치
+              설치하기
             </button>
-            <div
+            <button
               onClick={handleCloseModal}
-              className="mt-5 text-black/50 cursor-pointer text-xs block mx-auto text-center"
+              className="mt-4 text-[#B0B8C1] cursor-pointer text-sm bg-transparent border-none hover:text-[#6B7684] transition-colors"
             >
               나중에 설치
-            </div>
+            </button>
           </div>
         </div>
       )}
 
       {showPushNotificationPrompt && (
-        <div className="flex flex-col items-center justify-center h-screen w-screen fixed top-0 left-0 bg-white text-black z-[1000] p-5 text-center">
+        <div className="flex flex-col items-center justify-center min-h-screen w-screen fixed top-0 left-0 bg-white text-[#191F28] z-[1000] p-6 text-center">
           <img
             alt="알람"
             src={`${process.env.PUBLIC_URL}/icons/notiOn.svg`}
-            className="w-[100px] h-[100px] mb-5"
+            className="w-20 h-20 mb-6"
           />
-          <h1 className="text-2xl font-bold">푸시 알림 받기</h1>
-          <p className="text-base">푸시 알림을 설정하고 각종 공지사항, 키워드 알림을 받아보세요!</p>
+          <h1 className="text-2xl font-bold tracking-tight mb-3">푸시 알림 받기</h1>
+          <p className="text-sm text-[#6B7684] leading-relaxed mb-8">
+            푸시 알림을 설정하고 각종 공지사항,<br />키워드 알림을 받아보세요!
+          </p>
           <button
             onClick={handleAllowNotifications}
-            className="bg-[#0A5CA8] text-white py-4 px-12 text-lg border-none rounded-[25px] cursor-pointer mt-5 w-4/5 max-w-[300px]"
+            className="w-full max-w-[300px] bg-[#3182F6] hover:bg-[#1B6EE8] text-white py-4 text-base font-bold border-none rounded-xl cursor-pointer transition-colors"
           >
             알림 받기
           </button>
-          <div
+          <button
             onClick={() => setShowPushNotificationPrompt(false)}
-            className="mt-5 text-black/50 cursor-pointer text-xs block mx-auto text-center"
+            className="mt-4 text-[#B0B8C1] cursor-pointer text-sm bg-transparent border-none hover:text-[#6B7684] transition-colors"
           >
             나중에 받을게요
-          </div>
+          </button>
         </div>
       )}
 

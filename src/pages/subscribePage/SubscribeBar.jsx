@@ -112,48 +112,44 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
-      <div
-        className={`w-full flex items-center overflow-x-auto whitespace-nowrap bg-white font-semibold box-border ${
-          showGuide ? 'py-[18px] px-[10px] pl-3' : 'pt-3 pb-0 px-[10px] pl-4'
-        }`}
-      >
-        <div className="flex items-center gap-2.5">
-          <div
+      <div className="w-full flex items-center overflow-x-auto whitespace-nowrap bg-white px-4 py-3 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="flex items-center gap-2">
+          <button
             onClick={handleShowModal}
-            className={`flex h-fit px-3 py-2 justify-center items-center gap-1 rounded-[600px] border-2 border-[#F5F5F5] bg-[#E0E0E0] cursor-pointer text-sm whitespace-nowrap box-border ${
-              showGuide ? 'animate-[glow_1.5s_infinite]' : ''
+            className={`flex h-9 px-3 justify-center items-center gap-1.5 rounded-full border border-[#E5E8EB] bg-[#F2F4F6] cursor-pointer text-sm font-semibold whitespace-nowrap text-[#333D4B] hover:bg-[#E5E8EB] transition-colors ${
+              showGuide ? 'ring-2 ring-[#3182F6]' : ''
             }`}
           >
-            <img src={`${process.env.PUBLIC_URL}/icons/gear.svg`} alt="gear" className="w-[18px] aspect-square object-cover" />
-            <p className="m-0">구독 설정</p>
-          </div>
+            <img src={`${process.env.PUBLIC_URL}/icons/gear.svg`} alt="gear" className="w-4 h-4 opacity-60" />
+            <span>구독 설정</span>
+          </button>
           {showGuide && (
-            <div className="bg-[#0072CE] text-white px-2 py-1 rounded-xl text-[11px] font-bold whitespace-nowrap leading-[1.4] animate-[fadeIn_0.5s_ease-in-out]">
+            <span className="bg-[#3182F6] text-white px-2 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap">
               클릭해서 구독하기
-            </div>
+            </span>
           )}
         </div>
 
-        <div className="w-full flex overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="flex gap-2 ml-2 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {Array.isArray(subscribeItems) ? (
             subscribeItems.map((item) => (
-              <div
+              <button
                 key={item.id}
                 onClick={() => handleTopicClick(item.englishTopic)}
-                className={`flex h-fit px-3 py-2 mx-1 justify-center items-center gap-1 rounded-[600px] border-2 border-[#F5F5F5] cursor-pointer ${
+                className={`flex h-9 px-3 justify-center items-center gap-1 rounded-full border text-sm font-semibold whitespace-nowrap cursor-pointer transition-colors ${
                   selectedTopic === item.englishTopic
-                    ? 'bg-[#0A5CA8] text-white'
-                    : 'bg-white text-black'
+                    ? 'bg-[#3182F6] border-[#3182F6] text-white'
+                    : 'bg-white border-[#E5E8EB] text-[#333D4B] hover:bg-[#F9FAFB]'
                 }`}
               >
                 <span>{item.koreanTopic}</span>
                 {item.isRead === false && (
-                  <div className="w-2.5 h-2.5 bg-red-500 rounded-full inline-block" />
+                  <div className="w-1.5 h-1.5 bg-[#F04452] rounded-full" />
                 )}
-              </div>
+              </button>
             ))
           ) : (
-            <p>구독 항목이 없습니다</p>
+            <p className="text-sm text-[#B0B8C1]">구독 항목이 없습니다</p>
           )}
         </div>
       </div>
@@ -164,21 +160,25 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
             onClick={() => setShowModal(false)}
             className="fixed top-0 left-0 w-full h-full bg-black/50 z-[1000]"
           />
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-[10px] overflow-y-auto p-6 z-[1001] w-[90%] h-[80%]">
-            <div className="w-full flex items-center pb-4 gap-2">
-              <img
-                src={`${process.env.PUBLIC_URL}/icons/arrow_back.svg`}
-                alt="back"
-                className="w-5 aspect-square object-contain cursor-pointer"
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl overflow-y-auto p-5 z-[1001] w-[90%] h-[80%]">
+            <div className="flex items-center gap-3 mb-5">
+              <button
                 onClick={() => setShowModal(false)}
-              />
-              <h1 className="text-black text-lg font-bold tracking-[-0.2px] m-0">전체 구독 항목</h1>
+                className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-[#F2F4F6] transition-colors"
+              >
+                <img
+                  src={`${process.env.PUBLIC_URL}/icons/arrow_back.svg`}
+                  alt="back"
+                  className="w-5 aspect-square object-contain"
+                />
+              </button>
+              <h1 className="text-[#191F28] text-lg font-bold tracking-tight m-0">전체 구독 항목</h1>
             </div>
 
             {Object.keys(categorizedItems).map((category) => (
-              <div key={category}>
-                <h2
-                  className="text-3xl font-bold mt-10 pb-2.5 border-b border-[#E0E0E0] flex justify-between items-center cursor-pointer"
+              <div key={category} className="mb-2">
+                <button
+                  className="w-full text-left text-xl font-bold py-3 border-b border-[#E5E8EB] flex justify-between items-center cursor-pointer bg-transparent text-[#191F28]"
                   onClick={() => handleCategoryClick(category)}
                 >
                   {category}
@@ -189,16 +189,16 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
                         : `${process.env.PUBLIC_URL}/icons/arrow_right.svg`
                     }
                     alt="arrow"
-                    className="w-6 h-6"
+                    className="w-5 h-5 opacity-50"
                   />
-                </h2>
+                </button>
                 {openCategory === category &&
                   categorizedItems[category].map((item) => (
                     <div
                       key={item.id}
-                      className="flex justify-between items-center py-2.5 border-b border-[#E0E0E0] font-semibold"
+                      className="flex justify-between items-center py-3 border-b border-[#F2F4F6]"
                     >
-                      <div>{item.koreanTopic}</div>
+                      <span className="text-[#333D4B] text-sm font-medium">{item.koreanTopic}</span>
                       <div>
                         {item.subscribed ? (
                           <SubscribeStatusDropdown
@@ -209,7 +209,7 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
                         ) : (
                           <button
                             onClick={() => handleSubscribe(item)}
-                            className="inline-flex justify-center items-center px-5 py-2.5 bg-[#0072CE] text-white text-base font-semibold rounded-[50px] border-none cursor-pointer shadow-sm gap-2 hover:bg-[#E0E0E0]"
+                            className="px-4 py-2 bg-[#3182F6] hover:bg-[#1B6EE8] text-white text-xs font-semibold rounded-xl border-none cursor-pointer transition-colors"
                           >
                             구독
                           </button>

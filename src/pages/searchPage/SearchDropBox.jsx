@@ -7,38 +7,13 @@ import {
   대학원,
   기숙사,
 } from '../../constants/searchDropOption';
-
-function FilterOption({ label, options, selectedValue, setSelectedValue, icon }) {
-  return (
-    <div className="flex w-[150px] flex-col justify-center bg-white border border-[rgba(229,232,235,1)] rounded-full">
-      <div
-        className="flex flex-col gap-[9px] px-4 py-2"
-        style={{
-          backgroundImage: `url(${icon})`,
-          backgroundSize: '24px 24px',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'right 8px center',
-        }}
-      >
-        <select
-          value={selectedValue}
-          onChange={(e) => setSelectedValue(e.target.value)}
-          className="appearance-none outline-none border-none bg-transparent text-sm font-medium tracking-[-0.98px] pr-2.5"
-          style={{ fontFamily: 'Pretendard Variable' }}
-        >
-          <option value="" disabled>
-            {label} 선택
-          </option>
-          {options.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      </div>
-    </div>
-  );
-}
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../../components/ui/select';
 
 function SearchDropBox({
   setPage,
@@ -103,23 +78,31 @@ function SearchDropBox({
   }, [option2]);
 
   return (
-    <div className="flex flex-col items-stretch justify-center px-3.5 py-3.5 mb-1.5 w-full text-sm font-medium text-[#1b1e26] tracking-[-0.98px] shadow-[0_4px_10px_#e5e5e5]">
-      <div className="flex items-stretch justify-center gap-4">
-        <FilterOption
-          label="단체"
-          options={option1List}
-          selectedValue={option1}
-          setSelectedValue={setOption1}
-          icon="https://cdn.builder.io/api/v1/image/assets/TEMP/e9566b1578aea7dfd042515fc7174a5222b2c94f022d10de0bf5f1f4a44f8bf2?apiKey=75213697ab8e4fbfb70997e546d69efb&"
-        />
-        <FilterOption
-          label="상세"
-          options={option2List}
-          selectedValue={option2}
-          setSelectedValue={setOption2}
-          icon="https://cdn.builder.io/api/v1/image/assets/TEMP/9316045d2a3d77a8384125accfe4d605dfbbba2237b9dcf5c74d5f74feb0de83?apiKey=75213697ab8e4fbfb70997e546d69efb&"
-        />
-      </div>
+    <div className="flex items-center gap-3 px-5 py-3 w-full">
+      <Select value={option1} onValueChange={setOption1}>
+        <SelectTrigger>
+          <SelectValue placeholder="단체 선택" />
+        </SelectTrigger>
+        <SelectContent>
+          {option1List.map((option) => (
+            <SelectItem key={option} value={option}>
+              {option}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Select value={option2} onValueChange={setOption2}>
+        <SelectTrigger>
+          <SelectValue placeholder="상세 선택" />
+        </SelectTrigger>
+        <SelectContent>
+          {option2List.map((option) => (
+            <SelectItem key={option} value={option}>
+              {option}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }

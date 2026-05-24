@@ -20,34 +20,38 @@ export default function TopBar() {
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[5] flex flex-wrap items-center w-full h-12 px-0 py-4 bg-[#0066b3]">
+    <div className="fixed top-0 left-0 right-0 z-[5] flex items-center w-full h-14 px-4 bg-white border-b border-[#E5E8EB]">
       <Link
         to="/"
-        className="flex justify-start items-center w-1/2 h-full no-underline bg-[#0066b3]"
+        className="flex flex-1 items-center no-underline"
       >
-        <span className="font-bold text-[0.9rem] text-white ml-4 leading-6 w-48">
+        <span className="font-bold text-[1rem] text-[#3182F6] tracking-tight">
           아주대 공지사항 알림
         </span>
       </Link>
-      <div className="flex justify-end items-center w-1/2 h-full bg-[#0066b3]">
-        <img
-          alt="알람"
-          src={`${process.env.PUBLIC_URL}/icons/mdi_bell.svg`}
+      <div className="flex items-center gap-2">
+        <button
           onClick={handleAlarmClick}
-          className="w-[4vw] h-[4vh]"
-        />
+          className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-[#F2F4F6] transition-colors"
+        >
+          <img
+            alt="알람"
+            src={`${process.env.PUBLIC_URL}/icons/mdi_bell.svg`}
+            className="w-5 h-5 opacity-60"
+          />
+        </button>
         {isSignIn ? (
           <Link
             onClick={handleLogoutBtnClick}
             to="/login"
-            className="flex flex-wrap items-center justify-center bg-white rounded-lg border-0 w-20 h-[1.4rem] text-black text-[0.8rem] no-underline mx-4"
+            className="flex items-center justify-center bg-[#F2F4F6] hover:bg-[#E5E8EB] rounded-xl px-3 h-8 text-[#6B7684] text-xs font-semibold no-underline transition-colors"
           >
             로그아웃
           </Link>
         ) : (
           <Link
             to="/login"
-            className="flex flex-wrap items-center justify-center bg-white rounded-lg border-0 w-20 h-[1.4rem] text-black text-[0.8rem] no-underline mx-4"
+            className="flex items-center justify-center bg-[#3182F6] hover:bg-[#1B6EE8] rounded-xl px-3 h-8 text-white text-xs font-semibold no-underline transition-colors"
           >
             로그인
           </Link>

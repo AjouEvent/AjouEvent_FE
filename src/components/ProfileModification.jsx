@@ -11,37 +11,44 @@ const ProfileModification = () => {
   const handleDeleteAccount = () => navigate('/delete-account');
 
   return (
-    <div className="flex flex-col items-center p-5 w-full">
-      <div className="w-full flex items-center py-4 gap-2">
-        <img
+    <div className="flex flex-col min-h-screen bg-white px-5 pt-4">
+      <div className="flex items-center gap-3 py-4 mb-2">
+        <button
           onClick={arrowBackClicked}
-          loading="lazy"
-          src={`${process.env.PUBLIC_URL}/icons/arrow_back.svg`}
-          alt="뒤로가기"
-          className="w-5 aspect-square object-contain cursor-pointer"
-        />
-        <div className="text-black text-lg font-bold">마이페이지</div>
+          className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-[#F2F4F6] transition-colors"
+        >
+          <img
+            loading="lazy"
+            src={`${process.env.PUBLIC_URL}/icons/arrow_back.svg`}
+            alt="뒤로가기"
+            className="w-5 aspect-square object-contain"
+          />
+        </button>
+        <span className="text-[#191F28] text-lg font-bold tracking-tight">마이페이지</span>
       </div>
-      <h2 className="font-bold mb-5">회원정보 수정</h2>
-      <div className="block my-2.5 w-[95%] max-w-[680px] h-[10px] relative">
-        <span className="absolute top-2 left-0 right-0 h-px bg-black/20" />
-      </div>
-      <h1 className="text-2xl font-bold text-left w-full mb-5">로그인 정보</h1>
-      <div className="flex flex-col mb-2.5 w-full">
-        <p className="m-0 text-sm font-semibold mb-1">아이디 (이메일)</p>
+
+      <h2 className="text-[#191F28] text-xl font-bold tracking-tight mb-6">회원정보 수정</h2>
+
+      <div className="h-px bg-[#E5E8EB] mb-6" />
+
+      <h3 className="text-[#191F28] text-lg font-bold tracking-tight mb-5">로그인 정보</h3>
+
+      <div className="flex flex-col gap-1.5 mb-6">
+        <label className="text-[#6B7684] text-xs font-semibold">아이디 (이메일)</label>
         <input
           type="text"
           value={email}
           readOnly
-          className="px-2.5 py-2.5 border border-[#cdcdcd] rounded text-base outline-none bg-gray-50"
+          className="w-full h-12 px-4 bg-[#F2F4F6] rounded-xl text-sm text-[#B0B8C1] outline-none border-0 cursor-default"
         />
       </div>
-      <span
+
+      <button
         onClick={handleDeleteAccount}
-        className="text-[#0066b3] underline cursor-pointer mt-5 hover:text-gray-600 transition-colors"
+        className="text-[#F04452] text-sm font-medium bg-transparent border-none cursor-pointer text-left hover:text-[#D93746] transition-colors p-0"
       >
         회원 탈퇴하기
-      </span>
+      </button>
     </div>
   );
 };

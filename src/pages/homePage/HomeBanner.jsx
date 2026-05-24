@@ -39,13 +39,17 @@ export default function HomeBanner({ images }) {
   };
 
   if (!Array.isArray(images) || images.length === 0) {
-    return <div className="w-full h-[100vw] bg-gray-100" />;
+    return (
+      <div className="w-full px-4 pt-3 pb-1 bg-white">
+        <div className="w-full aspect-[4/3] bg-gradient-to-br from-[#F2F4F6] to-[#E5E8EB] rounded-2xl animate-pulse" />
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center bg-white h-[100vw] w-full">
+    <div className="w-full bg-white px-4 pt-3 pb-1">
       <div
-        className="relative w-full h-[100vw] overflow-hidden"
+        className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl shadow-sm"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -62,15 +66,30 @@ export default function HomeBanner({ images }) {
               <img
                 src={image.imgUrl}
                 alt={`Slide ${idx + 1}`}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
               />
             </div>
           ))}
         </div>
 
-        <div className="absolute bottom-2.5 right-2.5 bg-black/50 text-white px-2.5 py-1 rounded text-sm">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none rounded-2xl" />
+
+        <div className="absolute bottom-3 right-3 bg-black/35 backdrop-blur-sm text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold">
           {index + 1} / {images.length}
         </div>
+
+        {images.length > 1 && (
+          <div className="absolute bottom-3.5 left-1/2 -translate-x-1/2 flex gap-1.5">
+            {images.map((_, idx) => (
+              <div
+                key={idx}
+                className={`rounded-full transition-all duration-300 ${
+                  idx === index ? 'w-5 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/50'
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

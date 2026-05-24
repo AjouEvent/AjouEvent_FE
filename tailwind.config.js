@@ -33,6 +33,30 @@ module.exports = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        /* Ajou University Brand */
+        ajou: {
+          navy: '#003876',
+          'navy-dark': '#002557',
+          'navy-light': '#1a4f8a',
+          50: '#EEF3FA',
+          100: '#D5E2F2',
+        },
+        surface: '#F5F6F8',
+        /* Toss Design System */
+        toss: {
+          blue: '#3182F6',
+          bg: '#F9FAFB',
+          card: '#FFFFFF',
+          title: '#191F28',
+          body: '#333D4B',
+          secondary: '#6B7684',
+          disabled: '#B0B8C1',
+          border: '#E5E8EB',
+          red: '#F04452',
+          green: '#00B493',
+          'input-bg': '#F2F4F6',
+          'blue-light': '#EBF4FE',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',

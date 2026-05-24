@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import NavigationBar from '../../components/NavigationBar';
-import LocationBar from '../../components/LocationBar';
 import { clearAuth } from '../../utils/auth';
 import { getUserInfo } from '../../services/api/user';
 import Swal from 'sweetalert2';
@@ -42,40 +41,54 @@ const MyPage = () => {
     clearAuth();
   };
 
+  const menuItems = [
+    { label: '회원정보 수정', onClick: handleEditClick },
+    { label: '자주묻는질문' },
+    { label: '공지사항' },
+    { label: '버전' },
+    { label: '피드백 / 오류 제보', onClick: handleFeedBackClick },
+  ];
+
   return (
-    <div className="flex flex-col items-center justify-center bg-white h-screen overflow-y-hidden w-screen overflow-x-hidden">
-      <div className="flex flex-col w-full h-full text-center">
-        <LocationBar location="마이페이지" />
-        <div className="flex flex-col justify-start items-start px-10 pt-5 pb-2.5 border-t border-black/[0.08]">
-          <h3 className="mb-6">회원정보</h3>
-          <p className="m-0 mb-1">이름: {user.name}</p>
-          <p className="m-0 mb-1">전공: {user.major}</p>
-          <p className="m-0 mb-1">이메일: {user.email}</p>
-        </div>
-        <div className="flex items-center justify-center w-full my-3">
+    <div className="flex flex-col min-h-screen bg-[#F5F6F8] pb-20">
+      <div className="bg-white px-5 pt-6 pb-5 border-b border-[#F0F2F5]">
+        <div className="flex items-center justify-between mb-5">
+          <h1 className="text-[#191F28] text-[20px] font-bold tracking-tight m-0">프로필</h1>
           <Link
             onClick={handleLogoutBtnClick}
             to="/login"
-            className="flex flex-wrap items-center justify-center bg-white rounded-lg p-2 border border-[#b8b8b8] w-[85%] text-gray-500 text-[0.8rem] no-underline text-center"
+            className="flex items-center justify-center bg-[#F2F4F6] hover:bg-[#E5E8EB] active:bg-[#DDE0E5] rounded-xl px-3.5 py-2 text-[#6B7684] text-xs font-semibold no-underline transition-colors"
           >
             로그아웃
           </Link>
         </div>
-        <ul className="list-none m-0 py-5 px-0">
-          {[
-            { label: '회원정보 수정', onClick: handleEditClick },
-            { label: '자주묻는질문' },
-            { label: '공지사항' },
-            { label: '버전' },
-            { label: '피드백 / 오류 제보', onClick: handleFeedBackClick },
-          ].map(({ label, onClick }) => (
+
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <div className="w-[60px] h-[60px] rounded-2xl bg-gradient-to-br from-[#3182F6] to-[#1B6EE8] flex items-center justify-center text-white text-2xl font-bold flex-shrink-0 shadow-md">
+              {user.name ? user.name[0] : '?'}
+            </div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[#191F28] font-bold text-[17px] m-0 mb-0.5 tracking-tight">{user.name || '-'}</p>
+            <p className="text-[#6B7684] text-sm m-0 mb-0.5 truncate">{user.major || '-'}</p>
+            <p className="text-[#B0B8C1] text-xs m-0 truncate">{user.email || '-'}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-2 bg-white overflow-hidden border-t border-b border-[#F0F2F5]">
+        <ul className="list-none m-0 p-0">
+          {menuItems.map(({ label, onClick }, idx) => (
             <li
               key={label}
               onClick={onClick}
-              className="border-b border-[#eee] px-5 py-2.5 text-base flex justify-between items-center cursor-pointer hover:bg-gray-50 transition-colors"
+              className={`px-5 py-4 flex justify-between items-center cursor-pointer hover:bg-[#FAFBFC] active:bg-[#F5F6F8] transition-colors ${
+                idx < menuItems.length - 1 ? 'border-b border-[#F5F6F8]' : ''
+              }`}
             >
-              {label}
-              <span className="text-base text-gray-400">›</span>
+              <span className="text-[#333D4B] text-sm font-medium">{label}</span>
+              <span className="text-[#C5CDD6] text-lg font-light">›</span>
             </li>
           ))}
         </ul>
