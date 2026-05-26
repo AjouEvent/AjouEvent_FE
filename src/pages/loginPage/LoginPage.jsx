@@ -4,7 +4,7 @@ import NavigationBar from '../../components/NavigationBar';
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col items-center justify-center bg-white overflow-y-hidden overflow-x-hidden">
+    <div className="flex flex-col items-center justify-center bg-white w-full h-full">
       <Login />
       <NavigationBar />
     </div>
