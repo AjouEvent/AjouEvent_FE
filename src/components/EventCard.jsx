@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import { Heart } from 'lucide-react';
-import { likeEvent, unlikeEvent } from '../../services/api/event';
+import { likeEvent, unlikeEvent } from '../services/api/event';
 
 function Stat({ iconSrc, value, altText, hasKeyword }) {
   return (

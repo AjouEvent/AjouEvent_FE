@@ -3,7 +3,7 @@ import useUIStore from '../../store/useUIStore';
 import SubscribeBar from './SubscribeBar';
 import SubscribeEvent from './SubscribeEvent';
 import { getEventsByCategory, getSubscribedEvents } from '../../services/api/event';
-import SearchBar from '../../components/SearchBar';
+import SearchBar from '../../components/layout/SearchBar';
 import { LIMITS } from '../../constants/appConstants';
 
 export default function SubscribeTab({ showGuide }) {

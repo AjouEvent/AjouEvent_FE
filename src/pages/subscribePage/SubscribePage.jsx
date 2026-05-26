@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import useSubscriptionStore from '../../store/useSubscriptionStore';
-import NavigationBar from '../../components/NavigationBar';
-import LocationBar from '../../components/LocationBar';
+import NavigationBar from '../../components/layout/NavigationBar';
+import LocationBar from '../../components/layout/LocationBar';
 import SubscribeTab from './SubscribeTab';
 import KeywordTab from './KeywordTab';
 import { STORAGE_KEYS } from '../../constants/appConstants';

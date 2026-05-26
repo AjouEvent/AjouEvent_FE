@@ -1,10 +1,22 @@
-import React from 'react';
-import useCarousel from '../../hooks/useCarousel';
+import React, { useState, useRef } from 'react';
 
 export default function EventBanner({ images, onImageClick }) {
-  const { index, setIndex, next, prev, handleTouchStart, handleTouchEnd } = useCarousel(
-    images?.length ?? 0,
-  );
+  const [index, setIndex] = useState(0);
+  const touchStartX = useRef(null);
+
+  const next = () => setIndex((i) => (i + 1) % images.length);
+  const prev = () => setIndex((i) => (i - 1 + images.length) % images.length);
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const delta = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(delta) > 50) delta > 0 ? next() : prev();
+    touchStartX.current = null;
+  };
 
   if (!images || images.length === 0) return null;
 

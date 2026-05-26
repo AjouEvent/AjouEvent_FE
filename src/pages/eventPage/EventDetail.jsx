@@ -6,12 +6,7 @@ import Swal from 'sweetalert2';
 import EventBanner from './EventBanner';
 import ImageModal from './ImageModal';
 import { STORAGE_KEYS } from '../../constants/appConstants';
-import { Heart, Eye } from 'lucide-react';
-import {
-  getEventDetail,
-  getAuthEventDetail,
-} from '../../services/api/event';
-import useEventLike from '../../hooks/useEventLike';
+import { getEventDetail, getAuthEventDetail, likeEvent, unlikeEvent } from '../../services/api/event';
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -41,9 +36,6 @@ const EventDetail = () => {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { isLiked: eventStar, count: eventLikeCount, toggleLike: handleStarClick } = useEventLike(
-    id, event?.star, event?.likesCount
-  );
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -56,27 +48,17 @@ const EventDetail = () => {
           response = await getAuthEventDetail(id);
         } else {
           const config = alreadyViewClubEventNum
-            ? {
-                headers: {
-                  Cookie: `AlreadyViewClubEventNum=${alreadyViewClubEventNum}`,
-                },
-                withCredentials: true,
-              }
+            ? { headers: { Cookie: `AlreadyViewClubEventNum=${alreadyViewClubEventNum}` }, withCredentials: true }
             : { withCredentials: true };
           response = await getEventDetail(id, config);
         }
 
-        if (response.data.content)
-          setContent(response.data.content.split('\\n'));
+        if (response.data.content) setContent(response.data.content.split('\\n'));
         setEvent(response.data);
       } catch (error) {
         console.error('Error fetching event:', error);
         if (error.response && error.response.status === 401) {
-          Swal.fire({
-            icon: 'error',
-            title: '세션 만료',
-            text: '다시 로그인 해주세요.',
-          });
+          Swal.fire({ icon: 'error', title: '세션 만료', text: '다시 로그인 해주세요.' });
         }
       }
     };
@@ -87,11 +69,7 @@ const EventDetail = () => {
     if (event && event.url) {
       window.location.href = event.url;
     } else {
-      Swal.fire({
-        icon: 'warning',
-        title: 'url 에러',
-        text: '바로가기 가능한 url이 없습니다.',
-      });
+      Swal.fire({ icon: 'warning', title: 'url 에러', text: '바로가기 가능한 url이 없습니다.' });
     }
   };
 
@@ -101,6 +79,21 @@ const EventDetail = () => {
   };
 
   const handleCalendarClick = () => setIsCalendarModalOpen(true);
+
+  const handleStarClick = async () => {
+    try {
+      if (event.star) {
+        await unlikeEvent(id);
+        setEvent((prev) => ({ ...prev, star: false, likesCount: prev.likesCount - 1 }));
+      } else {
+        await likeEvent(id);
+        setEvent((prev) => ({ ...prev, star: true, likesCount: prev.likesCount + 1 }));
+      }
+    } catch (error) {
+      console.error('Error toggling like:', error);
+      Swal.fire({ icon: 'error', title: '좋아요 에러', text: '로그인이 필요한 기능입니다.' });
+    }
+  };
 
   return (
     <div className="w-full min-h-screen bg-white">
@@ -123,16 +116,22 @@ const EventDetail = () => {
               </time>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1">
-                  <Eye className="w-3 h-3 text-[#B0B8C1]" />
-                  <span className="text-xs text-[#6B7684]">
-                    {event.viewCount}
-                  </span>
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/62c7bb15f5fd13739601caff1be349795102bd00b8ccfe603cd2e43498657c46?apiKey=75213697ab8e4fbfb70997e546d69efb&"
+                    alt="조회수"
+                    className="w-3 h-3 object-contain opacity-50"
+                    loading="lazy"
+                  />
+                  <span className="text-xs text-[#6B7684]">{event.viewCount}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Heart className="w-3 h-3 text-[#B0B8C1]" />
-                  <span className="text-xs text-[#6B7684]">
-                    {eventLikeCount}
-                  </span>
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/52d95bd6c4badc487be46d013f44cd23b9800d5d1e753fb3a364bcb97b18044f?apiKey=75213697ab8e4fbfb70997e546d69efb&"
+                    alt="좋아요"
+                    className="w-3 h-3 object-contain opacity-50"
+                    loading="lazy"
+                  />
+                  <span className="text-xs text-[#6B7684]">{event.likesCount}</span>
                 </div>
               </div>
             </div>
@@ -145,27 +144,25 @@ const EventDetail = () => {
               ))}
             </div>
 
-            <p className="text-xs text-[#B0B8C1] mt-4">
-              작성자: {event.writer}
-            </p>
+            <p className="text-xs text-[#B0B8C1] mt-4">작성자: {event.writer}</p>
           </div>
 
-          <div
-            className="w-full z-[5] fixed bottom-0 flex items-center bg-white/95 backdrop-blur-xl border-t border-[#F0F2F5] px-4 py-3 gap-2 shadow-[0_-4px_24px_rgba(0,0,0,0.06)]"
-            style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}
-          >
+          <div className="w-full z-[5] fixed bottom-0 flex items-center bg-white/95 backdrop-blur-xl border-t border-[#F0F2F5] px-4 py-3 gap-2 shadow-[0_-4px_24px_rgba(0,0,0,0.06)]" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
             <button
               onClick={handleStarClick}
               className={`w-12 h-12 flex items-center justify-center rounded-xl transition-colors flex-shrink-0 ${
-                eventStar
-                  ? 'bg-[#FFF0F1] hover:bg-[#FFE0E3]'
-                  : 'hover:bg-[#F2F4F6] active:bg-[#E5E8EB]'
+                event.star ? 'bg-[#FFF0F1] hover:bg-[#FFE0E3]' : 'hover:bg-[#F2F4F6] active:bg-[#E5E8EB]'
               }`}
             >
-              <Heart
-                className={`w-6 h-6 transition-colors ${
-                  eventStar ? 'fill-[#FF3B6B] text-[#FF3B6B]' : 'text-[#B0B8C1]'
-                }`}
+              <img
+                loading="lazy"
+                src={
+                  event.star
+                    ? `${process.env.PUBLIC_URL}/icons/FilledBookmarkIcon.svg`
+                    : `${process.env.PUBLIC_URL}/icons/EmptyBookmarkIcon.svg`
+                }
+                alt="Bookmark"
+                className="w-6 h-6"
               />
             </button>
             <div className="flex gap-2 flex-1">

@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
-import NavigationBar from '../../components/NavigationBar';
+import NavigationBar from '../../components/layout/NavigationBar';
 import SearchDropBox from './SearchDropBox';
-import SearchBar from '../../components/SearchBar';
+import SearchBar from '../../components/layout/SearchBar';
 import useUIStore from '../../store/useUIStore';
 import { KtoECodes } from '../../constants/departmentCodes';
-import LocationBar from '../../components/LocationBar';
+import LocationBar from '../../components/layout/LocationBar';
 import SearchEvent from './SearchEvent';
 import { LIMITS } from '../../constants/appConstants';
 import { getEventsByCategory } from '../../services/api/event';

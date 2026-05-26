@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TabBar from '../../components/TabBar';
+import TabBar from '../../components/layout/TabBar';
 import NotificationList from './NotificationList';
 import { getUserKeywords } from '../../services/api/subscription';
 import { readAllNotifications } from '../../services/api/notification';

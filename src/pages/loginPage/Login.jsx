@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import GetUserPermission from '../../services/fcm/GetUserPermission';
 import Swal from 'sweetalert2';
@@ -66,12 +66,12 @@ const Login = () => {
             <div className="flex-1 h-px bg-[#E5E8EB]" />
           </div>
 
-          <div className="flex justify-between items-center w-full mb-6">
+          {/* <div className="flex justify-between items-center w-full mb-6">
             <span className="text-[#6B7684] text-sm">아직 회원이 아니신가요?</span>
             <Link to="/privacy-agreement" className="text-[#3182F6] no-underline text-sm font-bold">
               회원가입
             </Link>
-          </div>
+          </div> */}
 
           <p className="text-[#B0B8C1] text-xs text-center leading-relaxed">
             AjouEvent는 2024-1학기 아주대학교 파란학기제에서<br />

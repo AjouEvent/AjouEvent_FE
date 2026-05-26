@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import KeywordBar from './KeywordBar';
-import SearchBar from '../../components/SearchBar';
-import EventCard from '../../components/events/EventCard';
+import SearchBar from '../../components/layout/SearchBar';
+import EventCard from '../../components/EventCard';
 import { getPostsByKeyword } from '../../services/api/event';
 import { LIMITS } from '../../constants/appConstants';
 

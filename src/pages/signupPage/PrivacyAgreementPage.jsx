@@ -1,6 +1,6 @@
 import React from 'react';
-import NavigationBar from '../../components/NavigationBar';
-import PrivacyAgreement from '../../components/PrivacyAgreement';
+import NavigationBar from '../../components/layout/NavigationBar';
+import PrivacyAgreement from './PrivacyAgreement';
 
 export default function PrivacyAgreementPage() {
   return (

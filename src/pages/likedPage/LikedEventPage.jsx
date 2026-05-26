@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import LikedEvent from './LikedEvent';
-import NavigationBar from '../../components/NavigationBar';
-import SearchBar from '../../components/SearchBar';
-import LocationBar from '../../components/LocationBar';
+import NavigationBar from '../../components/layout/NavigationBar';
+import SearchBar from '../../components/layout/SearchBar';
+import LocationBar from '../../components/layout/LocationBar';
 import useUIStore from '../../store/useUIStore';
 import { Link } from 'react-router-dom';
 import { LIMITS, STORAGE_KEYS } from '../../constants/appConstants';

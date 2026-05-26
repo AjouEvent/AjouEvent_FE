@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import {
-  resetTopicSubscriptions,
-  resetKeywordSubscriptions,
-} from '../../services/api/subscription';
+import { resetTopicSubscriptions, resetKeywordSubscriptions } from '../../services/api/subscription';
 import { deleteUser } from '../../services/api/user';
 import { clearAuth } from '../../utils/auth';
 
@@ -62,12 +59,9 @@ const DeleteAccountPage = () => {
     <div className="flex flex-col min-h-screen bg-white px-5 pt-4">
       {!nextStep ? (
         <div className="flex flex-col gap-5 pt-6">
-          <h2 className="text-[#191F28] text-xl font-bold tracking-tight m-0">
-            정말 떠나시는 건가요?
-          </h2>
+          <h2 className="text-[#191F28] text-xl font-bold tracking-tight m-0">정말 떠나시는 건가요?</h2>
           <p className="text-[#6B7684] text-sm leading-relaxed m-0">
-            알림이 자주 온다면 필요없는 토픽, 키워드 구독을 해지해보시는 게
-            어떤가요?
+            알림이 자주 온다면 필요없는 토픽, 키워드 구독을 해지해보시는 게 어떤가요?
           </p>
           <button
             onClick={() => setNextStep(true)}
@@ -78,9 +72,7 @@ const DeleteAccountPage = () => {
         </div>
       ) : (
         <div className="flex flex-col gap-3 pt-6">
-          <h2 className="text-[#191F28] text-xl font-bold tracking-tight mb-2">
-            탈퇴 절차
-          </h2>
+          <h2 className="text-[#191F28] text-xl font-bold tracking-tight mb-2">탈퇴 절차</h2>
 
           <button
             onClick={handleTopicReset}
@@ -89,15 +81,11 @@ const DeleteAccountPage = () => {
               isTopicReset
                 ? 'bg-[#F2F4F6] text-[#B0B8C1] cursor-not-allowed'
                 : isLoadingTopic
-                  ? 'bg-[#E5E8EB] text-[#6B7684] cursor-not-allowed'
-                  : 'bg-[#EBF4FE] text-[#3182F6] hover:bg-[#D6ECFE]'
+                ? 'bg-[#E5E8EB] text-[#6B7684] cursor-not-allowed'
+                : 'bg-[#EBF4FE] text-[#3182F6] hover:bg-[#D6ECFE]'
             }`}
           >
-            {isLoadingTopic
-              ? '토픽 초기화 중...'
-              : isTopicReset
-                ? '✓ 토픽 초기화 완료'
-                : '구독한 토픽 초기화'}
+            {isLoadingTopic ? '토픽 초기화 중...' : isTopicReset ? '✓ 토픽 초기화 완료' : '구독한 토픽 초기화'}
           </button>
 
           <button
@@ -107,15 +95,11 @@ const DeleteAccountPage = () => {
               isKeywordReset
                 ? 'bg-[#F2F4F6] text-[#B0B8C1] cursor-not-allowed'
                 : isLoadingKeyword
-                  ? 'bg-[#E5E8EB] text-[#6B7684] cursor-not-allowed'
-                  : 'bg-[#EBF4FE] text-[#3182F6] hover:bg-[#D6ECFE]'
+                ? 'bg-[#E5E8EB] text-[#6B7684] cursor-not-allowed'
+                : 'bg-[#EBF4FE] text-[#3182F6] hover:bg-[#D6ECFE]'
             }`}
           >
-            {isLoadingKeyword
-              ? '키워드 초기화 중...'
-              : isKeywordReset
-                ? '✓ 키워드 초기화 완료'
-                : '구독한 키워드 초기화'}
+            {isLoadingKeyword ? '키워드 초기화 중...' : isKeywordReset ? '✓ 키워드 초기화 완료' : '구독한 키워드 초기화'}
           </button>
 
           <select

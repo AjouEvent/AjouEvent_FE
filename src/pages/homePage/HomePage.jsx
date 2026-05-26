@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavigationBar from '../../components/NavigationBar';
+import NavigationBar from '../../components/layout/NavigationBar';
 import GetUserPermission from '../../services/fcm/GetUserPermission';
-import LocationBar from '../../components/LocationBar';
+import LocationBar from '../../components/layout/LocationBar';
 import HomeBanner from './HomeBanner';
 import HomeHotEvent from './HomeHotEvent';
 import DailyModal from '../../components/DailyModal';

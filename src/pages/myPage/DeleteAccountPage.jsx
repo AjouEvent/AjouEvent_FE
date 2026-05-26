@@ -1,6 +1,6 @@
 import React from 'react';
-import NavigationBar from '../../components/NavigationBar';
-import DeleteAccount from '../../components/DeleteAccount';
+import NavigationBar from '../../components/layout/NavigationBar';
+import DeleteAccount from './DeleteAccount';
 
 export default function DeleteAccountPage() {
   return (

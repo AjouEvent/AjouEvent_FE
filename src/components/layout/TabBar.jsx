@@ -26,9 +26,7 @@ const TabBar = ({ Title, RightComponent }) => {
             className="w-5 h-5 object-contain opacity-70"
           />
         </button>
-        <span className="text-[#191F28] text-[17px] font-bold tracking-tight">
-          {Title}
-        </span>
+        <span className="text-[#191F28] text-[17px] font-bold tracking-tight">{Title}</span>
       </div>
       <div className="flex items-center">{RightComponent}</div>
     </div>

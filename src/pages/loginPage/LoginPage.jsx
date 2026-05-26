@@ -1,6 +1,6 @@
 import React from 'react';
 import Login from './Login';
-import NavigationBar from '../../components/NavigationBar';
+import NavigationBar from '../../components/layout/NavigationBar';
 
 export default function LoginPage() {
   return (

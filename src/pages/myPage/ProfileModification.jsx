@@ -11,7 +11,7 @@ const ProfileModification = () => {
   const handleDeleteAccount = () => navigate('/delete-account');
 
   return (
-    <div className="flex w-full flex-col min-h-screen bg-white px-5 pt-4">
+    <div className="flex flex-col min-h-screen bg-white px-5 pt-4">
       <div className="flex items-center gap-3 py-4 mb-2">
         <button
           onClick={arrowBackClicked}
@@ -24,19 +24,17 @@ const ProfileModification = () => {
             className="w-5 aspect-square object-contain"
           />
         </button>
-        <span className="text-[#191F28] text-lg font-bold tracking-tight">
-          회원정보 수정
-        </span>
+        <span className="text-[#191F28] text-lg font-bold tracking-tight">마이페이지</span>
       </div>
 
-      <h3 className="text-[#191F28] text-lg font-bold tracking-tight mb-5">
-        로그인 정보
-      </h3>
+      <h2 className="text-[#191F28] text-xl font-bold tracking-tight mb-6">회원정보 수정</h2>
+
+      <div className="h-px bg-[#E5E8EB] mb-6" />
+
+      <h3 className="text-[#191F28] text-lg font-bold tracking-tight mb-5">로그인 정보</h3>
 
       <div className="flex flex-col gap-1.5 mb-6">
-        <label className="text-[#6B7684] text-xs font-semibold">
-          아이디 (이메일)
-        </label>
+        <label className="text-[#6B7684] text-xs font-semibold">아이디 (이메일)</label>
         <input
           type="text"
           value={email}

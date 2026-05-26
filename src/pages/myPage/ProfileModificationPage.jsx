@@ -1,6 +1,6 @@
 import React from 'react';
-import NavigationBar from '../../components/NavigationBar';
-import ProfileModification from '../../components/ProfileModification';
+import NavigationBar from '../../components/layout/NavigationBar';
+import ProfileModification from './ProfileModification';
 
 export default function ProfileModificationPage() {
   return (

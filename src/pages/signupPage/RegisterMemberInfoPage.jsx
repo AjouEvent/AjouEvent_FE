@@ -1,6 +1,6 @@
 import React from 'react';
-import NavigationBar from '../../components/NavigationBar';
-import RegisterMemberInfo from '../../components/RegisterMemberInfo';
+import NavigationBar from '../../components/layout/NavigationBar';
+import RegisterMemberInfo from './RegisterMemberInfo';
 
 export default function RegisterMemberInfoPage() {
   return (

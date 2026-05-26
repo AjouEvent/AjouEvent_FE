@@ -1,5 +1,5 @@
 import React from 'react';
-import EventDetail from '../../components/events/EventDetail';
+import EventDetail from './EventDetail';
 
 export default function EventDetailPage() {
   return (

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { clearAuth } from '../utils/auth';
-import dialog from '../utils/dialog';
-import { STORAGE_KEYS } from '../constants/appConstants';
+import { clearAuth } from '../../utils/auth';
+import dialog from '../../utils/dialog';
+import { STORAGE_KEYS } from '../../constants/appConstants';
 
 export default function TopBar() {
   const handleAlarmClick = () => {};

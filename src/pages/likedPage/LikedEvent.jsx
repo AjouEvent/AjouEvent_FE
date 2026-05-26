@@ -1,4 +1,4 @@
-import EventCard from '../../components/events/EventCard';
+import EventCard from '../../components/EventCard';
 
 const LikedEvent = ({ events, bottomRef, loading, hasMore }) => {
   return (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import NavigationBar from '../../components/NavigationBar';
+import NavigationBar from '../../components/layout/NavigationBar';
 import Swal from 'sweetalert2';
 import { getTopicSubscriptionsStatus, getUserKeywords, subscribeKeyword, unsubscribeKeyword } from '../../services/api/subscription';
 import useSubscriptionStore from '../../store/useSubscriptionStore';

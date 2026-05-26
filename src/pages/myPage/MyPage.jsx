@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavigationBar from '../../components/NavigationBar';
+import NavigationBar from '../../components/layout/NavigationBar';
 import { clearAuth } from '../../utils/auth';
 import { getUserInfo, logout } from '../../services/api/user';
 import Swal from 'sweetalert2';

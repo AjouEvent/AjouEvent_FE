@@ -1,5 +1,5 @@
 import React from 'react';
-import TabBar from '../components/TabBar';
+import TabBar from '../components/layout/TabBar';
 
 export default function GuidePage() {
   return (
