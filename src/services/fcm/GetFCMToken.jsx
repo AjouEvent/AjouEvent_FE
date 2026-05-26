@@ -1,6 +1,7 @@
 import { firebaseApp } from './firebase';
 import { getMessaging, getToken } from 'firebase/messaging';
 import { STORAGE_KEYS } from '../../constants/appConstants';
+import { registerFcmToken } from '../api/fcm';
 
 const GetFCMToken = async () => {
   try {
@@ -20,6 +21,11 @@ const GetFCMToken = async () => {
 
     if (currentToken) {
       localStorage.setItem(STORAGE_KEYS.FCM_TOKEN, currentToken);
+      try {
+        await registerFcmToken(currentToken);
+      } catch {
+        // 서버 등록 실패해도 로컬 토큰은 유지
+      }
     } else {
       console.log(
         'No registration token available. Request permission to generate one.',

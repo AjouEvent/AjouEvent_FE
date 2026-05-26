@@ -16,7 +16,7 @@ export const getAuthEventDetail = (id) =>
   api.get(`/api/event/detail/${id}`);
 
 export const getLikedEvents = (page, pageSize, keyword) =>
-  api.get(`/api/event/liked?AjouNormal&page=${page}&size=${pageSize}&keyword=${keyword}`);
+  api.get(`/api/event/liked?page=${page}&size=${pageSize}&keyword=${keyword}`);
 
 export const getEventsByCategory = (category, page, pageSize, keyword) =>
   api.get(`/api/event/${encodeURIComponent(category)}?page=${page}&size=${pageSize}&keyword=${keyword}`);

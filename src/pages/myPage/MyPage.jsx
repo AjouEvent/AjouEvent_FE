@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import NavigationBar from '../../components/NavigationBar';
 import { clearAuth } from '../../utils/auth';
-import { getUserInfo } from '../../services/api/user';
+import { getUserInfo, logout } from '../../services/api/user';
 import Swal from 'sweetalert2';
 import { STORAGE_KEYS } from '../../constants/appConstants';
 
@@ -36,9 +36,16 @@ const MyPage = () => {
     );
   };
 
-  const handleLogoutBtnClick = () => {
-    Swal.fire({ icon: 'success', title: '로그아웃 성공', text: '로그아웃 했습니다.' });
+  const handleLogoutBtnClick = async (e) => {
+    e.preventDefault();
+    try {
+      await logout();
+    } catch {
+      // 서버 오류여도 클라이언트 측 인증 정보는 제거
+    }
     clearAuth();
+    Swal.fire({ icon: 'success', title: '로그아웃 성공', text: '로그아웃 했습니다.' });
+    navigate('/login');
   };
 
   const menuItems = [
@@ -54,13 +61,12 @@ const MyPage = () => {
       <div className="bg-white px-5 pt-6 pb-5 border-b border-[#F0F2F5]">
         <div className="flex items-center justify-between mb-5">
           <h1 className="text-[#191F28] text-[20px] font-bold tracking-tight m-0">프로필</h1>
-          <Link
+          <button
             onClick={handleLogoutBtnClick}
-            to="/login"
-            className="flex items-center justify-center bg-[#F2F4F6] hover:bg-[#E5E8EB] active:bg-[#DDE0E5] rounded-xl px-3.5 py-2 text-[#6B7684] text-xs font-semibold no-underline transition-colors"
+            className="flex items-center justify-center bg-[#F2F4F6] hover:bg-[#E5E8EB] active:bg-[#DDE0E5] rounded-xl px-3.5 py-2 text-[#6B7684] text-xs font-semibold transition-colors border-0 cursor-pointer"
           >
             로그아웃
-          </Link>
+          </button>
         </div>
 
         <div className="flex items-center gap-4">

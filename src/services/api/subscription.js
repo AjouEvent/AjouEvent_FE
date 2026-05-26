@@ -32,3 +32,6 @@ export const resetKeywordSubscriptions = () =>
 
 export const getSubscribedTabReadStatus = () =>
   api.get('/api/subscriptions/isSubscribedTabRead');
+
+export const getAllTopics = () =>
+  api.get('/api/topic/all');

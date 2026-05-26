@@ -43,6 +43,11 @@ export const userHandlers = [
     );
   }),
 
+  // POST /api/users/logout
+  rest.post('*/api/users/logout', (req, res, ctx) => {
+    return res(ctx.text("Success"));
+  }),
+
   // POST /api/users/register
   rest.post('*/api/users/register', (req, res, ctx) => {
     return res(ctx.text("Success"));
