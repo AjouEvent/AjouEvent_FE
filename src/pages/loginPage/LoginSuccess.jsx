@@ -49,7 +49,7 @@ const LoginSuccess = () => {
             Swal.fire({ icon: 'success', title: '로그인 성공', text: '로그인이 완료되었습니다!' });
 
             if (isNewMember) {
-              navigate('/register-info', { state: { email, name } });
+              navigate('/privacy-agreement');
             } else {
               navigate('/');
             }

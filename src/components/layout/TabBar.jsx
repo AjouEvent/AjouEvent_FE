@@ -13,7 +13,7 @@ const TabBar = ({ Title, RightComponent }) => {
   };
 
   return (
-    <div className="w-full flex items-center justify-between px-4 py-3.5 bg-white border-b border-[#F0F2F5]">
+    <div className="w-full flex items-center justify-between px-4 py-1.5 bg-white border-b border-[#F0F2F5]">
       <div className="flex items-center gap-2">
         <button
           onClick={arrowBackClicked}

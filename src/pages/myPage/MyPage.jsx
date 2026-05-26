@@ -36,6 +36,13 @@ const MyPage = () => {
     );
   };
 
+  const handleTeamInfoClick = () => {
+    window.open(
+      'https://frill-cactus-d3c.notion.site/ajouevent-com-1078a120218e80f78847e9b9b8cd330a?pvs=74',
+      '_blank',
+    );
+  };
+
   const handleLogoutBtnClick = async (e) => {
     e.preventDefault();
     try {
@@ -54,6 +61,7 @@ const MyPage = () => {
     { label: '공지사항' },
     { label: '버전' },
     { label: '피드백 / 오류 제보', onClick: handleFeedBackClick },
+    { label: '팀소개', onClick: handleTeamInfoClick },
   ];
 
   return (

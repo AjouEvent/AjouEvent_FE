@@ -4,9 +4,9 @@ import Swal from 'sweetalert2';
 import { Heart } from 'lucide-react';
 import { likeEvent, unlikeEvent } from '../services/api/event';
 
-function Stat({ iconSrc, value, altText, hasKeyword }) {
+function Stat({ iconSrc, value, altText }) {
   return (
-    <div className={`flex items-center gap-1 ${hasKeyword ? 'pr-3' : ''}`}>
+    <div className="flex items-center gap-1">
       <img
         src={iconSrc}
         alt={altText}
@@ -27,7 +27,6 @@ const EventCard = ({
   likesCount,
   viewCount,
   star,
-  keyword = null,
 }) => {
   const [cardStar, setCardStar] = useState(star);
   const [likes, setLikes] = useState(likesCount);
@@ -62,68 +61,7 @@ const EventCard = ({
     navigate(`/event/${id}`);
   };
 
-  const hasKeyword = keyword != null;
   const formattedContent = content ? content.replace(/\\n/g, ' ') : '';
-
-  if (hasKeyword) {
-    return (
-      <div
-        className="flex cursor-pointer items-start gap-4 w-full py-5 border-b border-[#F5F6F8] hover:bg-[#FAFBFC] active:bg-[#F5F6F8] transition-colors px-5"
-        onClick={handleCardClick}
-      >
-        <div className="w-[90px] h-[90px] flex-shrink-0 rounded-2xl overflow-hidden bg-[#F2F4F6]">
-          <img
-            className="w-full h-full object-cover"
-            src={getSafeImageUrl(imgUrl)}
-            alt={title}
-            loading="lazy"
-          />
-        </div>
-
-        <div className="flex flex-col flex-1 gap-1.5 min-w-0">
-          <div className="flex items-center gap-1.5">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#EBF4FE] text-[#3182F6] text-[11px] font-bold">
-              <img
-                src={`${process.env.PUBLIC_URL}/icons/alarm_filled.svg`}
-                alt=""
-                className="w-3 h-3 opacity-80"
-              />
-              {keyword}
-            </span>
-          </div>
-          <div className="text-[#191F28] font-semibold text-sm leading-[1.45] line-clamp-2 break-keep">
-            {title}
-          </div>
-          <span className="inline-flex w-fit px-2 py-0.5 rounded-lg bg-[#F2F4F6] text-[11px] text-[#6B7684] font-semibold">
-            {subject}
-          </span>
-          <div className="flex items-center gap-3 mt-0.5">
-            <Stat
-              hasKeyword
-              iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/62c7bb15f5fd13739601caff1be349795102bd00b8ccfe603cd2e43498657c46?apiKey=75213697ab8e4fbfb70997e546d69efb&"
-              value={viewCount}
-              altText="조회수"
-            />
-            <Stat
-              hasKeyword
-              iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/52d95bd6c4badc487be46d013f44cd23b9800d5d1e753fb3a364bcb97b18044f?apiKey=75213697ab8e4fbfb70997e546d69efb&"
-              value={likes}
-              altText="좋아요"
-            />
-          </div>
-        </div>
-
-        <div
-          className="flex-shrink-0 w-8 h-8 flex items-center justify-center cursor-pointer rounded-xl hover:bg-[#F2F4F6] active:bg-[#E5E8EB] transition-colors"
-          onClick={handleStarClick}
-        >
-          <Heart
-            className={`w-5 h-5 transition-colors ${cardStar ? 'fill-[#FF4D6D] text-[#FF4D6D]' : 'text-[#C4C9D4]'}`}
-          />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div

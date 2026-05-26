@@ -47,7 +47,7 @@ const Login = () => {
         </div>
       )}
 
-        <div className="flex-1 w-1/2 max-w-md flex flex-col items-center justify-center gap-3">
+        <div className="flex-1 w-3/4 max-w-md flex flex-col items-center justify-center gap-3">
           <h1 className="text-[#191F28] text-3xl font-bold tracking-tight mb-2 w-full">로그인</h1>
           <p className="text-[#6B7684] text-sm leading-relaxed w-full mb-6">
             기본 로그인이{' '}

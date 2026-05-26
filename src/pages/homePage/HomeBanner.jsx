@@ -41,15 +41,15 @@ export default function HomeBanner({ images }) {
   if (!Array.isArray(images) || images.length === 0) {
     return (
       <div className="w-full px-4 pt-3 pb-1 bg-white">
-        <div className="w-full aspect-[4/3] bg-gradient-to-br from-[#F2F4F6] to-[#E5E8EB] rounded-2xl animate-pulse" />
+        <div className="w-full aspect-square md:aspect-[4/3] bg-gradient-to-br from-[#F2F4F6] to-[#E5E8EB] rounded-2xl animate-pulse" />
       </div>
     );
   }
 
   return (
-    <div className="w-full bg-white px-4 pt-3 pb-1">
+    <div className="w-full h-full bg-white px-4 pt-3 pb-1">
       <div
-        className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl shadow-sm"
+        className="relative h-full w-full aspect-square md:aspect-[4/3] overflow-hidden rounded-2xl shadow-sm"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavigationBar from '../../components/layout/NavigationBar';
+import AppHeader from '../../components/layout/AppHeader';
 import GetUserPermission from '../../services/fcm/GetUserPermission';
 import LocationBar from '../../components/layout/LocationBar';
 import HomeBanner from './HomeBanner';
 import HomeHotEvent from './HomeHotEvent';
 import DailyModal from '../../components/DailyModal';
-import HelpBox from '../../components/HelpBox';
 import { STORAGE_KEYS } from '../../constants/appConstants';
 import { getBannerImages } from '../../services/api/event';
 
@@ -102,7 +102,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="flex items-center flex-col bg-[#F9FAFB] min-h-screen">
+    <div className="h-screen flex flex-col bg-[#F9FAFB] overflow-hidden">
       {showInstallPrompt && (
         <div className="fixed z-[1000] left-0 top-0 w-full h-full flex justify-center items-center bg-black/50">
           <div className="flex flex-col items-center bg-white px-6 py-8 w-[85%] max-w-[400px] rounded-2xl shadow-lg">
@@ -159,12 +159,19 @@ export default function HomePage() {
         </div>
       )}
 
-      <div className="flex w-full overflow-x-hidden items-center flex-col pb-20">
-        <HelpBox setIsLoading={setIsLoading} />
-        <HomeBanner images={bannerImages} />
-        <LocationBar location="이번주 인기글" />
-        <HomeHotEvent />
-      </div>
+      <AppHeader />
+      <main className="flex flex-col md:flex-row flex-1 min-h-0 overflow-y-auto md:overflow-hidden">
+        <div className="w-full md:w-2/5 bg-white flex-shrink-0 md:flex-shrink md:overflow-hidden border-b md:border-b-0 md:border-r border-[#F0F2F5]">
+          <HomeBanner images={bannerImages} />
+        </div>
+        <div className="w-full md:w-3/5 bg-white flex flex-col md:overflow-hidden">
+          <LocationBar location="이번주 인기글" />
+          <div className="md:flex-1 md:overflow-y-auto md:min-h-0">
+            <HomeHotEvent />
+          </div>
+        </div>
+      </main>
+      <div className="h-16 flex-shrink-0" />
       <NavigationBar />
       {showModal && <DailyModal onClose={handleCloseModal} />}
     </div>
