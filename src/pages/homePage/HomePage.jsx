@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavigationBar from '../../components/layout/NavigationBar';
-import AppHeader from '../../components/layout/AppHeader';
+import HelpBox from '../../components/layout/HelpBox';
 import GetUserPermission from '../../services/fcm/GetUserPermission';
 import LocationBar from '../../components/layout/LocationBar';
 import HomeBanner from './HomeBanner';
@@ -159,7 +159,7 @@ export default function HomePage() {
         </div>
       )}
 
-      <AppHeader />
+      <HelpBox />
       <main className="flex flex-col md:flex-row flex-1 min-h-0 overflow-y-auto md:overflow-hidden">
         <div className="w-full md:w-2/5 bg-white flex-shrink-0 md:flex-shrink md:overflow-hidden border-b md:border-b-0 md:border-r border-[#F0F2F5]">
           <HomeBanner images={bannerImages} />

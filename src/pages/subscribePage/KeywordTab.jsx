@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import KeywordBar from './KeywordBar';
 import SearchBar from '../../components/layout/SearchBar';
-import EventCard from '../../components/EventCard';
+import EventCard, { EventCardSkeleton } from '../../components/EventCard';
 import { getPostsByKeyword } from '../../services/api/event';
 import { LIMITS } from '../../constants/appConstants';
 
@@ -69,9 +69,11 @@ export default function KeywordTab({ showGuide }) {
         ))}
       </div>
       {loading && (
-        <div className="flex justify-center items-center w-full text-sm text-[#B0B8C1] font-medium p-6">
-          로딩중...
-        </div>
+        <>
+          <EventCardSkeleton />
+          <EventCardSkeleton />
+          <EventCardSkeleton />
+        </>
       )}
       {isError && (
         <div className="flex justify-center items-center w-full text-sm text-[#F04452] font-medium p-6">

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import EventCard from '../../components/EventCard';
+import EventCard, { EventCardSkeleton } from '../../components/EventCard';
 import { getPopularEvents } from '../../services/api/event';
 
 export default function HomeHotEvent() {
@@ -29,14 +29,7 @@ export default function HomeHotEvent() {
     return (
       <div className="w-full bg-white mt-2">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="flex items-center gap-3.5 px-5 py-4 border-b border-[#F5F6F8]">
-            <div className="w-[62px] h-[62px] rounded-xl bg-[#F2F4F6] animate-pulse flex-shrink-0" />
-            <div className="flex flex-col flex-1 gap-2">
-              <div className="h-3.5 bg-[#F2F4F6] rounded-lg animate-pulse w-4/5" />
-              <div className="h-3 bg-[#F2F4F6] rounded-lg animate-pulse w-3/5" />
-              <div className="h-2.5 bg-[#F2F4F6] rounded-md animate-pulse w-1/3" />
-            </div>
-          </div>
+          <EventCardSkeleton key={i} />
         ))}
       </div>
     );

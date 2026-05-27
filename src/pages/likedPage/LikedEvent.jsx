@@ -1,4 +1,4 @@
-import EventCard from '../../components/EventCard';
+import EventCard, { EventCardSkeleton } from '../../components/EventCard';
 
 const LikedEvent = ({ events, bottomRef, loading, hasMore }) => {
   return (
@@ -18,9 +18,11 @@ const LikedEvent = ({ events, bottomRef, loading, hasMore }) => {
       ))}
       <div ref={bottomRef} style={{ height: '1px' }} />
       {loading && (
-        <div className="flex justify-center items-center w-full text-sm text-[#B0B8C1] font-medium p-6">
-          로딩중...
-        </div>
+        <>
+          <EventCardSkeleton />
+          <EventCardSkeleton />
+          <EventCardSkeleton />
+        </>
       )}
       {!loading && events.length === 0 && (
         <div className="flex justify-center items-center w-full text-sm text-[#B0B8C1] font-medium p-12">

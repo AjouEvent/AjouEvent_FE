@@ -1,14 +1,24 @@
 import React from 'react';
-import NotificationCard from './NotificationCard';
+import EventCard, { EventCardSkeleton } from '../../components/EventCard';
 import usePagination from '../../hooks/usePagination';
 
 const NotificationList = ({ apiUrl }) => {
   const { data, loading, isError, observerRef, hasNext } = usePagination(apiUrl);
 
+  if (loading && data.length === 0) {
+    return (
+      <div className="w-full">
+        <EventCardSkeleton />
+        <EventCardSkeleton />
+        <EventCardSkeleton />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full">
       {data.map((notification) => (
-        <NotificationCard key={notification.id} {...notification} />
+        <EventCard key={notification.id} {...notification} />
       ))}
       <div ref={observerRef} style={{ height: 10 }} />
       {loading && (

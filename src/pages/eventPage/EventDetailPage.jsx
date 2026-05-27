@@ -147,7 +147,7 @@ export default function EventDetailPage() {
             <p className="text-xs text-[#B0B8C1] mt-4">작성자: {event.writer}</p>
           </div>
 
-          <div className="w-full z-[5] fixed bottom-0 flex items-center bg-white/95 backdrop-blur-xl border-t border-[#F0F2F5] px-4 py-3 gap-2 shadow-[0_-4px_24px_rgba(0,0,0,0.06)]" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
+          <div className="w-full z-[5] fixed bottom-0 flex items-center bg-white/95 backdrop-blur-xl border-t border-[#F0F2F5] px-4 py-2 gap-2 shadow-[0_-4px_24px_rgba(0,0,0,0.06)]">
             <button
               onClick={handleStarClick}
               className={`w-12 h-12 flex items-center justify-center rounded-xl transition-colors flex-shrink-0 ${

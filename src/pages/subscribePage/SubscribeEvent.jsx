@@ -1,4 +1,4 @@
-import EventCard from '../../components/EventCard';
+import EventCard, { EventCardSkeleton } from '../../components/EventCard';
 
 const SubscribeEvent = ({ events, bottomRef, loading, hasMore, isError }) => {
   return (
@@ -18,9 +18,11 @@ const SubscribeEvent = ({ events, bottomRef, loading, hasMore, isError }) => {
       ))}
       <div ref={bottomRef} style={{ height: '1px' }} />
       {loading && (
-        <div className="flex justify-center items-center w-full text-sm text-[#B0B8C1] font-medium p-6">
-          로딩중...
-        </div>
+        <>
+          <EventCardSkeleton />
+          <EventCardSkeleton />
+          <EventCardSkeleton />
+        </>
       )}
       {!loading && !hasMore && events.length === 0 && (
         <div className="flex justify-center items-center w-full text-sm text-[#B0B8C1] font-medium p-12">
