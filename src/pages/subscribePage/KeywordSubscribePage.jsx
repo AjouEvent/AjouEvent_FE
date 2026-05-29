@@ -5,6 +5,12 @@ import Swal from 'sweetalert2';
 import { getTopicSubscriptionsStatus, getUserKeywords, subscribeKeyword, unsubscribeKeyword } from '../../services/api/subscription';
 import useSubscriptionStore from '../../store/useSubscriptionStore';
 import { LIMITS, STORAGE_KEYS } from '../../constants/appConstants';
+import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
+import { Badge } from '../../components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../../components/ui/dialog';
+import { ScrollArea } from '../../components/ui/scroll-area';
+import { ArrowLeft, Settings, Trash2, ChevronDown } from 'lucide-react';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -39,8 +45,9 @@ export default function KeywordSubscribePage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [openCategory, setOpenCategory] = useState(null);
+  const [closingCategory, setClosingCategory] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
   const [selectedTopic, setSelectedTopic] = useState(null);
 
@@ -74,6 +81,7 @@ export default function KeywordSubscribePage() {
       await subscribeKeyword(finalInputValue, selectedTopic.englishTopic);
       Swal.fire({ icon: 'success', title: '구독 성공', text: `${finalInputValue}를 구독하셨습니다` });
       fetchUserKeywords();
+      setSelectedTopic(null);
     } catch (error) {
       handleError(error.response);
     } finally {
@@ -108,26 +116,37 @@ export default function KeywordSubscribePage() {
   };
 
   const handleTopicSelect = (topic) => {
-    setSelectedTopic(selectedTopic === topic ? null : topic);
-    setShowModal(false);
+    setSelectedTopic(selectedTopic?.id === topic.id ? null : topic);
+    setDialogOpen(false);
   };
 
   useEffect(() => {
-    const fetchMenuItems = async () => {
+    fetchUserKeywords();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleCategoryClick = (category) => {
+    if (openCategory === category) {
+      setClosingCategory(category);
+      setTimeout(() => {
+        setOpenCategory(null);
+        setClosingCategory(null);
+      }, 150);
+    } else {
+      setOpenCategory(category);
+    }
+  };
+
+  const handleDialogOpenChange = async (open) => {
+    if (open) {
       try {
         const response = await getTopicSubscriptionsStatus();
         setMenuItems(response.data);
       } catch (error) {
         console.error('Error fetching menu items:', error);
       }
-    };
-    fetchMenuItems();
-    fetchUserKeywords();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleCategoryClick = (category) => {
-    setOpenCategory(openCategory === category ? null : category);
+    }
+    setDialogOpen(open);
   };
 
   const categorizeAndSortItems = (items) => {
@@ -140,110 +159,146 @@ export default function KeywordSubscribePage() {
   const categorizedItems = categorizeAndSortItems(menuItems);
 
   return (
-    <div className="flex items-center flex-col bg-white">
+    <div className="flex items-center flex-col bg-white min-h-screen">
       {accessToken ? (
-        <div className="flex w-full overflow-x-hidden items-center flex-col px-5 pb-20">
+        <div className="flex w-full overflow-x-hidden items-center flex-col px-5 pb-24">
+          {/* 헤더 */}
           <div className="w-full flex items-center py-4 gap-2">
-            <img
-              onClick={arrowBackClicked}
-              loading="lazy"
-              src={`${process.env.PUBLIC_URL}/icons/arrow_back.svg`}
-              alt="뒤로가기"
-              className="w-5 aspect-square object-contain cursor-pointer"
-            />
-            <div className="text-black text-lg font-bold">키워드 구독</div>
+            <button onClick={arrowBackClicked} className="p-1 rounded-lg hover:bg-[#F2F4F6] transition-colors">
+              <ArrowLeft className="w-5 h-5 text-[#333D4B]" />
+            </button>
+            <h1 className="text-[#191F28] text-lg font-bold">키워드 구독</h1>
           </div>
 
-          <div className="flex flex-col w-full mt-5">
-            <div className="flex items-center justify-between border border-[#CDCDCD] rounded px-2.5 py-2.5 mb-5">
-              <div
-                onClick={() => setShowModal(true)}
-                className="flex h-fit px-3 py-2 justify-center items-center gap-1 rounded-[600px] border-2 border-[#F5F5F5] bg-[#E0E0E0] cursor-pointer text-sm whitespace-nowrap"
-              >
-                <img src={`${process.env.PUBLIC_URL}/icons/gear.svg`} alt="gear" className="w-[18px] aspect-square object-cover" />
-                <p className="m-0">{selectedTopic ? selectedTopic.koreanTopic : '게시판 선택'}</p>
-              </div>
-              <input
-                value={inputValue}
-                onChange={handleChange}
-                placeholder="알림 받을 키워드를 입력해주세요."
-                className="flex-1 border-none outline-none text-sm py-1 px-1 w-full"
-                style={{ fontSize: 'clamp(0.7rem, 2.5vw, 1rem)' }}
-              />
-              <button
-                onClick={handleClick}
-                disabled={isProcessing}
-                className="bg-[#007bff] text-white border-none rounded-xl px-3.5 py-1.5 cursor-pointer"
-                style={{ fontSize: 'clamp(0.7rem, 2vw, 1rem)' }}
-              >
-                구독
-              </button>
-            </div>
-            {errorMessage && (
-              <div className="flex justify-start w-full text-red-500 pl-5 text-[0.8em] mb-2">
-                {errorMessage}
-              </div>
-            )}
+          <div className="flex flex-col w-full gap-4 mt-2">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
+                  <DialogTrigger asChild>
+                    <button
+                      className={`flex h-9 px-3 justify-center items-center gap-1.5 rounded-full border cursor-pointer text-sm font-semibold whitespace-nowrap transition-colors ${
+                        selectedTopic
+                          ? 'bg-[#EBF4FE] border-[#3182F6] text-[#3182F6]'
+                          : 'border-[#E5E8EB] bg-[#F2F4F6] text-[#333D4B] hover:bg-[#E5E8EB]'
+                      }`}
+                    >
+                      <Settings className="w-4 h-4 text-[#6B7684]" />
+                      <span>{selectedTopic ? selectedTopic.koreanTopic : '게시판 선택'}</span>
+                    </button>
+                  </DialogTrigger>
 
-            <div className="text-[1.4rem] font-bold mb-2.5 py-1 border-b border-[#CDCDCD]">
-              알림 설정한 키워드 {keywords.length} / {LIMITS.MAX_KEYWORDS}
-            </div>
-            <div className="flex flex-col w-full">
-              {keywords.map((item, index) => (
-                <div key={index} className="flex justify-between items-center border-b border-[#F5F5F5] py-2.5">
-                  <div className="flex flex-col">
-                    <span className="text-base flex items-center whitespace-pre-wrap">
-                      {item.koreanKeyword}
-                      <span className="bg-[#f1f1f1] px-2.5 py-1 rounded-xl text-[0.9rem] ml-2">
-                        {item.topicName}
-                      </span>
-                    </span>
-                  </div>
-                  <span onClick={() => handleDeleteKeyword(item)} className="cursor-pointer text-red-500">
-                    🗑️
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
+                  <DialogContent className="h-[80vh] flex flex-col p-0 gap-0 overflow-hidden">
+                    <DialogHeader className="px-5 py-4 border-b border-[#F0F2F5] flex-shrink-0">
+                      <DialogTitle className="text-[#191F28] text-lg font-bold tracking-tight">
+                        게시판 선택
+                      </DialogTitle>
+                    </DialogHeader>
 
-          {showModal && (
-            <>
-              <div onClick={() => setShowModal(false)} className="fixed top-0 left-0 w-full h-full bg-black/50 z-[1000]" />
-              <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-[10px] overflow-y-auto p-6 z-[1001] w-[90%] h-[80%]">
-                <div className="w-full flex items-center pb-4 gap-2">
-                  <img src={`${process.env.PUBLIC_URL}/icons/arrow_back.svg`} alt="back" className="w-5 aspect-square object-contain cursor-pointer" onClick={() => setShowModal(false)} />
-                  <h1 className="text-black text-lg font-bold tracking-[-0.2px] m-0">전체 구독 항목</h1>
-                </div>
-                {Object.keys(categorizedItems).map((category) => (
-                  <div key={category}>
-                    <h2 className="text-3xl font-bold mt-10 pb-2.5 border-b border-[#E0E0E0] flex justify-between items-center cursor-pointer" onClick={() => handleCategoryClick(category)}>
-                      {category}
-                      <img src={openCategory === category ? `${process.env.PUBLIC_URL}/icons/arrow_down.svg` : `${process.env.PUBLIC_URL}/icons/arrow_right.svg`} alt="arrow" className="w-6 h-6" />
-                    </h2>
-                    {openCategory === category && categorizedItems[category].map((item) => (
-                      <div key={item.id} className="flex justify-between items-center py-2.5 border-b border-[#E0E0E0] font-semibold">
-                        <div>{item.koreanTopic}</div>
-                        <button
-                          onClick={() => handleTopicSelect(item)}
-                          className={`border border-[#CDCDCD] rounded px-4 py-2 m-1 cursor-pointer ${selectedTopic === item ? 'bg-[#d3d3d3]' : 'bg-white'}`}
-                          style={{ fontSize: 'clamp(0.7rem, 2vw, 1rem)' }}
-                        >
-                          {selectedTopic === item ? '선택 해제' : '선택'}
-                        </button>
+                    <ScrollArea className="flex-1">
+                      <div className="px-5 py-2">
+                        {Object.keys(categorizedItems).map((category) => (
+                          <div key={category} className="mb-1">
+                            <button
+                              className="w-full text-left text-base font-bold py-3.5 border-b border-[#E5E8EB] flex justify-between items-center cursor-pointer bg-transparent text-[#191F28]"
+                              onClick={() => handleCategoryClick(category)}
+                            >
+                              <span>{category}</span>
+                              <ChevronDown className={`w-5 h-5 text-[#8B95A1] transition-transform duration-200 ${
+                                openCategory === category ? 'rotate-0' : '-rotate-90'
+                              }`} />
+                            </button>
+                            {(openCategory === category || closingCategory === category) && (
+                              <div className={closingCategory === category ? 'animate-accordion-up' : 'animate-accordion-down'}>
+                                {categorizedItems[category].map((item) => {
+                                  const isSelected = selectedTopic?.id === item.id;
+                                  return (
+                                    <div
+                                      key={item.id}
+                                      className="flex justify-between items-center py-3 border-b border-[#F2F4F6]"
+                                    >
+                                      <span className="text-[#333D4B] text-sm font-medium">{item.koreanTopic}</span>
+                                      <button
+                                        onClick={() => handleTopicSelect(item)}
+                                        className={`px-4 py-2 text-xs font-semibold rounded-xl border-none cursor-pointer transition-colors ${
+                                          isSelected
+                                            ? 'bg-[#EBF4FE] text-[#3182F6] hover:bg-[#D6ECFE]'
+                                            : 'bg-[#3182F6] text-white hover:bg-[#1B6EE8]'
+                                        }`}
+                                      >
+                                        {isSelected ? '선택 해제' : '선택'}
+                                      </button>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                ))}
+                    </ScrollArea>
+                  </DialogContent>
+                </Dialog>
+
+                <Input
+                  value={inputValue}
+                  onChange={handleChange}
+                  placeholder="알림 받을 키워드를 입력해주세요."
+                  className="flex-1 h-10 text-sm"
+                />
+                <Button
+                  onClick={handleClick}
+                  disabled={isProcessing}
+                  size="sm"
+                  className="shrink-0 rounded-xl h-10"
+                >
+                  구독
+                </Button>
               </div>
-            </>
-          )}
+              {errorMessage && (
+                <p className="text-xs text-[#F04452] pl-1">{errorMessage}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between py-2 border-b border-[#E5E8EB]">
+                <span className="text-base font-bold text-[#191F28]">알림 설정한 키워드</span>
+                <Badge variant="outline" className="text-xs">
+                  {keywords.length} / {LIMITS.MAX_KEYWORDS}
+                </Badge>
+              </div>
+
+              {keywords.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-12 gap-2 text-[#B0B8C1]">
+                  <p className="text-sm">구독한 키워드가 없습니다.</p>
+                  <p className="text-xs">게시판을 선택하고 키워드를 추가해보세요.</p>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2 pt-1">
+                  {keywords.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center bg-[#F8F9FA] rounded-xl px-4 py-3.5">
+                      <div className="flex flex-col gap-1">
+                        <span className="text-base font-bold text-[#191F28]">{item.koreanKeyword}</span>
+                        <Badge variant="secondary" className="w-fit text-xs">{item.topicName}</Badge>
+                      </div>
+                      <button
+                        onClick={() => handleDeleteKeyword(item)}
+                        disabled={isProcessing}
+                        className="p-2 rounded-lg hover:bg-[#FFE8EA] transition-colors disabled:opacity-50"
+                      >
+                        <Trash2 className="w-4 h-4 text-[#F04452]" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       ) : (
-        <div className="flex items-center justify-center flex-col bg-white h-screen">
-          <p>로그인이 필요한 서비스입니다</p>
-          <Link to="/login" className="flex flex-wrap items-center justify-center bg-white rounded-lg border border-gray-400 w-24 h-[1.4rem] text-black text-sm no-underline mx-4">
-            로그인
+        <div className="flex items-center justify-center flex-col bg-white h-screen gap-3">
+          <p className="text-sm text-[#6B7684]">로그인이 필요한 서비스입니다</p>
+          <Link to="/login">
+            <Button variant="outline" size="sm">로그인</Button>
           </Link>
         </div>
       )}

@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import { getTopicSubscriptionsStatus, subscribeTopic } from '../../services/api/subscription';
 import SubscribeStatusDropdown from './SubscribeStatusDropdown';
 import { LIMITS } from '../../constants/appConstants';
-import { Settings, ChevronDown, ChevronRight } from 'lucide-react';
+import { Settings, ChevronDown } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -39,6 +39,7 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
   const [showModal, setShowModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [openCategory, setOpenCategory] = useState(null);
+  const [closingCategory, setClosingCategory] = useState(null);
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [ringingTopics, setRingingTopics] = useState({});
 
@@ -54,7 +55,15 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
   };
 
   const handleCategoryClick = (category) => {
-    setOpenCategory(openCategory === category ? null : category);
+    if (openCategory === category) {
+      setClosingCategory(category);
+      setTimeout(() => {
+        setOpenCategory(null);
+        setClosingCategory(null);
+      }, 150);
+    } else {
+      setOpenCategory(category);
+    }
   };
 
   const fetchMenuItems = async () => {
@@ -151,37 +160,38 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
                       onClick={() => handleCategoryClick(category)}
                     >
                       <span>{category}</span>
-                      {openCategory === category ? (
-                        <ChevronDown className="w-5 h-5 text-[#8B95A1]" />
-                      ) : (
-                        <ChevronRight className="w-5 h-5 text-[#8B95A1]" />
-                      )}
+                      <ChevronDown className={`w-5 h-5 text-[#8B95A1] transition-transform duration-200 ${
+                        openCategory === category ? 'rotate-0' : '-rotate-90'
+                      }`} />
                     </button>
-                    {openCategory === category &&
-                      categorizedItems[category].map((item) => (
-                        <div
-                          key={item.id}
-                          className="flex justify-between items-center py-3 border-b border-[#F2F4F6]"
-                        >
-                          <span className="text-[#333D4B] text-sm font-medium">{item.koreanTopic}</span>
-                          <div>
-                            {item.subscribed ? (
-                              <SubscribeStatusDropdown
-                                topic={item}
-                                fetchMenuItems={fetchMenuItems}
-                                ringing={ringingTopics[item.id]}
-                              />
-                            ) : (
-                              <button
-                                onClick={() => handleSubscribe(item)}
-                                className="px-4 py-2 bg-[#3182F6] hover:bg-[#1B6EE8] text-white text-xs font-semibold rounded-xl border-none cursor-pointer transition-colors"
-                              >
-                                구독
-                              </button>
-                            )}
+                    {(openCategory === category || closingCategory === category) && (
+                      <div className={closingCategory === category ? 'animate-accordion-up' : 'animate-accordion-down'}>
+                        {categorizedItems[category].map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex justify-between items-center py-3 border-b border-[#F2F4F6]"
+                          >
+                            <span className="text-[#333D4B] text-sm font-medium">{item.koreanTopic}</span>
+                            <div>
+                              {item.subscribed ? (
+                                <SubscribeStatusDropdown
+                                  topic={item}
+                                  fetchMenuItems={fetchMenuItems}
+                                  ringing={ringingTopics[item.id]}
+                                />
+                              ) : (
+                                <button
+                                  onClick={() => handleSubscribe(item)}
+                                  className="px-4 py-2 bg-[#3182F6] hover:bg-[#1B6EE8] text-white text-xs font-semibold rounded-xl border-none cursor-pointer transition-colors"
+                                >
+                                  구독
+                                </button>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

@@ -58,6 +58,30 @@ module.exports = {
           'blue-light': '#EBF4FE',
         },
       },
+      keyframes: {
+        'dropdown-in': {
+          '0%': { opacity: '0', transform: 'scale(0.95) translateY(-4px)' },
+          '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
+        },
+        'dropdown-out': {
+          '0%': { opacity: '1', transform: 'scale(1) translateY(0)' },
+          '100%': { opacity: '0', transform: 'scale(0.95) translateY(-4px)' },
+        },
+        'accordion-down': {
+          '0%': { opacity: '0', transform: 'translateY(-6px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'accordion-up': {
+          '0%': { opacity: '1', transform: 'translateY(0)' },
+          '100%': { opacity: '0', transform: 'translateY(-6px)' },
+        },
+      },
+      animation: {
+        'dropdown-in': 'dropdown-in 0.15s ease-out',
+        'dropdown-out': 'dropdown-out 0.12s ease-in forwards',
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.15s ease-in forwards',
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',

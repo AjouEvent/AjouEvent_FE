@@ -5,16 +5,28 @@ import { Bell, BellOff, BellMinus, ChevronDown, Check } from 'lucide-react';
 
 export default function SubscribeStatusDropdown({ topic, fetchMenuItems, ringing }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
-  const toggleDropdown = () => setIsOpen(!isOpen);
+  const closeDropdown = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsOpen(false);
+      setIsClosing(false);
+    }, 120);
+  };
+
+  const toggleDropdown = () => {
+    if (isOpen) closeDropdown();
+    else setIsOpen(true);
+  };
 
   const handleOptionChange = async (option) => {
+    closeDropdown();
     if (option === 'unsubscribe') {
       await handleUnsubscribe();
     } else {
       await updateNotificationPreference(option === 'all');
     }
-    setIsOpen(false);
   };
 
   const updateNotificationPreference = async (receiveNotification) => {
@@ -57,7 +69,7 @@ export default function SubscribeStatusDropdown({ topic, fetchMenuItems, ringing
       </button>
 
       {isOpen && (
-        <ul className="absolute top-full right-0 bg-white list-none p-1.5 border border-[#E5E8EB] rounded-xl shadow-lg w-[148px] z-[100] mt-1">
+        <ul className={`absolute top-full right-0 bg-white list-none p-1.5 border border-[#E5E8EB] rounded-xl shadow-lg w-[148px] z-[100] mt-1 ${isClosing ? 'animate-dropdown-out' : 'animate-dropdown-in'}`}>
           <li
             onClick={() => !topic.receiveNotification !== false && handleOptionChange('all')}
             className={`px-3 py-2 flex justify-between items-center rounded-lg ${

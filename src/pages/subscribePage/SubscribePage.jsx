@@ -10,12 +10,15 @@ import { STORAGE_KEYS } from '../../constants/appConstants';
 export default function SubscribePage() {
   const location = useLocation();
   const { subscribeItems, subscribedKeywords, fetchSubscribedKeywords } = useSubscriptionStore();
-  const [activeTab, setActiveTab] = useState(location.state?.activeTab || 'subscribe');
+  const [activeTab, setActiveTab] = useState(
+    location.state?.activeTab || sessionStorage.getItem('subscribe_active_tab') || 'subscribe',
+  );
   const [showGuide, setShowGuide] = useState(false);
 
   const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
   useEffect(() => {
+    sessionStorage.setItem('subscribe_active_tab', activeTab);
     if (activeTab === 'subscribe') setShowGuide(subscribeItems.length === 0);
     else if (activeTab === 'keyword') setShowGuide(subscribedKeywords.length === 0);
   }, [subscribeItems, subscribedKeywords, activeTab]);
