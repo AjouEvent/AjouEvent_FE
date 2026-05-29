@@ -4,6 +4,15 @@ import Swal from 'sweetalert2';
 import { getTopicSubscriptionsStatus, subscribeTopic } from '../../services/api/subscription';
 import SubscribeStatusDropdown from './SubscribeStatusDropdown';
 import { LIMITS } from '../../constants/appConstants';
+import { Settings, ChevronDown, ChevronRight } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../../components/ui/dialog';
+import { ScrollArea } from '../../components/ui/scroll-area';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -57,9 +66,9 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
     }
   };
 
-  const handleShowModal = async () => {
-    if (!showModal) await fetchMenuItems();
-    setShowModal(!showModal);
+  const handleOpenChange = async (open) => {
+    if (open) await fetchMenuItems();
+    setShowModal(open);
   };
 
   useEffect(() => {
@@ -113,16 +122,73 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
   return (
     <div className="flex flex-col items-center justify-center w-full">
       <div className="w-full flex items-center overflow-x-auto whitespace-nowrap bg-white px-4 py-3 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleShowModal}
-            className={`flex h-9 px-3 justify-center items-center gap-1.5 rounded-full border border-[#E5E8EB] bg-[#F2F4F6] cursor-pointer text-sm font-semibold whitespace-nowrap text-[#333D4B] hover:bg-[#E5E8EB] transition-colors ${
-              showGuide ? 'ring-2 ring-[#3182F6]' : ''
-            }`}
-          >
-            <img src={`${process.env.PUBLIC_URL}/icons/gear.svg`} alt="gear" className="w-4 h-4 opacity-60" />
-            <span>구독 설정</span>
-          </button>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <Dialog open={showModal} onOpenChange={handleOpenChange}>
+            <DialogTrigger asChild>
+              <button
+                className={`flex h-9 px-3 justify-center items-center gap-1.5 rounded-full border border-[#E5E8EB] bg-[#F2F4F6] cursor-pointer text-sm font-semibold whitespace-nowrap text-[#333D4B] hover:bg-[#E5E8EB] transition-colors ${
+                  showGuide ? 'ring-2 ring-[#3182F6]' : ''
+                }`}
+              >
+                <Settings className="w-4 h-4 text-[#6B7684]" />
+                <span>구독 설정</span>
+              </button>
+            </DialogTrigger>
+
+            <DialogContent className="h-[80vh] flex flex-col p-0 gap-0 overflow-hidden">
+              <DialogHeader className="px-5 py-4 border-b border-[#F0F2F5] flex-shrink-0">
+                <DialogTitle className="text-[#191F28] text-lg font-bold tracking-tight">
+                  전체 구독 항목
+                </DialogTitle>
+              </DialogHeader>
+
+              <ScrollArea className="flex-1">
+              <div className="px-5 py-2">
+                {Object.keys(categorizedItems).map((category) => (
+                  <div key={category} className="mb-1">
+                    <button
+                      className="w-full text-left text-base font-bold py-3.5 border-b border-[#E5E8EB] flex justify-between items-center cursor-pointer bg-transparent text-[#191F28]"
+                      onClick={() => handleCategoryClick(category)}
+                    >
+                      <span>{category}</span>
+                      {openCategory === category ? (
+                        <ChevronDown className="w-5 h-5 text-[#8B95A1]" />
+                      ) : (
+                        <ChevronRight className="w-5 h-5 text-[#8B95A1]" />
+                      )}
+                    </button>
+                    {openCategory === category &&
+                      categorizedItems[category].map((item) => (
+                        <div
+                          key={item.id}
+                          className="flex justify-between items-center py-3 border-b border-[#F2F4F6]"
+                        >
+                          <span className="text-[#333D4B] text-sm font-medium">{item.koreanTopic}</span>
+                          <div>
+                            {item.subscribed ? (
+                              <SubscribeStatusDropdown
+                                topic={item}
+                                fetchMenuItems={fetchMenuItems}
+                                ringing={ringingTopics[item.id]}
+                              />
+                            ) : (
+                              <button
+                                onClick={() => handleSubscribe(item)}
+                                className="px-4 py-2 bg-[#3182F6] hover:bg-[#1B6EE8] text-white text-xs font-semibold rounded-xl border-none cursor-pointer transition-colors"
+                              >
+                                구독
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                ))}
+              </div>
+              </ScrollArea>
+            </DialogContent>
+          </Dialog>
+
           {showGuide && (
             <span className="bg-[#3182F6] text-white px-2 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap">
               클릭해서 구독하기
@@ -153,75 +219,6 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
           )}
         </div>
       </div>
-
-      {showModal && (
-        <>
-          <div
-            onClick={() => setShowModal(false)}
-            className="fixed top-0 left-0 w-full h-full bg-black/50 z-[1000]"
-          />
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl overflow-y-auto p-5 z-[1001] w-[90%] h-[80%]">
-            <div className="flex items-center gap-3 mb-5">
-              <button
-                onClick={() => setShowModal(false)}
-                className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-[#F2F4F6] transition-colors"
-              >
-                <img
-                  src={`${process.env.PUBLIC_URL}/icons/arrow_back.svg`}
-                  alt="back"
-                  className="w-5 aspect-square object-contain"
-                />
-              </button>
-              <h1 className="text-[#191F28] text-lg font-bold tracking-tight m-0">전체 구독 항목</h1>
-            </div>
-
-            {Object.keys(categorizedItems).map((category) => (
-              <div key={category} className="mb-2">
-                <button
-                  className="w-full text-left text-xl font-bold py-3 border-b border-[#E5E8EB] flex justify-between items-center cursor-pointer bg-transparent text-[#191F28]"
-                  onClick={() => handleCategoryClick(category)}
-                >
-                  {category}
-                  <img
-                    src={
-                      openCategory === category
-                        ? `${process.env.PUBLIC_URL}/icons/arrow_down.svg`
-                        : `${process.env.PUBLIC_URL}/icons/arrow_right.svg`
-                    }
-                    alt="arrow"
-                    className="w-5 h-5 opacity-50"
-                  />
-                </button>
-                {openCategory === category &&
-                  categorizedItems[category].map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex justify-between items-center py-3 border-b border-[#F2F4F6]"
-                    >
-                      <span className="text-[#333D4B] text-sm font-medium">{item.koreanTopic}</span>
-                      <div>
-                        {item.subscribed ? (
-                          <SubscribeStatusDropdown
-                            topic={item}
-                            fetchMenuItems={fetchMenuItems}
-                            ringing={ringingTopics[item.id]}
-                          />
-                        ) : (
-                          <button
-                            onClick={() => handleSubscribe(item)}
-                            className="px-4 py-2 bg-[#3182F6] hover:bg-[#1B6EE8] text-white text-xs font-semibold rounded-xl border-none cursor-pointer transition-colors"
-                          >
-                            구독
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            ))}
-          </div>
-        </>
-      )}
     </div>
   );
 };

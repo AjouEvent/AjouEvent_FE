@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SearchIcon from '../icons/SearchIcon';
+import { Search } from 'lucide-react';
 
 const SearchBar = ({
   keyword,
@@ -42,7 +42,7 @@ const SearchBar = ({
           onClick={handleSearchClick}
           className="mr-4 flex items-center justify-center w-8 h-8 rounded-lg hover:bg-[#E5E8EB] transition-colors"
         >
-          <SearchIcon />
+          <Search size={24} className="text-[#8B95A1]" />
         </button>
       </div>
     </div>

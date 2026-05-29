@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { updateTopicNotification, unsubscribeTopic } from '../../services/api/subscription';
+import { Bell, BellOff, BellMinus, ChevronDown, Check } from 'lucide-react';
 
 export default function SubscribeStatusDropdown({ topic, fetchMenuItems, ringing }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,68 +37,65 @@ export default function SubscribeStatusDropdown({ topic, fetchMenuItems, ringing
     }
   };
 
-  const bellFilter = topic.receiveNotification
-    ? 'invert(29%) sepia(97%) saturate(937%) hue-rotate(187deg) brightness(91%) contrast(90%)'
-    : 'none';
-
   return (
     <div className="relative inline-block">
       <button
         onClick={toggleDropdown}
-        className="flex items-center gap-1.5 bg-[#F5F5F5] px-3 py-1.5 border-none rounded-full cursor-pointer font-semibold"
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full cursor-pointer font-semibold text-sm border-none transition-colors ${
+          topic.receiveNotification
+            ? 'bg-[#EBF4FE] text-[#3182F6]'
+            : 'bg-[#F2F4F6] text-[#6B7684]'
+        } ${ringing ? 'animate-[ring_1s_ease-in-out]' : ''}`}
       >
-        <img
-          src={
-            topic.receiveNotification
-              ? `${process.env.PUBLIC_URL}/icons/bell_ring.svg`
-              : `${process.env.PUBLIC_URL}/icons/bell_off.svg`
-          }
-          alt="알림 상태 아이콘"
-          className={`w-[25px] h-[25px] ${ringing ? 'animate-[ring_1s_ease-in-out]' : ''}`}
-          style={{ filter: bellFilter }}
-        />
+        {topic.receiveNotification ? (
+          <Bell className="w-4 h-4" />
+        ) : (
+          <BellOff className="w-4 h-4" />
+        )}
         구독중
-        <img src={`${process.env.PUBLIC_URL}/icons/arrow_down.svg`} alt="arrow" />
+        <ChevronDown className="w-3.5 h-3.5" />
       </button>
 
       {isOpen && (
-        <ul className="absolute top-full left-0 bg-white list-none p-1.5 border border-[#CDCDCD] rounded-lg w-[130px] z-[100]">
+        <ul className="absolute top-full right-0 bg-white list-none p-1.5 border border-[#E5E8EB] rounded-xl shadow-lg w-[148px] z-[100] mt-1">
           <li
             onClick={() => !topic.receiveNotification !== false && handleOptionChange('all')}
-            className={`px-3 py-2 flex justify-between items-center ${
+            className={`px-3 py-2 flex justify-between items-center rounded-lg ${
               topic.receiveNotification === true
-                ? 'cursor-default text-[#bbb] pointer-events-none'
-                : 'cursor-pointer hover:bg-[#F5F5F5]'
+                ? 'cursor-default text-[#3182F6] bg-[#F0F7FF]'
+                : 'cursor-pointer hover:bg-[#F5F5F5] text-[#333D4B]'
             }`}
           >
-            <div className="flex items-center gap-1.5">
-              <img src={`${process.env.PUBLIC_URL}/icons/bell_ring.svg`} alt="알림 받기" className="w-4 h-4" />
+            <div className="flex items-center gap-2 text-sm">
+              <Bell className="w-4 h-4 flex-shrink-0" />
               알림 받기
             </div>
-            {topic.receiveNotification === true && <span className="text-[#0072CE] font-bold">✔</span>}
+            {topic.receiveNotification === true && (
+              <Check className="w-3.5 h-3.5 text-[#3182F6] flex-shrink-0" />
+            )}
           </li>
           <li
             onClick={() => topic.receiveNotification !== false && handleOptionChange('none')}
-            className={`px-3 py-2 flex justify-between items-center ${
+            className={`px-3 py-2 flex justify-between items-center rounded-lg ${
               topic.receiveNotification === false
-                ? 'cursor-default text-[#bbb] pointer-events-none'
-                : 'cursor-pointer hover:bg-[#F5F5F5]'
+                ? 'cursor-default text-[#3182F6] bg-[#F0F7FF]'
+                : 'cursor-pointer hover:bg-[#F5F5F5] text-[#333D4B]'
             }`}
           >
-            <div className="flex items-center gap-1.5">
-              <img src={`${process.env.PUBLIC_URL}/icons/bell_off.svg`} alt="알림 없음" className="w-4 h-4" />
+            <div className="flex items-center gap-2 text-sm">
+              <BellOff className="w-4 h-4 flex-shrink-0" />
               알림 없음
             </div>
-            {topic.receiveNotification === false && <span className="text-[#0072CE] font-bold">✔</span>}
+            {topic.receiveNotification === false && (
+              <Check className="w-3.5 h-3.5 text-[#3182F6] flex-shrink-0" />
+            )}
           </li>
           <li
             onClick={() => handleOptionChange('unsubscribe')}
-            className="px-3 py-2 flex justify-between items-center cursor-pointer hover:bg-[#F5F5F5]"
+            className="px-3 py-2 flex items-center gap-2 rounded-lg cursor-pointer hover:bg-[#FFF0F0] text-[#F04452] text-sm"
           >
-            <div className="flex items-center gap-1.5">
-              <img src={`${process.env.PUBLIC_URL}/icons/bell_minus.svg`} alt="구독 취소" className="w-4 h-4" />
-              구독 취소
-            </div>
+            <BellMinus className="w-4 h-4 flex-shrink-0" />
+            구독 취소
           </li>
         </ul>
       )}
