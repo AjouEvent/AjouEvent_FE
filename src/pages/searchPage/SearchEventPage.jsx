@@ -5,7 +5,7 @@ import SearchBar from '../../components/layout/SearchBar';
 import useUIStore from '../../store/useUIStore';
 import { KtoECodes } from '../../constants/departmentCodes';
 import LocationBar from '../../components/layout/LocationBar';
-import SearchEvent from './SearchEvent';
+import EventCard, { EventCardSkeleton } from '../../components/EventCard';
 import { LIMITS } from '../../constants/appConstants';
 import { getEventsByCategory } from '../../services/api/event';
 
@@ -107,13 +107,39 @@ export default function SearchEventPage() {
           />
         </div>
         <div className="w-full bg-white mt-1.5 border-t border-[#F0F2F5]">
-          <SearchEvent
-            events={events}
-            bottomRef={bottomRef}
-            loading={loading}
-            hasMore={hasMore}
-            isError={isError}
-          />
+          <div className="w-full">
+            {events.map((event, index) => (
+              <EventCard
+                key={`${event.eventId}-${index}`}
+                id={event.eventId}
+                title={event.title}
+                subject={event.subject}
+                content={event.content}
+                imgUrl={event.imgUrl}
+                likesCount={event.likesCount}
+                viewCount={event.viewCount}
+                star={event.star}
+              />
+            ))}
+            <div ref={bottomRef} style={{ height: '1px' }} />
+            {loading && (
+              <>
+                <EventCardSkeleton />
+                <EventCardSkeleton />
+                <EventCardSkeleton />
+              </>
+            )}
+            {!loading && !hasMore && events.length === 0 && (
+              <div className="flex justify-center items-center w-full text-sm text-[#B0B8C1] font-medium p-12">
+                더 이상 불러올 이벤트가 없습니다.
+              </div>
+            )}
+            {isError && (
+              <div className="flex justify-center items-center w-full text-sm text-[#F04452] font-medium p-6">
+                서버 에러
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <NavigationBar />

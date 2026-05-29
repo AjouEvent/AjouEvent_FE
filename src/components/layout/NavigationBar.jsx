@@ -52,6 +52,10 @@ function NavigationBar() {
   const [shouldShowPWAPrompt, setShouldShowPWAPrompt] = useState(false);
 
   useEffect(() => {
+    fetchMemberStatus();
+  }, [fetchMemberStatus]);
+
+  useEffect(() => {
     const isDeviceIOS =
       /iPad|iPhone|iPod/.test(window.navigator.userAgent) && !window.MSStream;
     setIsIOS(isDeviceIOS);

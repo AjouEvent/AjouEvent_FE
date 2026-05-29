@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
-import LikedEvent from './LikedEvent';
+import EventCard, { EventCardSkeleton } from '../../components/EventCard';
 import NavigationBar from '../../components/layout/NavigationBar';
 import SearchBar from '../../components/layout/SearchBar';
 import LocationBar from '../../components/layout/LocationBar';
@@ -72,7 +72,34 @@ export default function LikedEventPage() {
               fetchData={fetchData}
             />
           </div>
-          <LikedEvent events={events} bottomRef={bottomRef} loading={loading} hasMore={hasMore} />
+          <div className="w-full bg-white mt-2">
+            {events.map((event, index) => (
+              <EventCard
+                key={`${event.eventId}-${index}`}
+                id={event.eventId}
+                title={event.title}
+                subject={event.subject}
+                content={event.content}
+                imgUrl={event.imgUrl}
+                likesCount={event.likesCount}
+                viewCount={event.viewCount}
+                star={event.star}
+              />
+            ))}
+            <div ref={bottomRef} style={{ height: '1px' }} />
+            {loading && (
+              <>
+                <EventCardSkeleton />
+                <EventCardSkeleton />
+                <EventCardSkeleton />
+              </>
+            )}
+            {!loading && events.length === 0 && (
+              <div className="flex justify-center items-center w-full text-sm text-[#B0B8C1] font-medium p-12">
+                불러올 이벤트가 없습니다.
+              </div>
+            )}
+          </div>
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center min-h-screen gap-4">
