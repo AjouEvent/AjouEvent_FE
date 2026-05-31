@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavigationBar from '../../components/layout/NavigationBar';
+import LocationBar from '../../components/layout/LocationBar';
 import { clearAuth } from '../../utils/auth';
 import { getUserInfo, logout } from '../../services/api/user';
 import Swal from 'sweetalert2';
@@ -66,17 +67,19 @@ const MyPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F5F6F8] pb-20">
-      <div className="bg-white px-5 pt-6 pb-5 border-b border-[#F0F2F5]">
-        <div className="flex items-center justify-between mb-5">
-          <h1 className="text-[#191F28] text-[20px] font-bold tracking-tight m-0">프로필</h1>
+      <div className="flex bg-white">
+        <LocationBar  location="프로필"  />
+        <div className="flex items-center justify-end bg-white">
           <button
             onClick={handleLogoutBtnClick}
             className="flex items-center justify-center bg-[#F2F4F6] hover:bg-[#E5E8EB] active:bg-[#DDE0E5] rounded-xl px-3.5 py-2 text-[#6B7684] text-xs font-semibold transition-colors border-0 cursor-pointer"
-          >
+            >
             로그아웃
           </button>
         </div>
+      </div>
 
+      <div className="bg-white px-5 pt-6 pb-5 border-b border-[#F0F2F5]">
         <div className="flex items-center gap-4">
           <div className="relative">
             <div className="w-[60px] h-[60px] rounded-2xl bg-gradient-to-br from-[#3182F6] to-[#1B6EE8] flex items-center justify-center text-white text-2xl font-bold flex-shrink-0 shadow-md">

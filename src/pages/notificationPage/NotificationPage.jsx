@@ -30,7 +30,7 @@ const NotificationPage = () => {
         RightComponent={
           <button
             onClick={handleReadAllNotifications}
-            className="border border-[#D5E2F2] text-[#003876] bg-[#EEF3FA] hover:bg-[#D5E2F2] active:bg-[#C0D5EC] px-3.5 py-1.5 text-xs font-bold rounded-xl cursor-pointer transition-colors border-0"
+            className="border border-[#D5E2F2] text-[#003876] bg-[#EEF3FA] hover:bg-[#D5E2F2] active:bg-[#C0D5EC] px-3.5 py-1.5 text-xs font-bold rounded-xl cursor-pointer transition-colors"
           >
             모두 읽음
           </button>
