@@ -2,8 +2,10 @@ import React, { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RouteChangeTracker from './RouteChangeTracker';
 import { Analytics } from '@vercel/analytics/react';
+
 import useNotificationStore from "./store/useNotificationStore";
 import useSubscriptionStore from "./store/useSubscriptionStore";
+
 import HomePage from './pages/homePage/HomePage';
 import SearchEventPage from './pages/searchPage/SearchEventPage';
 import LoginPage from './pages/loginPage/LoginPage';
@@ -19,6 +21,8 @@ import RegisterMemberInfoPage from './pages/signupPage/RegisterMemberInfoPage';
 import PrivacyAgreementPage from './pages/signupPage/PrivacyAgreementPage';
 import NotificationPage from './pages/notificationPage/NotificationPage';
 import EventDetailPage from "./pages/eventPage/EventDetailPage";
+import VersionPage from "./pages/myPage/VersionPage";
+import FAQPage from "./pages/myPage/FAQPage";
 
 const ROUTER = createBrowserRouter([
   {
@@ -81,6 +85,14 @@ const ROUTER = createBrowserRouter([
     path: '/register-info',
     element: <RegisterMemberInfoPage />,
   },
+  {
+    path: '/version',
+    element: <VersionPage />,
+  },
+  {
+    path: '/faq',
+    element: <FAQPage />,
+  }
 ]);
 
 function App() {

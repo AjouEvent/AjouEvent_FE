@@ -32,6 +32,10 @@ const MyPage = () => {
 
   const handleEditClick = () => navigate('/profile-modification', { state: { user } });
 
+  const handleFAQClick = () => navigate('/faq');
+
+  const handleVersionClick = () => navigate('/version');
+
   const handleFeedBackClick = () => {
     window.open(
       'https://forms.gle/oDqj1sEgtjfLHzWJ9',
@@ -60,9 +64,8 @@ const MyPage = () => {
 
   const menuItems = [
     { label: '회원정보 수정', onClick: handleEditClick },
-    { label: 'FAQ' },
-    { label: '공지사항' },
-    { label: '버전' },
+    { label: 'FAQ', onClick: handleFAQClick },
+    { label: '버전 & 히스토리', onClick: handleVersionClick },
     { label: '피드백 / 오류 제보', onClick: handleFeedBackClick },
     { label: '팀소개', onClick: handleTeamInfoClick },
   ];
