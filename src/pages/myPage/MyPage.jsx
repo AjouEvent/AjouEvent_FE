@@ -6,6 +6,8 @@ import { clearAuth } from '../../utils/auth';
 import { getUserInfo, logout } from '../../services/api/user';
 import Swal from 'sweetalert2';
 import { STORAGE_KEYS } from '../../constants/appConstants';
+import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar';
+import { User } from 'lucide-react';
 
 const MyPage = () => {
   const [user, setUser] = useState({});
@@ -32,14 +34,14 @@ const MyPage = () => {
 
   const handleFeedBackClick = () => {
     window.open(
-      'https://docs.google.com/forms/d/e/1FAIpQLSfSyN05EK3L9N7DMfQlpAnrebcuIGzadeANgELlGqrdlKeeqg/viewform',
+      'https://forms.gle/oDqj1sEgtjfLHzWJ9',
       '_blank',
     );
   };
 
   const handleTeamInfoClick = () => {
     window.open(
-      'https://frill-cactus-d3c.notion.site/ajouevent-com-1078a120218e80f78847e9b9b8cd330a?pvs=74',
+      'https://lumbar-node-b36.notion.site/ajouevent-com-371a76ffc9a1808bbda6e58d2c9defca?source=copy_link',
       '_blank',
     );
   };
@@ -58,7 +60,7 @@ const MyPage = () => {
 
   const menuItems = [
     { label: '회원정보 수정', onClick: handleEditClick },
-    { label: '자주묻는질문' },
+    { label: 'FAQ' },
     { label: '공지사항' },
     { label: '버전' },
     { label: '피드백 / 오류 제보', onClick: handleFeedBackClick },
@@ -81,11 +83,12 @@ const MyPage = () => {
 
       <div className="bg-white px-5 pt-6 pb-5 border-b border-[#F0F2F5]">
         <div className="flex items-center gap-4">
-          <div className="relative">
-            <div className="w-[60px] h-[60px] rounded-2xl bg-gradient-to-br from-[#3182F6] to-[#1B6EE8] flex items-center justify-center text-white text-2xl font-bold flex-shrink-0 shadow-md">
-              {user.name ? user.name[0] : '?'}
-            </div>
-          </div>
+          <Avatar className="w-[60px] h-[60px] shadow-md flex-shrink-0">
+            <AvatarImage src={user.profileImage} alt={user.name} />
+            <AvatarFallback>
+              <User className="w-7 h-7 text-white" />
+            </AvatarFallback>
+          </Avatar>
           <div className="flex-1 min-w-0">
             <p className="text-[#191F28] font-bold text-[17px] m-0 mb-0.5 tracking-tight">{user.name || '-'}</p>
             <p className="text-[#6B7684] text-sm m-0 mb-0.5 truncate">{user.major || '-'}</p>
