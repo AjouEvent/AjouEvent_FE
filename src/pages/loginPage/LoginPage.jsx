@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import GetUserPermission from '../../services/fcm/GetUserPermission';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 import { STORAGE_KEYS } from '../../constants/appConstants';
 import NavigationBar from '../../components/layout/NavigationBar';
 
@@ -15,11 +15,7 @@ export default function LoginPage() {
   const handleGoogleButtonClicked = () => {
     const fcmToken = localStorage.getItem(STORAGE_KEYS.FCM_TOKEN);
     if (!fcmToken) {
-      Swal.fire({
-        icon: 'error',
-        title: '알림 토큰 미등록',
-        text: "'홈화면에 추가'를 통해 설치 / 알림 설정(허용)을 확인해주세요",
-      });
+      toast.error('알림 토큰 미등록', { description: "'홈화면에 추가'를 통해 설치 / 알림 설정(허용)을 확인해주세요" });
       return;
     }
     const redirectUri = `${window.location.origin}/loginSuccess`;

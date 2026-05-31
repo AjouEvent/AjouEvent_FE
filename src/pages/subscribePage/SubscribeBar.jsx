@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import useSubscriptionStore from '../../store/useSubscriptionStore';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 import { getTopicSubscriptionsStatus, subscribeTopic } from '../../services/api/subscription';
 import SubscribeStatusDropdown from './SubscribeStatusDropdown';
-import { LIMITS } from '../../constants/appConstants';
 import { Settings, ChevronDown } from 'lucide-react';
 import {
   Dialog,
@@ -13,18 +12,6 @@ import {
   DialogTrigger,
 } from '../../components/ui/dialog';
 import { ScrollArea } from '../../components/ui/scroll-area';
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'center-center',
-  showConfirmButton: false,
-  timer: LIMITS.TOAST_TIMER.MEDIUM,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer);
-    toast.addEventListener('mouseleave', Swal.resumeTimer);
-  },
-});
 
 const SubscribeBar = ({ onTopicSelect, showGuide }) => {
   const {
@@ -97,7 +84,7 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
     if (isProcessing) return;
     setIsProcessing(true);
     try {
-      Toast.fire({ icon: 'info', title: `${topic.koreanTopic} 구독 중` });
+      toast.info(`${topic.koreanTopic} 구독 중`);
       await subscribeTopic(topic.englishTopic);
       await fetchMenuItems();
       setIsTopicTabRead(false);
@@ -109,7 +96,7 @@ const SubscribeBar = ({ onTopicSelect, showGuide }) => {
         )
       );
     } catch (error) {
-      Swal.fire({ icon: 'error', title: '구독 실패', text: '서버 에러' });
+      toast.error('구독 실패', { description: '서버 에러' });
     } finally {
       setIsProcessing(false);
     }

@@ -5,7 +5,7 @@ import NavigationBar from '../../components/layout/NavigationBar';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
 import { updateMember } from '../../services/api/user';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 import { STORAGE_KEYS } from '../../constants/appConstants';
 
 export default function ProfileModificationPage() {
@@ -26,7 +26,7 @@ export default function ProfileModificationPage() {
 
   const handleSave = async () => {
     if (!name.trim()) {
-      Swal.fire({ icon: 'warning', title: '이름을 입력해주세요.' });
+      toast.warning('이름을 입력해주세요.');
       return;
     }
 
@@ -35,10 +35,10 @@ export default function ProfileModificationPage() {
       await updateMember({ name: name.trim(), major: major.trim() });
       localStorage.setItem(STORAGE_KEYS.NAME, name.trim());
       localStorage.setItem(STORAGE_KEYS.MAJOR, major.trim());
-      await Swal.fire({ icon: 'success', title: '수정 완료', text: '회원정보가 수정되었습니다.' });
+      toast.success('수정 완료', { description: '회원정보가 수정되었습니다.' });
       navigate('/mypage');
     } catch {
-      Swal.fire({ icon: 'error', title: '수정 실패', text: '회원정보 수정에 실패했습니다.' });
+      toast.error('수정 실패', { description: '회원정보 수정에 실패했습니다.' });
     } finally {
       setIsLoading(false);
     }

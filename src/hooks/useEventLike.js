@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 import { likeEvent, unlikeEvent } from '../services/api/event';
 
 const useEventLike = (eventId, initialLiked = false, initialCount = 0) => {
@@ -25,11 +25,7 @@ const useEventLike = (eventId, initialLiked = false, initialCount = 0) => {
       }
     } catch (error) {
       console.error('Error toggling like:', error);
-      Swal.fire({
-        icon: 'error',
-        title: '좋아요 에러',
-        text: '로그인이 필요한 기능입니다.',
-      });
+      toast.error('좋아요 에러', { description: '로그인이 필요한 기능입니다.' });
     }
   };
 

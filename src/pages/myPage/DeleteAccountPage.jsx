@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 import { resetTopicSubscriptions, resetKeywordSubscriptions } from '../../services/api/subscription';
 import { deleteUser } from '../../services/api/user';
 import { clearAuth } from '../../utils/auth';
@@ -21,9 +21,9 @@ export default function DeleteAccountPage() {
     try {
       await resetTopicSubscriptions();
       setIsTopicReset(true);
-      Swal.fire('성공', '구독한 토픽이 초기화되었습니다.', 'success');
+      toast.success('성공', { description: '구독한 토픽이 초기화되었습니다.' });
     } catch (error) {
-      Swal.fire('실패', '토픽 초기화에 실패했습니다.', 'error');
+      toast.error('실패', { description: '토픽 초기화에 실패했습니다.' });
     } finally {
       setIsLoadingTopic(false);
     }
@@ -34,9 +34,9 @@ export default function DeleteAccountPage() {
     try {
       await resetKeywordSubscriptions();
       setIsKeywordReset(true);
-      Swal.fire('성공', '구독한 키워드가 초기화되었습니다.', 'success');
+      toast.success('성공', { description: '구독한 키워드가 초기화되었습니다.' });
     } catch (error) {
-      Swal.fire('실패', '키워드 초기화에 실패했습니다.', 'error');
+      toast.error('실패', { description: '키워드 초기화에 실패했습니다.' });
     } finally {
       setIsLoadingKeyword(false);
     }
@@ -47,13 +47,13 @@ export default function DeleteAccountPage() {
       try {
         await deleteUser();
         clearAuth();
-        Swal.fire('탈퇴 완료', '정상적으로 탈퇴되었습니다.', 'success');
+        toast.success('탈퇴 완료', { description: '정상적으로 탈퇴되었습니다.' });
         navigate('/login');
       } catch (error) {
-        Swal.fire('실패', '탈퇴에 실패했습니다.', 'error');
+        toast.error('실패', { description: '탈퇴에 실패했습니다.' });
       }
     } else {
-      Swal.fire('알림', '모든 조건을 충족해야 탈퇴할 수 있습니다.', 'warning');
+      toast.warning('알림', { description: '모든 조건을 충족해야 탈퇴할 수 있습니다.' });
     }
   };
 

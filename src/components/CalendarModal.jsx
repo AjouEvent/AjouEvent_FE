@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 import { addEventToCalendar } from '../services/api/event';
 import {
   Dialog,
@@ -54,10 +54,10 @@ function CalendarModal({ setIsModalOpen, title, content }) {
 
     try {
       await addEventToCalendar(eventData);
-      Swal.fire({ icon: 'success', title: '구글 캘린더 등록 성공', text: '구글캘린더에 이벤트가 등록되었습니다.' });
+      toast.success('구글 캘린더 등록 성공', { description: '구글캘린더에 이벤트가 등록되었습니다.' });
       setIsModalOpen(false);
     } catch (error) {
-      Swal.fire({ icon: 'error', title: '구글 캘린더 등록 실패', text: '소셜로그인으로 로그인한 사용자만 이용가능한 서비스 입니다.' });
+      toast.error('구글 캘린더 등록 실패', { description: '소셜로그인으로 로그인한 사용자만 이용가능한 서비스 입니다.' });
       console.error('There was an error submitting the event!', error);
     }
   };

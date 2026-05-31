@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { registerInfo } from '../../services/api/user';
 import NavigationBar from '../../components/layout/NavigationBar';
@@ -29,10 +29,10 @@ export default function RegisterMemberInfoPage() {
     if (!major) { setHasError(true); return; }
     try {
       await registerInfo({ major });
-      Swal.fire({ icon: 'success', title: '학과 등록 성공', text: '구독 페이지로 이동합니다.' });
+      toast.success('학과 등록 성공', { description: '구독 페이지로 이동합니다.' });
       navigate('/subscribe', { state: { showGuide: true } });
     } catch (error) {
-      Swal.fire({ icon: 'error', title: '등록 실패', text: '학과 등록 중 문제가 발생했습니다.' });
+      toast.error('등록 실패', { description: '학과 등록 중 문제가 발생했습니다.' });
       console.error(error);
     }
   };

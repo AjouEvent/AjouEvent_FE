@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CalendarModal from '../../components/CalendarModal';
 import TabBar from '../../components/layout/TabBar';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 import EventBanner from './EventBanner';
 import ImageModal from './ImageModal';
 import { STORAGE_KEYS } from '../../constants/appConstants';
@@ -111,7 +111,7 @@ export default function EventDetailPage() {
       } catch (error) {
         console.error('Error fetching event:', error);
         if (error.response && error.response.status === 401) {
-          Swal.fire({ icon: 'error', title: '세션 만료', text: '다시 로그인 해주세요.' });
+          toast.error('세션 만료', { description: '다시 로그인 해주세요.' });
         }
       }
     };
@@ -122,7 +122,7 @@ export default function EventDetailPage() {
     if (event && event.url) {
       window.location.href = event.url;
     } else {
-      Swal.fire({ icon: 'warning', title: 'url 에러', text: '바로가기 가능한 url이 없습니다.' });
+      toast.warning('url 에러', { description: '바로가기 가능한 url이 없습니다.' });
     }
   };
 
@@ -144,7 +144,7 @@ export default function EventDetailPage() {
       }
     } catch (error) {
       console.error('Error toggling like:', error);
-      Swal.fire({ icon: 'error', title: '좋아요 에러', text: '로그인이 필요한 기능입니다.' });
+      toast.error('좋아요 에러', { description: '로그인이 필요한 기능입니다.' });
     }
   };
 

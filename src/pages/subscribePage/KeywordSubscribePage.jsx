@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import NavigationBar from '../../components/layout/NavigationBar';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 import { getTopicSubscriptionsStatus, getUserKeywords, subscribeKeyword, unsubscribeKeyword } from '../../services/api/subscription';
 import useSubscriptionStore from '../../store/useSubscriptionStore';
 import { LIMITS, STORAGE_KEYS } from '../../constants/appConstants';
@@ -12,26 +12,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { ScrollArea } from '../../components/ui/scroll-area';
 import { ArrowLeft, Settings, Trash2, ChevronDown } from 'lucide-react';
 
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'center-center',
-  showConfirmButton: false,
-  timer: LIMITS.TOAST_TIMER.MEDIUM,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer);
-    toast.addEventListener('mouseleave', Swal.resumeTimer);
-  },
-});
-
 const handleError = (error) => {
   const { status, data } = error;
   switch (status) {
-    case 409: Swal.fire({ icon: 'error', title: '이미 구독한 키워드', text: data.statusMessage }); break;
-    case 400: Swal.fire({ icon: 'error', title: '키워드 개수 초과', text: data.statusMessage }); break;
-    case 404: Swal.fire({ icon: 'error', title: '찾을 수 없음', text: data.message || '찾을 수 없는 항목입니다.' }); break;
-    case 500: Swal.fire({ icon: 'error', title: '서버 오류', text: data.message || '서버 오류가 발생했습니다.' }); break;
-    default: Swal.fire({ icon: 'error', title: '오류', text: data.message || '알 수 없는 오류가 발생했습니다.' });
+    case 409: toast.error('이미 구독한 키워드', { description: data.statusMessage }); break;
+    case 400: toast.error('키워드 개수 초과', { description: data.statusMessage }); break;
+    case 404: toast.error('찾을 수 없음', { description: data.message || '찾을 수 없는 항목입니다.' }); break;
+    case 500: toast.error('서버 오류', { description: data.message || '서버 오류가 발생했습니다.' }); break;
+    default: toast.error('오류', { description: data.message || '알 수 없는 오류가 발생했습니다.' });
   }
 };
 
@@ -67,19 +55,19 @@ export default function KeywordSubscribePage() {
     const pattern = /^[가-힣a-zA-Z\s]*$/;
     const finalInputValue = inputValue.trimEnd();
     if (!selectedTopic) {
-      Swal.fire({ icon: 'warning', title: '게시판 선택', text: '키워드를 구독하기 전에 게시판을 선택해 주세요.' });
+      toast.warning('게시판 선택', { description: '키워드를 구독하기 전에 게시판을 선택해 주세요.' });
       return;
     }
     if (finalInputValue.length < LIMITS.MIN_KEYWORD_LENGTH || !pattern.test(inputValue)) {
-      Swal.fire({ icon: 'error', title: '입력 오류', text: '2글자 이상, 한글만 입력해주세요' });
+      toast.error('입력 오류', { description: '2글자 이상, 한글만 입력해주세요' });
       setInputValue('');
       return;
     }
     setIsProcessing(true);
     try {
-      Toast.fire({ icon: 'info', title: `키워드 '${finalInputValue}' 구독 중` });
+      toast.info(`키워드 '${finalInputValue}' 구독 중`);
       await subscribeKeyword(finalInputValue, selectedTopic.englishTopic);
-      Swal.fire({ icon: 'success', title: '구독 성공', text: `${finalInputValue}를 구독하셨습니다` });
+      toast.success('구독 성공', { description: `${finalInputValue}를 구독하셨습니다` });
       fetchUserKeywords();
       setSelectedTopic(null);
     } catch (error) {
@@ -104,12 +92,12 @@ export default function KeywordSubscribePage() {
     if (isProcessing) return;
     setIsProcessing(true);
     try {
-      Toast.fire({ icon: 'info', title: `${keyword.koreanKeyword} 구독 취소 중` });
+      toast.info(`${keyword.koreanKeyword} 구독 취소 중`);
       await unsubscribeKeyword(keyword.encodedKeyword);
-      Swal.fire({ icon: 'success', title: '구독 취소 성공', text: `${keyword.koreanKeyword}를 구독 취소하셨습니다` });
+      toast.success('구독 취소 성공', { description: `${keyword.koreanKeyword}를 구독 취소하셨습니다` });
       setKeywords((prev) => prev.filter((item) => item.encodedKeyword !== keyword.encodedKeyword));
     } catch (error) {
-      Swal.fire({ icon: 'error', title: '구독 실패', text: '서버 에러' });
+      toast.error('구독 실패', { description: '서버 에러' });
     } finally {
       setIsProcessing(false);
     }

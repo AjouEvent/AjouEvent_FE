@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RouteChangeTracker from './RouteChangeTracker';
 import { Analytics } from '@vercel/analytics/react';
+import { Toaster } from './components/ui/sonner';
+import ConfirmDialog from './components/ConfirmDialog';
 
 import useNotificationStore from "./store/useNotificationStore";
 import useSubscriptionStore from "./store/useSubscriptionStore";
@@ -143,6 +145,8 @@ function App() {
         <RouteChangeTracker />
       </RouterProvider>
       <Analytics />
+      <Toaster position="top-center" richColors />
+      <ConfirmDialog />
     </div>
   );
 }

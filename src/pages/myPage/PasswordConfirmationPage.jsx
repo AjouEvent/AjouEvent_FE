@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { STORAGE_KEYS } from '../../constants/appConstants';
@@ -28,7 +28,7 @@ export default function PasswordConfirmationPage() {
     e.preventDefault();
     const fcmToken = localStorage.getItem(STORAGE_KEYS.FCM_TOKEN);
     if (!fcmToken) {
-      Swal.fire({ icon: 'error', title: '알림허용안됨', text: '홈화면의 알림아이콘을 터치해주세요' });
+      toast.error('알림허용안됨', { description: '홈화면의 알림아이콘을 터치해주세요' });
       return;
     }
     const userData = { email, password, fcmToken };
@@ -42,12 +42,12 @@ export default function PasswordConfirmationPage() {
       navigate('/profile-modification', { state: { user: response.data } });
     } catch (error) {
       if (error.response) {
-        Swal.fire({ icon: 'error', title: '로그인 실패', text: '비밀번호를 다시 확인해주세요' });
+        toast.error('로그인 실패', { description: '비밀번호를 다시 확인해주세요' });
       } else if (error.request) {
-        Swal.fire({ icon: 'warning', title: '응답없음', text: error.request });
+        toast.warning('응답없음', { description: error.request });
         navigate('/login');
       } else {
-        Swal.fire({ icon: 'warning', title: '요청 설정 에러', text: error.message });
+        toast.warning('요청 설정 에러', { description: error.message });
         navigate('/login');
       }
     }

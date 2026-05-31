@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 import { updateTopicNotification, unsubscribeTopic } from '../../services/api/subscription';
 import { Bell, BellOff, BellMinus, ChevronDown, Check } from 'lucide-react';
 
@@ -33,9 +33,9 @@ export default function SubscribeStatusDropdown({ topic, fetchMenuItems, ringing
     try {
       await updateTopicNotification(topic.englishTopic, receiveNotification);
       fetchMenuItems();
-      Swal.fire('알림 설정 변경 완료', '', 'success');
+      toast.success('알림 설정 변경 완료');
     } catch (error) {
-      Swal.fire('오류', '알림 설정 변경 실패', 'error');
+      toast.error('오류', { description: '알림 설정 변경 실패' });
     }
   };
 
@@ -43,9 +43,9 @@ export default function SubscribeStatusDropdown({ topic, fetchMenuItems, ringing
     try {
       await unsubscribeTopic(topic.englishTopic);
       fetchMenuItems();
-      Swal.fire('구독 취소 완료', `${topic.koreanTopic} 구독을 취소했습니다.`, 'success');
+      toast.success('구독 취소 완료', { description: `${topic.koreanTopic} 구독을 취소했습니다.` });
     } catch (error) {
-      Swal.fire('오류', '구독 취소 실패', 'error');
+      toast.error('오류', { description: '구독 취소 실패' });
     }
   };
 

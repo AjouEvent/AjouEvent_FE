@@ -1,20 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import { LIMITS, STORAGE_KEYS } from '../../constants/appConstants';
+import { toast } from 'sonner';
+import { STORAGE_KEYS } from '../../constants/appConstants';
 import { oauthLogin } from '../../services/api/user';
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'center-center',
-  showConfirmButton: false,
-  timer: LIMITS.TOAST_TIMER.LONG,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer);
-    toast.addEventListener('mouseleave', Swal.resumeTimer);
-  },
-});
 
 const LoginSuccess = () => {
   const navigate = useNavigate();
@@ -47,7 +35,7 @@ const LoginSuccess = () => {
             localStorage.setItem(STORAGE_KEYS.NAME, name);
             localStorage.setItem(STORAGE_KEYS.MAJOR, major);
 
-            Toast.fire({ icon: 'success', title: '로그인 성공' });
+            toast.success('로그인 성공');
 
             if (isNewMember) {
               navigate('/privacy-agreement');
@@ -59,25 +47,25 @@ const LoginSuccess = () => {
           if (error.response) {
             if (error.response.status === 400) {
               console.error('잘못된 인가 코드:', error.response.data);
-              Toast.fire({ icon: 'error', title: '로그인 실패', text: error.response.data?.message });
+              toast.error('로그인 실패', { description: error.response.data?.message });
             } else {
               console.error('응답 에러:', error.response.data);
-              Toast.fire({ icon: 'warning', title: error.response.data?.message ?? '로그인 중 오류가 발생했습니다.' });
+              toast.warning(error.response.data?.message ?? '로그인 중 오류가 발생했습니다.');
             }
             navigate('/login');
           } else if (error.request) {
             console.error('응답 없음:', error.request);
-            Toast.fire({ icon: 'warning', title: '서버 응답이 없습니다.' });
+            toast.warning('서버 응답이 없습니다.');
             navigate('/login');
           } else {
             console.error('요청 설정 에러:', error.message);
-            Toast.fire({ icon: 'warning', title: '요청 설정 에러: ' + error.message });
+            toast.warning('요청 설정 에러: ' + error.message);
             navigate('/login');
           }
         }
       } else {
         console.error('Missing URL parameters');
-        Toast.fire({ icon: 'warning', title: 'Missing URL parameters' });
+        toast.warning('Missing URL parameters');
         navigate('/login');
       }
     };

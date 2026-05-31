@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -34,7 +34,7 @@ export default function PrivacyAgreementPage() {
     if (isChecked14 && isCheckedTerms && isCheckedPrivacy) {
       navigate('/');
     } else {
-      Swal.fire({ icon: 'warning', title: '동의 필요', text: '모든 필수 항목에 동의해 주세요.' });
+      toast.warning('동의 필요', { description: '모든 필수 항목에 동의해 주세요.' });
     }
   };
 
@@ -47,7 +47,7 @@ export default function PrivacyAgreementPage() {
       setCurrentSetter(() => setter);
       setIsModalOpen(true);
     } catch (error) {
-      Swal.fire({ icon: 'error', title: '문서 로드 오류', text: '약관을 불러오는데 문제가 발생했습니다.' });
+      toast.error('문서 로드 오류', { description: '약관을 불러오는데 문제가 발생했습니다.' });
     }
   };
 

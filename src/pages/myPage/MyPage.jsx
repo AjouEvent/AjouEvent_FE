@@ -4,7 +4,7 @@ import NavigationBar from '../../components/layout/NavigationBar';
 import LocationBar from '../../components/layout/LocationBar';
 import { clearAuth } from '../../utils/auth';
 import { getUserInfo, logout } from '../../services/api/user';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 import { STORAGE_KEYS } from '../../constants/appConstants';
 import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar';
 import { User } from 'lucide-react';
@@ -58,7 +58,7 @@ const MyPage = () => {
       // 서버 오류여도 클라이언트 측 인증 정보는 제거
     }
     clearAuth();
-    Swal.fire({ icon: 'success', title: '로그아웃 성공', text: '로그아웃 했습니다.' });
+    toast.success('로그아웃 성공', { description: '로그아웃 했습니다.' });
     navigate('/login');
   };
 
