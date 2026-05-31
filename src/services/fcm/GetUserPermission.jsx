@@ -55,6 +55,7 @@ const GetUserPermission = async (setIsLoading) => {
           console.log('token already saved');
         }
       } catch {
+        setIsLoading(false);
         Toast.fire({
           icon: 'error',
           title: `알림 토큰 요청 실패`,

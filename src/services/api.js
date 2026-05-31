@@ -44,7 +44,7 @@ api.interceptors.response.use(
       } catch {
         clearAuth();
         localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-        Swal.fire({
+        await Swal.fire({
           icon: 'warning',
           title: '타임오버',
           text: '로그인 시간이 만료되어 로그아웃 되었습니다.',
