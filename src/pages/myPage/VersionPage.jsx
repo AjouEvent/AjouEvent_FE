@@ -92,25 +92,23 @@ const TYPE_TAG = {
 
 const VersionPage = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-[#F0F5FF] pb-20">
+    <div className="flex flex-col min-h-screen bg-white pb-10">
       <TabBar Title="버전 & 히스토리" />
 
-      <div className="mx-4 mt-4 rounded-2xl px-5 py-5 bg-[#3182F6] overflow-hidden relative">
-        <div className="absolute right-[-20px] top-[-20px] w-32 h-32 rounded-full bg-white opacity-5" />
-        <div className="absolute right-[30px] bottom-[-30px] w-44 h-44 rounded-full bg-white opacity-5" />
-        <p className="text-blue-200 text-xs m-0 mb-1 relative z-10">현재 버전</p>
-        <p className="text-white text-2xl font-bold m-0 relative z-10">v{APP_VERSION}</p>
-        <div className="flex gap-3 mt-3 relative z-10">
+      <div className="px-10 pt-5 pb-4 border-b border-[#F0F5FF]">
+        <p className="text-[#93C5FD] text-xs m-0 mb-1">현재 버전</p>
+        <p className="text-[#1E3A8A] text-2xl font-bold m-0">v{APP_VERSION}</p>
+        <div className="flex gap-4 mt-3">
           {[{ label: 'BE', cls: 'bg-[#1D4ED8]' }, { label: 'FE', cls: 'bg-[#60A5FA]' }, { label: 'Infra', cls: 'bg-[#BFDBFE]' }].map(({ label, cls }) => (
             <div key={label} className="flex items-center gap-1.5">
               <span className={`w-2 h-2 rounded-full flex-shrink-0 ${cls}`} />
-              <span className="text-blue-200 text-[11px]">{label}</span>
+              <span className="text-[#93C5FD] text-[11px]">{label}</span>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="mx-4 mt-3 bg-white rounded-2xl border border-[#DBEAFE] px-5 py-5">
+      <div className="px-10 pt-5">
         <div className="relative">
           <div className="absolute left-[9px] top-2 bottom-2 w-0.5 bg-[#DBEAFE]" />
 
@@ -118,13 +116,13 @@ const VersionPage = () => {
             <React.Fragment key={phase.id}>
               <div className={`flex items-start gap-4 ${pi > 0 ? 'mt-7' : ''}`}>
                 <div className="relative z-10 flex-shrink-0 mt-0.5">
-                  <div className="w-5 h-5 rounded-full bg-[#3182F6] border-[3px] border-white shadow-md shadow-blue-100 flex items-center justify-center">
+                  <div className="w-5 h-5 rounded-full bg-[#3182F6] shadow-md shadow-blue-100 flex items-center justify-center">
                     {phase.isActive && (
                       <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                     )}
                   </div>
                 </div>
-                <div className="flex-1 min-w-0 pb-2 border-b border-[#EBF3FF]">
+                <div className="flex-1 min-w-0 pb-2">
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-[#EFF6FF] text-[#3182F6] flex-shrink-0">
