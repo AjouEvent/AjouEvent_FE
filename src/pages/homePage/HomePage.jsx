@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import NavigationBar from '../../components/layout/NavigationBar';
 import HelpBox from '../../components/layout/HelpBox';
 import GetUserPermission from '../../services/fcm/GetUserPermission';
+import { registerFcmToken } from '../../services/api/fcm';
 import LocationBar from '../../components/layout/LocationBar';
 import HomeBanner from './HomeBanner';
 import HomeHotEvent from './HomeHotEvent';
@@ -22,7 +23,18 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    GetUserPermission(setIsLoading);
+    const initFCM = async () => {
+      await GetUserPermission(setIsLoading);
+      const fcmToken = localStorage.getItem(STORAGE_KEYS.FCM_TOKEN);
+      if (fcmToken) {
+        try {
+          await registerFcmToken(fcmToken);
+        } catch {
+          // 서버 등록 실패 무시
+        }
+      }
+    };
+    initFCM();
   }, []);
 
   const isKakaoTalkBrowser = () => /KAKAOTALK/i.test(navigator.userAgent);

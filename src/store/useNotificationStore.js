@@ -9,10 +9,10 @@ const useNotificationStore = create((set) => ({
   fetchUnreadNotificationCount: async () => {
     try {
       const response = await getUnreadNotificationCount();
-      set({ unreadNotificationCount: response.data.unreadNotificationCount });
+      set({ unreadNotificationCount: response.data.count });
 
       if (navigator.setAppBadge) {
-        navigator.setAppBadge(response.data.unreadNotificationCount).catch(console.error);
+        navigator.setAppBadge(response.data.count).catch(console.error);
       }
     } catch (error) {
       console.error('Error fetching unread count:', error);

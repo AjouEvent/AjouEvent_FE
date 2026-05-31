@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PWAPrompt from 'react-ios-pwa-prompt';
 import useSubscriptionStore from '../../store/useSubscriptionStore';
+import { STORAGE_KEYS } from '../../constants/appConstants';
+
+const PUBLIC_PATHS = ['/login', '/loginSuccess', '/privacy-agreement', '/signUp'];
 
 const items = [
   {
@@ -52,8 +55,11 @@ function NavigationBar() {
   const [shouldShowPWAPrompt, setShouldShowPWAPrompt] = useState(false);
 
   useEffect(() => {
-    fetchMemberStatus();
-  }, [fetchMemberStatus]);
+    const isPublicPath = PUBLIC_PATHS.some((path) => currentPath.startsWith(path));
+    if (!isPublicPath && localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)) {
+      fetchMemberStatus();
+    }
+  }, [currentPath, fetchMemberStatus]);
 
   useEffect(() => {
     const isDeviceIOS =
@@ -64,7 +70,6 @@ function NavigationBar() {
 
   const handleNavItemClick = (link) => {
     navigate(link);
-    fetchMemberStatus();
   };
 
   return (

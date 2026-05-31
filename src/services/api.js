@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import { clearAuth } from '../utils/auth';
 import { STORAGE_KEYS } from '../constants/appConstants';
 
@@ -44,14 +43,6 @@ api.interceptors.response.use(
       } catch {
         clearAuth();
         localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-        await Swal.fire({
-          icon: 'warning',
-          title: '타임오버',
-          text: '로그인 시간이 만료되어 로그아웃 되었습니다.',
-        });
-        if (window.location.pathname !== '/login') {
-          window.location.href = '/login';
-        }
         return Promise.reject(error);
       }
     }

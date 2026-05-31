@@ -46,7 +46,8 @@ const LoginSuccess = () => {
             localStorage.setItem(STORAGE_KEYS.EMAIL, email);
             localStorage.setItem(STORAGE_KEYS.NAME, name);
             localStorage.setItem(STORAGE_KEYS.MAJOR, major);
-            Swal.fire({ icon: 'success', title: '로그인 성공', text: '로그인이 완료되었습니다!' });
+
+            Toast.fire({ icon: 'success', title: '로그인 성공' });
 
             if (isNewMember) {
               navigate('/privacy-agreement');
@@ -56,21 +57,21 @@ const LoginSuccess = () => {
           }
         } catch (error) {
           if (error.response) {
-            if (error.response.status === 404) {
-              Swal.fire({ icon: 'error', title: '회원가입되지 않은 사용자', text: '회원가입 페이지로 이동합니다.' });
-              navigate('/signUp');
+            if (error.response.status === 400) {
+              console.error('잘못된 인가 코드:', error.response.data);
+              Toast.fire({ icon: 'error', title: '로그인 실패', text: error.response.data?.message });
             } else {
               console.error('응답 에러:', error.response.data);
-              Toast.fire({ icon: 'warning', title: '응답 에러:' + error.response.data });
-              navigate('/login');
+              Toast.fire({ icon: 'warning', title: error.response.data?.message ?? '로그인 중 오류가 발생했습니다.' });
             }
+            navigate('/login');
           } else if (error.request) {
             console.error('응답 없음:', error.request);
-            Toast.fire({ icon: 'warning', title: '응답 없음:' + error.request });
+            Toast.fire({ icon: 'warning', title: '서버 응답이 없습니다.' });
             navigate('/login');
           } else {
             console.error('요청 설정 에러:', error.message);
-            Toast.fire({ icon: 'warning', title: '요청 설정 에러:' + error.message });
+            Toast.fire({ icon: 'warning', title: '요청 설정 에러: ' + error.message });
             navigate('/login');
           }
         }
