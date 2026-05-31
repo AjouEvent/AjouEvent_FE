@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { addEventToCalendar } from '../services/api/event';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from './ui/dialog';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
 
 function CalendarModal({ setIsModalOpen, title, content }) {
   const currentTime = new Date();
@@ -65,85 +74,90 @@ function CalendarModal({ setIsModalOpen, title, content }) {
     if (newEndDate < startDate) setStartDate(newEndDate);
   };
 
-  const inputClass = 'w-full px-2.5 py-2.5 mb-2.5 border border-[#cdcdcd] rounded text-sm outline-none focus:border-[#0066b3] transition-colors';
-  const labelClass = 'font-semibold mb-1 text-sm';
-  const errorClass = 'text-red-500 text-[0.8rem] -mt-2 mb-2.5';
-
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen bg-black/50 flex justify-center items-center z-[1200]">
-      <div className="flex flex-col bg-white p-5 rounded-lg w-[80%] shadow-[0_2px_10px_rgba(0,0,0,0.1)]">
-        <h1 className="text-xl font-bold mb-6">이벤트 캘린더 등록</h1>
+    <Dialog open onOpenChange={(open) => !open && setIsModalOpen(false)}>
+      <DialogContent showCloseButton={false} className="w-[90%] max-w-2xl sm:max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="text-xl">이벤트 캘린더 등록</DialogTitle>
+        </DialogHeader>
 
-        <div className="flex justify-between items-end mb-1">
-          <p className={labelClass}>제목</p>
-          <button
-            onClick={() => setSummary('')}
-            className="bg-red-400 text-white px-1.5 py-0 text-[0.7rem] rounded cursor-pointer border-none mb-1"
-          >
-            초기화
-          </button>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
+            <div className="flex justify-between items-center">
+              <label className="text-sm font-semibold text-[#191F28]">제목</label>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => setSummary('')}
+                className="h-6 px-2 text-xs"
+              >
+                초기화
+              </Button>
+            </div>
+            <Input
+              type="text"
+              placeholder="제목을 입력해 주세요"
+              value={summary}
+              onChange={(e) => setSummary(e.target.value)}
+              className="border border-[#E5E8EB]"
+            />
+            {summaryError && <p className="text-red-500 text-xs">{summaryError}</p>}
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <div className="flex justify-between items-center">
+              <label className="text-sm font-semibold text-[#191F28]">내용</label>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => setDescription('')}
+                className="h-6 px-2 text-xs"
+              >
+                초기화
+              </Button>
+            </div>
+            <textarea
+              placeholder="내용을 입력해 주세요"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={4}
+              className="w-full rounded-xl bg-[#F2F4F6] px-4 py-3 text-sm text-[#191F28] font-medium placeholder:text-[#B0B8C1] focus:outline-none focus:ring-2 focus:ring-[#3182F6] resize-none transition-all border border-[#E5E8EB]"
+            />
+            {descriptionError && <p className="text-red-500 text-xs">{descriptionError}</p>}
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-semibold text-[#191F28]">시작 날짜</label>
+            <Input
+              type="datetime-local"
+              value={startDate}
+              onChange={handleStartDateChange}
+              className="border border-[#E5E8EB]"
+            />
+            {startDateError && <p className="text-red-500 text-xs">{startDateError}</p>}
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-semibold text-[#191F28]">종료 날짜</label>
+            <Input
+              type="datetime-local"
+              value={endDate}
+              onChange={handleEndDateChange}
+            />
+            {endDateError && <p className="text-red-500 text-xs">{endDateError}</p>}
+          </div>
         </div>
-        <input
-          type="text"
-          placeholder="제목을 입력해 주세요"
-          value={summary}
-          onChange={(e) => setSummary(e.target.value)}
-          className={inputClass}
-        />
-        {summaryError && <p className={errorClass}>{summaryError}</p>}
 
-        <div className="flex justify-between items-end mb-1">
-          <p className={labelClass}>내용</p>
-          <button
-            onClick={() => setDescription('')}
-            className="bg-red-400 text-white px-1.5 py-0 text-[0.7rem] rounded cursor-pointer border-none mb-1"
-          >
-            초기화
-          </button>
-        </div>
-        <textarea
-          placeholder="내용을 입력해 주세요"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className={inputClass}
-          rows={4}
-        />
-        {descriptionError && <p className={errorClass}>{descriptionError}</p>}
-
-        <p className={labelClass}>시작 날짜</p>
-        <input
-          type="datetime-local"
-          value={startDate}
-          onChange={handleStartDateChange}
-          className={inputClass}
-        />
-        {startDateError && <p className={errorClass}>{startDateError}</p>}
-
-        <p className={labelClass}>종료 날짜</p>
-        <input
-          type="datetime-local"
-          value={endDate}
-          onChange={handleEndDateChange}
-          className={inputClass}
-        />
-        {endDateError && <p className={errorClass}>{endDateError}</p>}
-
-        <div className="flex justify-between pt-5 gap-2.5 w-full">
-          <button
-            onClick={handleCancel}
-            className="w-1/2 py-2.5 px-5 border-none rounded cursor-pointer text-white bg-[#b4b4b4]"
-          >
+        <DialogFooter className="flex-row gap-2 sm:flex-row">
+          <Button variant="outline" onClick={handleCancel} className="flex-1">
             취소
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="w-1/2 py-2.5 px-5 border-none rounded cursor-pointer text-white bg-[#47bcff]"
-          >
+          </Button>
+          <Button onClick={handleSubmit} className="flex-1">
             등록
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 

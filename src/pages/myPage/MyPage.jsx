@@ -69,10 +69,10 @@ const MyPage = () => {
     <div className="flex flex-col min-h-screen bg-[#F5F6F8] pb-20">
       <div className="flex bg-white">
         <LocationBar  location="프로필"  />
-        <div className="flex items-center justify-end bg-white">
+        <div className="flex items-center justify-end bg-white px-5">
           <button
             onClick={handleLogoutBtnClick}
-            className="flex items-center justify-center bg-[#F2F4F6] hover:bg-[#E5E8EB] active:bg-[#DDE0E5] rounded-xl px-3.5 py-2 text-[#6B7684] text-xs font-semibold transition-colors border-0 cursor-pointer"
+            className="flex items-center justify-center bg-[#F2F4F6] hover:bg-[#E5E8EB] active:bg-[#DDE0E5] rounded-xl px-3.5 py-2 mt-2 text-[#6B7684] text-xs font-semibold transition-colors border-0 cursor-pointer whitespace-nowrap"
             >
             로그아웃
           </button>

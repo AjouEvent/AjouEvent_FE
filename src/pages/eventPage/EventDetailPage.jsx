@@ -29,6 +29,59 @@ const getCookie = (name) => {
   return null;
 };
 
+function EventDetailSkeleton() {
+  return (
+    <div className="w-full bg-white flex flex-col md:h-screen md:overflow-hidden">
+      <TabBar Title="공지사항" />
+
+      <div className="flex flex-col md:flex-row md:flex-1 md:overflow-hidden">
+        <div className="w-full h-[75vh] md:h-auto md:w-2/5 flex-shrink-0 bg-[#F2F4F6] animate-pulse" />
+
+        <div className="w-full md:w-3/5 flex flex-col md:overflow-hidden border-t border-[#F0F2F5] md:border-t-0 md:border-l">
+          <div className="flex-1 px-5 pt-5 pb-32 md:pb-5 space-y-3">
+            <div className="h-5 w-16 bg-[#F2F4F6] rounded-lg animate-pulse" />
+
+            <div className="space-y-2">
+              <div className="h-7 w-full bg-[#F2F4F6] rounded animate-pulse" />
+              <div className="h-7 w-3/4 bg-[#F2F4F6] rounded animate-pulse" />
+            </div>
+
+            <div className="flex items-center justify-between pt-2 pb-2">
+              <div className="h-4 w-32 bg-[#F2F4F6] rounded animate-pulse" />
+              <div className="flex gap-3">
+                <div className="h-4 w-12 bg-[#F2F4F6] rounded animate-pulse" />
+                <div className="h-4 w-12 bg-[#F2F4F6] rounded animate-pulse" />
+              </div>
+            </div>
+
+            <div className="h-px bg-[#F2F4F6]" />
+
+            <div className="space-y-2 pt-2">
+              {[100, 92, 96, 78, 88, 65, 93, 72, 85].map((w, i) => (
+                <div
+                  key={i}
+                  className="h-4 bg-[#F2F4F6] rounded animate-pulse"
+                  style={{ width: `${w}%` }}
+                />
+              ))}
+            </div>
+
+            <div className="h-3 w-28 bg-[#F2F4F6] rounded animate-pulse pt-1" />
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full z-[5] fixed md:static bottom-0 flex items-center bg-white/95 backdrop-blur-xl border-t border-[#F0F2F5] px-4 py-2 gap-2 shadow-[0_-4px_24px_rgba(0,0,0,0.06)]">
+        <div className="w-12 h-12 bg-[#F2F4F6] rounded-xl animate-pulse flex-shrink-0" />
+        <div className="flex gap-2 flex-1">
+          <div className="flex-1 h-12 bg-[#F2F4F6] rounded-xl animate-pulse" />
+          <div className="flex-1 h-12 bg-[#F2F4F6] rounded-xl animate-pulse" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function EventDetailPage() {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
@@ -96,58 +149,65 @@ export default function EventDetailPage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white">
+    <div className="w-full bg-white flex flex-col md:h-screen md:overflow-hidden">
       {event ? (
-        <div className="w-full">
+        <>
           <TabBar Title="공지사항" />
-          <EventBanner images={event.imgUrl} onImageClick={handleImageClick} />
 
-          <div className="px-5 pt-5 pb-32">
-            <span className="inline-flex px-2 py-0.5 rounded-lg bg-[#F2F4F6] text-xs text-[#6B7684] font-semibold mb-3">
-              {event.subject}
-            </span>
-            <h2 className="text-[#191F28] text-xl font-bold leading-[1.4] tracking-tight mb-3">
-              {event.title}
-            </h2>
+          <div className="flex flex-col md:flex-row md:flex-1 md:overflow-hidden">
+            <div className="w-full h-[75vh] md:h-full md:w-2/5 flex-shrink-0 bg-[#F8F9FA]">
+              <EventBanner images={event.imgUrl} onImageClick={handleImageClick} />
+            </div>
 
-            <div className="flex items-center justify-between mb-5">
-              <time className="text-[#B0B8C1] text-xs font-medium">
-                {formatDate(event.createdAt)}
-              </time>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1">
-                  <img
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/62c7bb15f5fd13739601caff1be349795102bd00b8ccfe603cd2e43498657c46?apiKey=75213697ab8e4fbfb70997e546d69efb&"
-                    alt="조회수"
-                    className="w-3 h-3 object-contain opacity-50"
-                    loading="lazy"
-                  />
-                  <span className="text-xs text-[#6B7684]">{event.viewCount}</span>
+            <div className="w-full md:w-3/5 flex flex-col md:overflow-hidden border-t border-[#F0F2F5] md:border-t-0 md:border-l">
+              <div className="flex-1 md:overflow-y-auto px-5 pt-5 pb-32 md:pb-5">
+                <span className="inline-flex px-2 py-0.5 rounded-lg bg-[#F2F4F6] text-xs text-[#6B7684] font-semibold mb-3">
+                  {event.subject}
+                </span>
+                <h2 className="text-[#191F28] text-xl font-bold leading-[1.4] tracking-tight mb-3">
+                  {event.title}
+                </h2>
+
+                <div className="flex items-center justify-between mb-5">
+                  <time className="text-[#B0B8C1] text-xs font-medium">
+                    {formatDate(event.createdAt)}
+                  </time>
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1">
+                      <img
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/62c7bb15f5fd13739601caff1be349795102bd00b8ccfe603cd2e43498657c46?apiKey=75213697ab8e4fbfb70997e546d69efb&"
+                        alt="조회수"
+                        className="w-3 h-3 object-contain opacity-50"
+                        loading="lazy"
+                      />
+                      <span className="text-xs text-[#6B7684]">{event.viewCount}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <img
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/52d95bd6c4badc487be46d013f44cd23b9800d5d1e753fb3a364bcb97b18044f?apiKey=75213697ab8e4fbfb70997e546d69efb&"
+                        alt="좋아요"
+                        className="w-3 h-3 object-contain opacity-50"
+                        loading="lazy"
+                      />
+                      <span className="text-xs text-[#6B7684]">{event.likesCount}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <img
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/52d95bd6c4badc487be46d013f44cd23b9800d5d1e753fb3a364bcb97b18044f?apiKey=75213697ab8e4fbfb70997e546d69efb&"
-                    alt="좋아요"
-                    className="w-3 h-3 object-contain opacity-50"
-                    loading="lazy"
-                  />
-                  <span className="text-xs text-[#6B7684]">{event.likesCount}</span>
+
+                <div className="h-px bg-[#F2F4F6] mb-5" />
+
+                <div className="text-[#333D4B] text-sm leading-relaxed mb-4">
+                  {content.map((line, index) => (
+                    <div key={index}>{line}</div>
+                  ))}
                 </div>
+
+                <p className="text-xs text-[#B0B8C1] mt-4">작성자: {event.writer}</p>
               </div>
             </div>
-
-            <div className="h-px bg-[#F2F4F6] mb-5" />
-
-            <div className="text-[#333D4B] text-sm leading-relaxed mb-4">
-              {content.map((line, index) => (
-                <div key={index}>{line}</div>
-              ))}
-            </div>
-
-            <p className="text-xs text-[#B0B8C1] mt-4">작성자: {event.writer}</p>
           </div>
 
-          <div className="w-full z-[5] fixed bottom-0 flex items-center bg-white/95 backdrop-blur-xl border-t border-[#F0F2F5] px-4 py-2 gap-2 shadow-[0_-4px_24px_rgba(0,0,0,0.06)]">
+          <div className="w-full z-[5] fixed md:static bottom-0 flex items-center bg-white/95 backdrop-blur-xl border-t border-[#F0F2F5] px-4 py-2 gap-2 shadow-[0_-4px_24px_rgba(0,0,0,0.06)]">
             <button
               onClick={handleStarClick}
               className={`w-12 h-12 flex items-center justify-center rounded-xl transition-colors flex-shrink-0 ${
@@ -195,11 +255,9 @@ export default function EventDetailPage() {
               content={content}
             />
           )}
-        </div>
+        </>
       ) : (
-        <div className="flex items-center justify-center min-h-screen">
-          <p className="text-[#B0B8C1] text-sm">불러오는 중...</p>
-        </div>
+        <EventDetailSkeleton />
       )}
     </div>
   );

@@ -21,18 +21,25 @@ export default function EventBanner({ images, onImageClick }) {
   if (!images || images.length === 0) return null;
 
   return (
-    <div className="flex flex-col items-center justify-center bg-white w-full h-[100vw]">
+    <div className="flex flex-col bg-white w-full h-full min-h-0">
       <div
-        className="relative w-full h-[100vw] overflow-hidden"
+        className="relative w-full flex-1 overflow-hidden min-h-0"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
         <div
           className="flex h-full transition-transform duration-300 ease-in-out"
-          style={{ transform: `translateX(-${index * 100}%)` }}
+          style={{
+            width: `${images.length * 100}%`,
+            transform: `translateX(-${(index * 100) / images.length}%)`,
+          }}
         >
           {images.map((src, idx) => (
-            <div key={idx} className="min-w-full h-full flex-shrink-0">
+            <div
+              key={idx}
+              className="h-full flex-shrink-0"
+              style={{ width: `${100 / images.length}%` }}
+            >
               <img
                 src={src}
                 alt={`Slide ${idx + 1}`}
@@ -69,8 +76,8 @@ export default function EventBanner({ images, onImageClick }) {
               onClick={() => setIndex(idx)}
               className={`rounded-full transition-all ${
                 index === idx
-                  ? 'bg-[#434a52] w-5 h-[15px] opacity-100'
-                  : 'bg-gray-400 w-2.5 h-2.5 opacity-50'
+                  ? 'bg-[#434a52] w-5 h-[10px] opacity-100'
+                  : 'bg-gray-400 w-2.5 h-1.5 opacity-50'
               }`}
             />
           ))}
