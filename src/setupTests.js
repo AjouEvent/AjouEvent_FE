@@ -81,8 +81,3 @@ Object.defineProperty(navigator, 'clearAppBadge', {
   writable: true,
   value: jest.fn(),
 });
-
-// SweetAlert2 모킹 (dialog.js 테스트 시 실제 팝업 방지)
-jest.mock('sweetalert2', () => ({
-  fire: jest.fn().mockResolvedValue({ isConfirmed: true }),
-}));

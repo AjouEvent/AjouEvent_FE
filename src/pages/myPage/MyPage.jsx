@@ -1,96 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import NavigationBar from '../../components/NavigationBar';
-import LocationBar from '../../components/LocationBar';
+import { useNavigate } from 'react-router-dom';
+import NavigationBar from '../../components/layout/NavigationBar';
+import LocationBar from '../../components/layout/LocationBar';
 import { clearAuth } from '../../utils/auth';
-import { getUserInfo } from '../../services/api/user';
-import Swal from 'sweetalert2';
-import { STORAGE_KEYS, COLORS } from '../../constants/appConstants';
-
-const AppContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: ${COLORS.WHITE};
-  height: 100vh;
-  overflow-y: hidden;
-  width: 100vw;
-  overflow-x: hidden;
-`;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-`;
-
-const UserInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: start;
-  font-family: 'Pretendard Variable', serif;
-  padding: 20px 40px 10px 40px;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-  h3 {
-    margin-bottom: 1.6rem;
-  }
-`;
-
-const LogoutBtnWapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-`;
-
-const StyledLink = styled(Link)`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border-radius: 0.5rem;
-  padding: 8px;
-  border: 1px solid #b8b8b8;
-  width: 85%;
-  height: fit-content;
-  color: gray;
-  font-size: 0.8rem;
-  text-decoration: none;
-  text-align: center;
-  font-family: 'Pretendard Variable';
-`;
-
-const MenuList = styled.ul`
-  list-style: none;
-  margin: 0;
-  padding: 20px 0;
-`;
-
-const MenuItem = styled.li`
-  border-bottom: 1px solid #eee;
-  padding: 10px 20px;
-  font-family: 'Pretendard Variable', serif;
-  font-size: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${COLORS.OFF_WHITE};
-  }
-`;
-
-const ArrowIcon = styled.span`
-  font-size: 1rem;
-  color: gray;
-`;
+import { getUserInfo, logout } from '../../services/api/user';
+import { toast } from 'sonner';
+import { STORAGE_KEYS } from '../../constants/appConstants';
+import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar';
+import { User } from 'lucide-react';
 
 const MyPage = () => {
   const [user, setUser] = useState({});
@@ -102,7 +19,6 @@ const MyPage = () => {
       navigate('/login');
       return;
     }
-
     const fetchUserInfo = async () => {
       try {
         const response = await getUserInfo();
@@ -111,70 +27,97 @@ const MyPage = () => {
         console.error(error);
       }
     };
-
     fetchUserInfo();
   }, [accessToken, navigate]);
 
-  const handleEditClick = () => {
-    navigate('/profile-modification', {
-      state: {
-        user,
-      },
-    });
-  };
+  const handleEditClick = () => navigate('/profile-modification', { state: { user } });
+
+  const handleFAQClick = () => navigate('/faq');
+
+  const handleVersionClick = () => navigate('/version');
 
   const handleFeedBackClick = () => {
     window.open(
-      'https://docs.google.com/forms/d/e/1FAIpQLSfSyN05EK3L9N7DMfQlpAnrebcuIGzadeANgELlGqrdlKeeqg/viewform',
+      'https://forms.gle/oDqj1sEgtjfLHzWJ9',
       '_blank',
     );
   };
 
-  const handleLogoutBtnClick = () => {
-    Swal.fire({
-      icon: 'success',
-      title: '로그아웃 성공',
-      text: '로그아웃 했습니다.',
-    });
-    clearAuth();
+  const handleTeamInfoClick = () => {
+    window.open(
+      'https://lumbar-node-b36.notion.site/ajouevent-com-371a76ffc9a1808bbda6e58d2c9defca?source=copy_link',
+      '_blank',
+    );
   };
 
+  const handleLogoutBtnClick = async (e) => {
+    e.preventDefault();
+    try {
+      await logout();
+    } catch {
+      // 서버 오류여도 클라이언트 측 인증 정보는 제거
+    }
+    clearAuth();
+    toast.success('로그아웃 성공', { description: '로그아웃 했습니다.' });
+    navigate('/login');
+  };
+
+  const menuItems = [
+    { label: '회원정보 수정', onClick: handleEditClick },
+    { label: 'FAQ', onClick: handleFAQClick },
+    { label: '버전 & 히스토리', onClick: handleVersionClick },
+    { label: '피드백 / 오류 제보', onClick: handleFeedBackClick },
+    { label: '팀소개', onClick: handleTeamInfoClick },
+  ];
+
   return (
-    <AppContainer>
-      <Container>
-        <LocationBar location="마이페이지" />
-        <UserInfo>
-          <h3>회원정보</h3>
-          <p>이름: {user.name}</p>
-          <p>전공: {user.major}</p>
-          <p>이메일: {user.email}</p>
-        </UserInfo>
-        <LogoutBtnWapper>
-          <StyledLink onClick={handleLogoutBtnClick} to="/login">
+    <div className="flex flex-col min-h-screen bg-[#F5F6F8] pb-20">
+      <div className="flex bg-white">
+        <LocationBar  location="프로필"  />
+        <div className="flex items-center justify-end bg-white px-5">
+          <button
+            onClick={handleLogoutBtnClick}
+            className="flex items-center justify-center bg-[#F2F4F6] hover:bg-[#E5E8EB] active:bg-[#DDE0E5] rounded-xl px-3.5 py-2 mt-2 text-[#6B7684] text-xs font-semibold transition-colors border-0 cursor-pointer whitespace-nowrap"
+            >
             로그아웃
-          </StyledLink>
-        </LogoutBtnWapper>
-        <MenuList>
-          <MenuItem onClick={handleEditClick}>
-            회원정보 수정 <ArrowIcon>›</ArrowIcon>
-          </MenuItem>
-          <MenuItem>
-            자주묻는질문 <ArrowIcon>›</ArrowIcon>
-          </MenuItem>
-          <MenuItem>
-            공지사항 <ArrowIcon>›</ArrowIcon>
-          </MenuItem>
-          <MenuItem>
-            버전 <ArrowIcon>›</ArrowIcon>
-          </MenuItem>
-          <MenuItem>
-            피드백 / 오류 제보
-            <ArrowIcon onClick={handleFeedBackClick}>›</ArrowIcon>
-          </MenuItem>
-        </MenuList>
-      </Container>
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-white px-5 pt-6 pb-5 border-b border-[#F0F2F5]">
+        <div className="flex items-center gap-4">
+          <Avatar className="w-[60px] h-[60px] shadow-md flex-shrink-0">
+            <AvatarImage src={user.profileImage} alt={user.name} />
+            <AvatarFallback>
+              <User className="w-7 h-7 text-white" />
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <p className="text-[#191F28] font-bold text-[17px] m-0 mb-0.5 tracking-tight">{user.name || '-'}</p>
+            <p className="text-[#6B7684] text-sm m-0 mb-0.5 truncate">{user.major || '-'}</p>
+            <p className="text-[#B0B8C1] text-xs m-0 truncate">{user.email || '-'}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-2 bg-white overflow-hidden border-t border-b border-[#F0F2F5]">
+        <ul className="list-none m-0 p-0">
+          {menuItems.map(({ label, onClick }, idx) => (
+            <li
+              key={label}
+              onClick={onClick}
+              className={`px-5 py-4 flex justify-between items-center cursor-pointer hover:bg-[#FAFBFC] active:bg-[#F5F6F8] transition-colors ${
+                idx < menuItems.length - 1 ? 'border-b border-[#F5F6F8]' : ''
+              }`}
+            >
+              <span className="text-[#333D4B] text-sm font-medium">{label}</span>
+              <span className="text-[#C5CDD6] text-lg font-light">›</span>
+            </li>
+          ))}
+        </ul>
+      </div>
       <NavigationBar />
-    </AppContainer>
+    </div>
   );
 };
 

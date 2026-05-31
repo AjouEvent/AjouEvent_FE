@@ -26,10 +26,7 @@ const GetFCMToken = async () => {
       );
     }
   } catch (error) {
-    console.error(
-      'An error occurred while sending the token to the server:',
-      error,
-    );
+    console.error('An error occurred while retrieving the FCM token:', error);
     throw error;
   }
 };

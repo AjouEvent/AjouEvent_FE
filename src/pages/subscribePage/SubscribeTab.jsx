@@ -1,25 +1,15 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import useUIStore from '../../store/useUIStore';
-import styled from 'styled-components';
 import SubscribeBar from './SubscribeBar';
 import SubscribeEvent from './SubscribeEvent';
 import { getEventsByCategory, getSubscribedEvents } from '../../services/api/event';
-import SearchBar from '../../components/SearchBar';
-import { COLORS, LIMITS } from '../../constants/appConstants';
-
-const AppContainer = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background-color: ${COLORS.WHITE};
-`;
+import SearchBar from '../../components/layout/SearchBar';
+import { LIMITS } from '../../constants/appConstants';
 
 export default function SubscribeTab({ showGuide }) {
   const { savedKeyword, setSavedKeyword } = useUIStore((state) => ({
     savedKeyword: state.savedKeyword,
     setSavedKeyword: state.setSavedKeyword,
-    // isTopicTabRead: state.isTopicTabRead,
-    // setIsTopicTabRead: state.setIsTopicTabRead,
   }));
 
   const [keyword, setKeyword] = useState(savedKeyword);
@@ -34,77 +24,52 @@ export default function SubscribeTab({ showGuide }) {
 
   const fetchData = useCallback(async () => {
     if (loading || !hasMore || isError) return;
-
     setLoading(true);
-
     try {
       const response = selectedTopic
         ? await getEventsByCategory(selectedTopic, page, pageSize, keyword)
         : await getSubscribedEvents(page, pageSize, keyword);
       const newEvents = response.data.result;
-
       setEvents((prevEvents) => {
         const eventIds = new Set(prevEvents.map((event) => event.eventId));
-        const filteredEvents = newEvents.filter(
-          (event) => !eventIds.has(event.eventId),
-        );
+        const filteredEvents = newEvents.filter((event) => !eventIds.has(event.eventId));
         return [...prevEvents, ...filteredEvents];
       });
-
-      if (response.data.hasNext) {
-        setPage((prevPage) => prevPage + 1);
-      } else {
-        setHasMore(false);
-      }
+      if (response.data.hasNext) setPage((prevPage) => prevPage + 1);
+      else setHasMore(false);
     } catch (error) {
       setIsError(true);
-      console.error('Error fetching events:', error);
     } finally {
       setLoading(false);
     }
   }, [loading, hasMore, isError, page, pageSize, keyword, selectedTopic]);
 
-  // Handle infinite scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !loading && hasMore) {
-          fetchData();
-        }
+        if (entries[0].isIntersecting && !loading && hasMore) fetchData();
       },
       { threshold: 1 },
     );
-
     const currentRef = bottomRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
+    if (currentRef) observer.observe(currentRef);
+    return () => { if (currentRef) observer.unobserve(currentRef); };
   }, [loading, hasMore, fetchData]);
 
   const handleTopicSelect = (topic) => {
-    if (selectedTopic === topic) {
-      setSelectedTopic(null);
-    } else {
-      setSelectedTopic(topic);
-    }
+    setSelectedTopic(selectedTopic === topic ? null : topic);
     setPage(0);
     setEvents([]);
     setHasMore(true);
   };
 
   useEffect(() => {
-    fetchData(selectedTopic); // Topic이나 페이지 변경 시 데이터 재로드
+    fetchData(selectedTopic);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTopic]);
 
   return (
-    <AppContainer>
+    <div className="flex items-center flex-col bg-white">
       <SubscribeBar onTopicSelect={handleTopicSelect} showGuide={showGuide} />
       <SearchBar
         keyword={keyword}
@@ -122,6 +87,6 @@ export default function SubscribeTab({ showGuide }) {
         hasMore={hasMore}
         isError={isError}
       />
-    </AppContainer>
+    </div>
   );
 }

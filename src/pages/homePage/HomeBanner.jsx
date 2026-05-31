@@ -1,112 +1,96 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Carousel from 'react-bootstrap/Carousel';
-import { COLORS } from '../../constants/appConstants';
-
-const BannerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: ${COLORS.WHITE};
-  height: 100vw;
-  width: 100%;
-`;
-
-const CarouselWrapper = styled.div`
-  position: relative;
-  width: 100vw;
-  height: 100vw;
-`;
-
-const StyledCarousel = styled(Carousel)`
-  .carousel-control-prev-icon,
-  .carousel-control-next-icon {
-    filter: invert(50%); /* 아이콘을 회색으로 */
-  }
-
-  .carousel-indicators {
-    position: absolute;
-    bottom: -30px; /* 배너 아래로 이동 */
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .carousel-indicators button {
-    background-color: gray; /* 비활성 인디케이터 색상 */
-    width: 10px; /* 인디케이터의 너비 */
-    height: 10px; /* 인디케이터의 높이 */
-    border-radius: 50%; /* 타원형으로 만들기 */
-    opacity: 0.5; /* 비활성 인디케이터의 투명도 */
-    margin: 0 4px; /* 인디케이터 간의 간격 */
-  }
-
-  .carousel-indicators .active {
-    background-color: #434a52; /* 활성 인디케이터 색상 */
-    opacity: 1; /* 활성 인디케이터의 투명도 */
-    width: 20px; /* 활성 인디케이터의 너비 */
-    height: 15px; /* 활성 인디케이터의 높이 */
-    border-radius: 50px; /* 타원형으로 만들기 */
-  }
-`;
-
-const CarouselItemImage = styled.img`
-  width: 100%;
-  height: 100vw;
-  object-fit: contain;
-  cursor: pointer;
-`;
-
-const SlideCount = styled.div`
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  background: ${COLORS.OVERLAY_BLACK};
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 14px;
-`;
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 export default function HomeBanner({ images }) {
   const [index, setIndex] = useState(0);
+  const touchStartX = useRef(null);
+  const intervalRef = useRef(null);
 
-  const handleSelect = (selectedIndex) => {
-    setIndex(selectedIndex);
+  const next = useCallback(() => {
+    setIndex((i) => (i + 1) % Math.max(images.length, 1));
+  }, [images.length]);
+
+  const prev = useCallback(() => {
+    setIndex((i) => (i - 1 + Math.max(images.length, 1)) % Math.max(images.length, 1));
+  }, [images.length]);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    intervalRef.current = setInterval(next, 3000);
+    return () => clearInterval(intervalRef.current);
+  }, [images.length, next]);
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const delta = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(delta) > 50) {
+      delta > 0 ? next() : prev();
+      clearInterval(intervalRef.current);
+      intervalRef.current = setInterval(next, 3000);
+    }
+    touchStartX.current = null;
   };
 
   const handleClick = (url) => {
     window.location.href = url;
   };
 
+  if (!Array.isArray(images) || images.length === 0) {
+    return (
+      <div className="w-full px-4 pt-3 pb-1 bg-white">
+        <div className="w-full aspect-square md:aspect-[4/3] bg-gradient-to-br from-[#F2F4F6] to-[#E5E8EB] rounded-2xl animate-pulse" />
+      </div>
+    );
+  }
+
   return (
-    <BannerContainer>
-      <CarouselWrapper>
-        <StyledCarousel
-          activeIndex={index}
-          onSelect={handleSelect}
-          controls={true} // 화살표 비활성화
-          interval={3000} // 3초마다 자동으로 넘김
-          touch={true}
-          indicators={false} // 인디케이터 비활성화
+    <div className="w-full h-full bg-white px-4 pt-3 pb-1">
+      <div
+        className="relative h-full w-full aspect-square md:aspect-[4/3] overflow-hidden rounded-2xl shadow-sm"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div
+          className="flex h-full transition-transform duration-300 ease-in-out"
+          style={{ transform: `translateX(-${index * 100}%)` }}
         >
           {images.map((image, idx) => (
-            <Carousel.Item key={idx} onClick={() => handleClick(image.siteUrl)}>
-              <CarouselItemImage src={image.imgUrl} alt={`Slide ${idx + 1}`} />
-            </Carousel.Item>
+            <div
+              key={idx}
+              className="min-w-full h-full flex-shrink-0 cursor-pointer"
+              onClick={() => handleClick(image.siteUrl)}
+            >
+              <img
+                src={image.imgUrl}
+                alt={`Slide ${idx + 1}`}
+                className="w-full h-full object-cover"
+              />
+            </div>
           ))}
-        </StyledCarousel>
-        <SlideCount>
-          {index + 1} / {images.length} {/* Current slide / Total slides */}
-        </SlideCount>
-      </CarouselWrapper>
-    </BannerContainer>
+        </div>
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none rounded-2xl" />
+
+        <div className="absolute bottom-3 right-3 bg-black/35 backdrop-blur-sm text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold">
+          {index + 1} / {images.length}
+        </div>
+
+        {images.length > 1 && (
+          <div className="absolute bottom-3.5 left-1/2 -translate-x-1/2 flex gap-1.5">
+            {images.map((_, idx) => (
+              <div
+                key={idx}
+                className={`rounded-full transition-all duration-300 ${
+                  idx === index ? 'w-5 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/50'
+                }`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

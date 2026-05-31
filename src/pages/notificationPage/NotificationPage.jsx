@@ -1,114 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import TabBar from '../../components/TabBar';
+import React, { useState } from 'react';
+import TabBar from '../../components/layout/TabBar';
 import NotificationList from './NotificationList';
-import { COLORS } from '../../constants/appConstants';
-import { getUserKeywords } from '../../services/api/subscription';
 import { readAllNotifications } from '../../services/api/notification';
 import dialog from '../../utils/dialog';
 
-const AppContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: start;
-  width: 100%;
-  min-height: 100vh;
-`;
-
-const TabContainer = styled.div`
-  display: flex;
-  width: 100%;
-  border-bottom: 1px solid rgba(239, 237, 239, 0.2);
-`;
-
-const TabButton = styled.button`
-  flex: 1;
-  padding: 16px;
-  text-align: center;
-  font-size: 1.125rem;
-  font-family: 'Pretendard Variable', serif;
-  font-weight: 600;
-  border: none;
-  background: none;
-  color: ${(props) => (props.$active ? 'black' : 'gray')};
-  cursor: pointer;
-  border-bottom: ${(props) =>
-    props.$active ? '2px solid black' : '1px solid gray'};
-  transition: color 0.3s ease-in-out;
-`;
-
-const KeywordRegistrationBanner = styled.div`
-  display: flex;
-  padding: 16px;
-  width: 100%;
-  height: 60px;
-  background-color: rgba(0, 0, 0, 0.05);
-  justify-content: space-between;
-  align-items: center;
-  font-family: 'Pretendard Variable', serif;
-  font-size: 18px;
-  font-weight: 600;
-`;
-
-const StyledButton = styled.button`
-  background-color: ${COLORS.BLUE_MEDIUM};
-  color: ${COLORS.WHITE};
-  padding: 4px 14px;
-  font-size: 16px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-family: 'Pretendard Variable', serif;
-  font-weight: 500;
-  transition: background-color 0.3s ease-in-out;
-  &:hover {
-    background-color: ${COLORS.BLUE_DARK};
-  }
-`;
-
-const MarkAllAsReadButton = styled.button`
-  background-color: ${COLORS.BLUE_MEDIUM};
-  color: ${COLORS.WHITE};
-  padding: 4px 14px;
-  font-size: 16px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-family: 'Pretendard Variable', serif;
-  font-weight: 500;
-  transition: background-color 0.3s ease-in-out;
-  &:hover {
-    background-color: ${COLORS.BLUE_DARK};
-  }
-`;
-
 const NotificationPage = () => {
-  const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState('topic');
-  const [keywordCount, setKeywordCount] = useState(0);
   const [notifications, setNotifications] = useState(0);
 
-  // 키워드 개수 가져오기
-  useEffect(() => {
-    const fetchUserKeywords = async () => {
-      try {
-        const response = await getUserKeywords();
-        setKeywordCount(response.data.length);
-      } catch (error) {
-        console.error('Error fetching user keywords:', error);
-      }
-    };
-
-    fetchUserKeywords();
-  }, []);
-
-  // 알림 모두 읽음 처리 함수 (백엔드 readAll API 호출)
   const handleReadAllNotifications = async () => {
     const confirmed = await dialog.confirm('알림 읽음 처리', '정말 모든 알림을 읽음 처리할까요?');
     if (!confirmed) return;
-
     try {
       await readAllNotifications();
       dialog.success('읽음 처리 완료', '모든 알림을 읽음 처리했습니다.');
@@ -119,49 +21,39 @@ const NotificationPage = () => {
     }
   };
 
-  // 탭 변경 핸들러
-  const handleTabChange = (tab) => {
-    setCurrentTab(tab);
-  };
-
-  // 키워드 설정 페이지 이동
-  const KeywordSettingButtonClick = () => {
-    navigate('/subscribe/keywordSubscribe');
-  };
+  const handleTabChange = (tab) => setCurrentTab(tab);
 
   return (
-    <AppContainer>
+    <div className="flex flex-col items-center justify-start w-full min-h-screen bg-surface">
       <TabBar
         Title="알림"
         RightComponent={
-          <MarkAllAsReadButton onClick={handleReadAllNotifications}>
+          <button
+            onClick={handleReadAllNotifications}
+            className="border border-[#D5E2F2] text-[#003876] bg-[#EEF3FA] hover:bg-[#D5E2F2] active:bg-[#C0D5EC] px-3.5 py-1.5 text-xs font-bold rounded-xl cursor-pointer transition-colors"
+          >
             모두 읽음
-          </MarkAllAsReadButton>
+          </button>
         }
       />
-      <TabContainer>
-        <TabButton
-          $active={currentTab === 'topic'}
-          onClick={() => handleTabChange('topic')}
-        >
-          구독
-        </TabButton>
-        <TabButton
-          $active={currentTab === 'keyword'}
-          onClick={() => handleTabChange('keyword')}
-        >
-          키워드
-        </TabButton>
-      </TabContainer>
 
-      {currentTab === 'keyword' && (
-        <KeywordRegistrationBanner>
-          <div>알림 등록한 키워드 {keywordCount}개</div>
-          <StyledButton onClick={KeywordSettingButtonClick}>
-            키워드 설정
-          </StyledButton>
-        </KeywordRegistrationBanner>
-      )}
+      <div className="flex w-full bg-white px-4 py-2.5 border-b border-[#F0F2F5]">
+        <div className="flex w-full bg-[#F2F4F6] rounded-xl p-1 gap-1">
+          {['topic', 'keyword'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => handleTabChange(tab)}
+              className={`flex-1 py-2 text-center text-sm border-none cursor-pointer transition-all rounded-lg font-semibold ${
+                currentTab === tab
+                  ? 'bg-white text-[#191F28] shadow-sm'
+                  : 'bg-transparent text-[#B0B8C1] hover:text-[#6B7684]'
+              }`}
+            >
+              {tab === 'topic' ? '구독 알림' : '키워드 알림'}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {currentTab === 'topic' ? (
         <NotificationList
@@ -174,7 +66,7 @@ const NotificationPage = () => {
           apiUrl={`${process.env.REACT_APP_BE_URL}/api/notification/keyword`}
         />
       )}
-    </AppContainer>
+    </div>
   );
 };
 

@@ -1,109 +1,41 @@
 import React, { useState } from 'react';
-import styled, { keyframes } from 'styled-components';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 import { updateTopicNotification, unsubscribeTopic } from '../../services/api/subscription';
-import { COLORS, Z_INDEX } from '../../constants/appConstants';
-
-const Wrapper = styled.div`
-  position: relative;
-  display: inline-block;
-`;
-
-const DropdownButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: ${COLORS.OFF_WHITE};
-  padding: 6px 12px;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: 600;
-`;
-
-// 떨림 애니메이션 추가
-const ring = keyframes`
-  0% { transform: rotate(0); }
-  25% { transform: rotate(-15deg); }
-  50% { transform: rotate(15deg); }
-  75% { transform: rotate(-15deg); }
-  100% { transform: rotate(0); }
-`;
-
-const BellIcon = styled.img`
-  width: 25px;  
-  height: 25px; 
-  filter: ${({ isActive }) =>
-    isActive
-      ? 'invert(29%) sepia(97%) saturate(937%) hue-rotate(187deg) brightness(91%) contrast(90%)'
-      : 'none'};
-  animation: ${({ ringing }) => (ringing ? ring : 'none')} 1s ease-in-out;
-`;
-
-const DropdownMenu = styled.ul`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: white;
-  list-style: none;
-  padding: 6px 0;
-  border: 1px solid ${COLORS.BORDER_GARY};
-  border-radius: 8px;
-  width: 130px;
-  z-index: ${Z_INDEX.DROPDOWN};
-`;
-
-const MenuItem = styled.li`
-  padding: 8px 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-  color: ${(props) => (props.disabled ? '#bbb' : COLORS.BLACK)};
-  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
-  &:hover {
-    background-color: ${(props) => (props.disabled ? 'transparent' : COLORS.OFF_WHITE)};
-  }
-`;
-
-const MenuItemContent = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-`;
-
-const Icon = styled.img`
-  width: 16px;
-  height: 16px;
-`;
-
-const Check = styled.span`
-  color: ${COLORS.BLUE_BRIGHT};
-  font-weight: bold;
-`;
+import { Bell, BellOff, BellMinus, ChevronDown, Check } from 'lucide-react';
 
 export default function SubscribeStatusDropdown({ topic, fetchMenuItems, ringing }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
-  const toggleDropdown = () => setIsOpen(!isOpen);
+  const closeDropdown = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsOpen(false);
+      setIsClosing(false);
+    }, 120);
+  };
+
+  const toggleDropdown = () => {
+    if (isOpen) closeDropdown();
+    else setIsOpen(true);
+  };
 
   const handleOptionChange = async (option) => {
+    closeDropdown();
     if (option === 'unsubscribe') {
       await handleUnsubscribe();
     } else {
-      const receiveNotification = option === 'all';
-      await updateNotificationPreference(receiveNotification);
+      await updateNotificationPreference(option === 'all');
     }
-    setIsOpen(false);
   };
 
   const updateNotificationPreference = async (receiveNotification) => {
     try {
       await updateTopicNotification(topic.englishTopic, receiveNotification);
       fetchMenuItems();
-      Swal.fire('알림 설정 변경 완료', '', 'success');
+      toast.success('알림 설정 변경 완료');
     } catch (error) {
-      Swal.fire('오류', '알림 설정 변경 실패', 'error');
+      toast.error('오류', { description: '알림 설정 변경 실패' });
     }
   };
 
@@ -111,61 +43,74 @@ export default function SubscribeStatusDropdown({ topic, fetchMenuItems, ringing
     try {
       await unsubscribeTopic(topic.englishTopic);
       fetchMenuItems();
-      Swal.fire('구독 취소 완료', `${topic.koreanTopic} 구독을 취소했습니다.`, 'success');
+      toast.success('구독 취소 완료', { description: `${topic.koreanTopic} 구독을 취소했습니다.` });
     } catch (error) {
-      Swal.fire('오류', '구독 취소 실패', 'error');
+      toast.error('오류', { description: '구독 취소 실패' });
     }
   };
 
   return (
-    <Wrapper>
-      <DropdownButton onClick={toggleDropdown}>
-        <BellIcon
-          src={
-            topic.receiveNotification
-              ? `${process.env.PUBLIC_URL}/icons/bell_ring.svg`
-              : `${process.env.PUBLIC_URL}/icons/bell_off.svg`
-          }
-          alt="알림 상태 아이콘"
-          isActive={topic.receiveNotification}
-          ringing={ringing}
-        />
+    <div className="relative inline-block">
+      <button
+        onClick={toggleDropdown}
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full cursor-pointer font-semibold text-sm border-none transition-colors ${
+          topic.receiveNotification
+            ? 'bg-[#EBF4FE] text-[#3182F6]'
+            : 'bg-[#F2F4F6] text-[#6B7684]'
+        } ${ringing ? 'animate-[ring_1s_ease-in-out]' : ''}`}
+      >
+        {topic.receiveNotification ? (
+          <Bell className="w-4 h-4" />
+        ) : (
+          <BellOff className="w-4 h-4" />
+        )}
         구독중
-        <img src={`${process.env.PUBLIC_URL}/icons/arrow_down.svg`} alt="arrow" />
-      </DropdownButton>
+        <ChevronDown className="w-3.5 h-3.5" />
+      </button>
 
       {isOpen && (
-        <DropdownMenu>
-          <MenuItem
-            onClick={() => handleOptionChange('all')}
-            disabled={topic.receiveNotification === true}
+        <ul className={`absolute top-full right-0 bg-white list-none p-1.5 border border-[#E5E8EB] rounded-xl shadow-lg w-[148px] z-[100] mt-1 ${isClosing ? 'animate-dropdown-out' : 'animate-dropdown-in'}`}>
+          <li
+            onClick={() => !topic.receiveNotification !== false && handleOptionChange('all')}
+            className={`px-3 py-2 flex justify-between items-center rounded-lg ${
+              topic.receiveNotification === true
+                ? 'cursor-default text-[#3182F6] bg-[#F0F7FF]'
+                : 'cursor-pointer hover:bg-[#F5F5F5] text-[#333D4B]'
+            }`}
           >
-            <MenuItemContent>
-              <Icon src={`${process.env.PUBLIC_URL}/icons/bell_ring.svg`} alt="알림 받기" />
+            <div className="flex items-center gap-2 text-sm">
+              <Bell className="w-4 h-4 flex-shrink-0" />
               알림 받기
-            </MenuItemContent>
-            {topic.receiveNotification === true && <Check>✔</Check>}
-          </MenuItem>
-
-          <MenuItem
-            onClick={() => handleOptionChange('none')}
-            disabled={topic.receiveNotification === false}
+            </div>
+            {topic.receiveNotification === true && (
+              <Check className="w-3.5 h-3.5 text-[#3182F6] flex-shrink-0" />
+            )}
+          </li>
+          <li
+            onClick={() => topic.receiveNotification !== false && handleOptionChange('none')}
+            className={`px-3 py-2 flex justify-between items-center rounded-lg ${
+              topic.receiveNotification === false
+                ? 'cursor-default text-[#3182F6] bg-[#F0F7FF]'
+                : 'cursor-pointer hover:bg-[#F5F5F5] text-[#333D4B]'
+            }`}
           >
-            <MenuItemContent>
-              <Icon src={`${process.env.PUBLIC_URL}/icons/bell_off.svg`} alt="알림 없음" />
+            <div className="flex items-center gap-2 text-sm">
+              <BellOff className="w-4 h-4 flex-shrink-0" />
               알림 없음
-            </MenuItemContent>
-            {topic.receiveNotification === false && <Check>✔</Check>}
-          </MenuItem>
-
-          <MenuItem onClick={() => handleOptionChange('unsubscribe')}>
-            <MenuItemContent>
-              <Icon src={`${process.env.PUBLIC_URL}/icons/bell_minus.svg`} alt="구독 취소" />
-              구독 취소
-            </MenuItemContent>
-          </MenuItem>
-        </DropdownMenu>
+            </div>
+            {topic.receiveNotification === false && (
+              <Check className="w-3.5 h-3.5 text-[#3182F6] flex-shrink-0" />
+            )}
+          </li>
+          <li
+            onClick={() => handleOptionChange('unsubscribe')}
+            className="px-3 py-2 flex items-center gap-2 rounded-lg cursor-pointer hover:bg-[#FFF0F0] text-[#F04452] text-sm"
+          >
+            <BellMinus className="w-4 h-4 flex-shrink-0" />
+            구독 취소
+          </li>
+        </ul>
       )}
-    </Wrapper>
+    </div>
   );
 }

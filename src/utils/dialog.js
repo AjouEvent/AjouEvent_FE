@@ -1,34 +1,21 @@
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
+import useConfirmStore from '../store/useConfirmStore';
 
 const dialog = {
   success(title, text) {
-    return Swal.fire({
-      icon: 'success',
-      title,
-      text,
-      timer: 1500,
-      showConfirmButton: false,
-    });
+    toast.success(title, { description: text });
   },
 
   error(title, text) {
-    return Swal.fire({
-      icon: 'error',
-      title,
-      text,
-    });
+    toast.error(title, { description: text });
   },
 
-  async confirm(title, text) {
-    const result = await Swal.fire({
-      icon: 'question',
-      title,
-      text,
-      showCancelButton: true,
-      confirmButtonText: '확인',
-      cancelButtonText: '취소',
-    });
-    return result.isConfirmed;
+  warning(title, text) {
+    toast.warning(title, { description: text });
+  },
+
+  confirm(title, text) {
+    return useConfirmStore.getState().show(title, text);
   },
 };
 

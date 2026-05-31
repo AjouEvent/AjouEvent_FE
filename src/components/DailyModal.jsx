@@ -1,83 +1,11 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { Z_INDEX, STORAGE_KEYS, COLORS } from '../constants/appConstants';
-
-const ModalWrapper = styled.div`
-  position: fixed;
-  z-index: ${Z_INDEX.MODAL};
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: ${COLORS.OVERLAY_BLACK};
-`;
-
-const ModalContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: white;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 500px;
-  border-radius: 20px;
-  font-family: "Pretendard Variable";
-`;
-
-const CloseButton = styled.button`
-  width: 100px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  padding: 4px 20px;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  border-radius: 10px;
-  cursor: pointer;
-`;
-
-const ModalBody = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin-top: 10px;
-  gap: 20px;
-`;
-
-const ModalFooter = styled.div`
-  width: 100%;
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const EllipticalLink = styled(Link)`
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: ${COLORS.BLUE_SECONDARY};
-  color: white;
-  text-decoration: none;
-  border-radius: 50px;
-  font-weight: bold;
-  text-align: center;
-
-  &:hover {
-    background-color: ${COLORS.BLUE_DARK};
-  }
-`;
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { STORAGE_KEYS } from '../constants/appConstants';
 
 const DailyModal = ({ show, onClose }) => {
   const [doNotShowToday, setDoNotShowToday] = useState(false);
 
-  const handleDoNotShowTodayChange = (e) => {
-    setDoNotShowToday(e.target.checked);
-  };
+  const handleDoNotShowTodayChange = (e) => setDoNotShowToday(e.target.checked);
 
   const handleClose = () => {
     if (doNotShowToday) {
@@ -89,34 +17,40 @@ const DailyModal = ({ show, onClose }) => {
   };
 
   return (
-    <ModalWrapper>
-      <ModalContent>
-        <ModalBody>
-          <img
-            src={`${process.env.PUBLIC_URL}/logo196.png`}
-            alt="Modal"
-            style={{ width: "50%" }}
-          />
-          <p>
+    <div className="fixed z-[1000] left-0 top-0 w-full h-full flex justify-center items-center bg-black/50">
+      <div className="flex flex-col items-center bg-white p-5 border border-[#888] w-[80%] max-w-[500px] rounded-[20px]">
+        <div className="flex flex-col items-center text-center mt-2.5 gap-5">
+          <img src={`${process.env.PUBLIC_URL}/logo196.png`} alt="Modal" className="w-1/2" />
+          <p className="m-0">
             홈화면에 앱 추가하고 <br />
             공지사항, 이벤트 알림을 받아보세요.
           </p>
-        </ModalBody>
-        <EllipticalLink to="/guide">설치없이 앱으로 열기</EllipticalLink>
-        <ModalFooter>
-          <label>
+        </div>
+        <Link
+          to="/guide"
+          className="inline-block px-5 py-2.5 bg-[#0066b3] text-white no-underline rounded-[50px] font-bold text-center mt-4 hover:bg-[#004f8a] transition-colors"
+        >
+          설치없이 앱으로 열기
+        </Link>
+        <div className="w-full mt-5 flex justify-between items-center">
+          <label className="flex items-center gap-1 cursor-pointer">
             <input
               type="checkbox"
               checked={doNotShowToday}
               onChange={handleDoNotShowTodayChange}
-              style={{ marginRight: "4px" }}
+              className="mr-1"
             />
             오늘은 보지 않기
           </label>
-          <CloseButton onClick={handleClose}>닫기</CloseButton>
-        </ModalFooter>
-      </ModalContent>
-    </ModalWrapper>
+          <button
+            onClick={handleClose}
+            className="w-[100px] bg-transparent border border-black/[0.04] text-xl px-5 py-1 rounded-[10px] cursor-pointer"
+          >
+            닫기
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

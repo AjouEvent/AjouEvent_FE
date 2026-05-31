@@ -1,53 +1,40 @@
-import styled from 'styled-components';
-import EventCard from '../../components/events/EventCard';
-
-const FlexContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  width: 100%;
-  padding: 0.25rem 1.5rem;
-  gap: 0.5rem;
-`;
-
-const MessageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  width: 100%;
-  height: 100%;
-  font-family: 'Pretendard Variable';
-  font-size: 16px;
-  font-weight: 600;
-  color: gray;
-  padding: 16px;
-`;
+import EventCard, { EventCardSkeleton } from '../../components/EventCard';
 
 const SubscribeEvent = ({ events, bottomRef, loading, hasMore, isError }) => {
   return (
-    <>
-      <FlexContainer>
-        {events.map((event, index) => (
-          <EventCard
-            key={`${event.eventId}-${index}`}
-            id={event.eventId}
-            title={event.title}
-            subject={event.subject}
-            content={event.content}
-            imgUrl={event.imgUrl}
-            likesCount={event.likesCount}
-            viewCount={event.viewCount}
-            star={event.star}
-          />
-        ))}
-      </FlexContainer>
-      <div ref={bottomRef} style={{ height: '1px' }}></div>
-      {loading && <MessageContainer>로딩중...</MessageContainer>}
-      {!hasMore && (
-        <MessageContainer>불러올 이벤트가 없습니다.</MessageContainer>
+    <div className="w-full">
+      {events.map((event, index) => (
+        <EventCard
+          key={`${event.eventId}-${index}`}
+          id={event.eventId}
+          title={event.title}
+          subject={event.subject}
+          content={event.content}
+          imgUrl={event.imgUrl}
+          likesCount={event.likesCount}
+          viewCount={event.viewCount}
+          star={event.star}
+        />
+      ))}
+      <div ref={bottomRef} style={{ height: '1px' }} />
+      {loading && (
+        <>
+          <EventCardSkeleton />
+          <EventCardSkeleton />
+          <EventCardSkeleton />
+        </>
       )}
-      {isError && <MessageContainer>서버 에러</MessageContainer>}
-    </>
+      {!loading && !hasMore && events.length === 0 && (
+        <div className="flex justify-center items-center w-full text-sm text-[#B0B8C1] font-medium p-12">
+          불러올 이벤트가 없습니다.
+        </div>
+      )}
+      {isError && (
+        <div className="flex justify-center items-center w-full text-sm text-[#F04452] font-medium p-6">
+          서버 에러
+        </div>
+      )}
+    </div>
   );
 };
 

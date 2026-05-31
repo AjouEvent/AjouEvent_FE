@@ -1,26 +1,91 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-    "Pretendard Variable", Pretendard, Roboto, "Noto Sans KR", "Segoe UI",
-    "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Toss Design Tokens */
+    --background: 220 14% 96%;       /* #F9FAFB */
+    --foreground: 222 47% 11%;       /* #191F28 */
+    --card: 0 0% 100%;               /* #FFFFFF */
+    --card-foreground: 222 47% 11%;  /* #191F28 */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 213 91% 57%;          /* #3182F6 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 213 100% 95%;       /* #EBF4FE */
+    --secondary-foreground: 213 91% 40%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 218 11% 47%; /* #6B7684 */
+    --accent: 213 100% 95%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 355 91% 61%;      /* #F04452 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 216 17% 91%;           /* #E5E8EB */
+    --input: 220 14% 96%;
+    --ring: 213 91% 57%;
+    --radius: 0.75rem;
+
+    /* Extended Toss Tokens */
+    --toss-blue: #3182F6;
+    --toss-bg: #F9FAFB;
+    --toss-card: #FFFFFF;
+    --toss-title: #191F28;
+    --toss-body: #333D4B;
+    --toss-secondary: #6B7684;
+    --toss-disabled: #B0B8C1;
+    --toss-border: #E5E8EB;
+    --toss-red: #F04452;
+    --toss-green: #00B493;
+    --toss-input-bg: #F2F4F6;
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: #F9FAFB;
+    color: #191F28;
+    font-family: 'Pretendard Variable', Pretendard, -apple-system,
+      BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI',
+      'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    letter-spacing: -0.02em;
+    overscroll-behavior-y: none;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* padding-bottom: calc(env(safe-area-inset-bottom) + 4rem); */
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  html {
+    box-sizing: border-box;
+  }
+
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
-html {
-  box-sizing: border-box;
-}
-
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .App {

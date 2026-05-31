@@ -1,31 +1,19 @@
 import { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import EventCard from '../../components/events/EventCard';
+import EventCard, { EventCardSkeleton } from '../../components/EventCard';
 import { getPopularEvents } from '../../services/api/event';
-
-const FlexContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  width: 100%;
-  padding: 0.25rem 1.5rem;
-  gap: 0.5rem;
-`;
 
 export default function HomeHotEvent() {
   const [events, setEvents] = useState([]);
   const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const loadHotEvent = async () => {
       if (isError || loading) return;
-
       setLoading(true);
       try {
         const response = await getPopularEvents();
-        const newEvents = response.data;
-
-        setEvents(newEvents);
+        setEvents(response.data);
       } catch (error) {
         console.error('Error fetching events:', error);
         setIsError(true);
@@ -37,24 +25,34 @@ export default function HomeHotEvent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <>
-      <FlexContainer>
-        {events.map((event, index) => (
-          <EventCard
-            key={`${event.eventId}-${index}`}
-            id={event.eventId}
-            title={event.title}
-            subject={event.subject}
-            content={event.content}
-            imgUrl={event.imgUrl}
-            likesCount={event.likesCount}
-            viewCount={event.viewCount}
-            star={event.star}
-          />
+  if (loading) {
+    return (
+      <div className="w-full bg-white mt-2">
+        {[1, 2, 3].map((i) => (
+          <EventCardSkeleton key={i} />
         ))}
-      </FlexContainer>
-      {isError && <p>서버 에러</p>}
-    </>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full bg-white mt-2">
+      {events.map((event, index) => (
+        <EventCard
+          key={`${event.eventId}-${index}`}
+          id={event.eventId}
+          title={event.title}
+          subject={event.subject}
+          content={event.content}
+          imgUrl={event.imgUrl}
+          likesCount={event.likesCount}
+          viewCount={event.viewCount}
+          star={event.star}
+        />
+      ))}
+      {isError && (
+        <p className="text-[#F04452] text-sm px-5 py-4 font-medium">데이터를 불러오지 못했습니다</p>
+      )}
+    </div>
   );
 }

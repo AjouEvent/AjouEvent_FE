@@ -1,206 +1,118 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
 import useSubscriptionStore from '../../store/useSubscriptionStore';
-import NavigationBar from '../../components/NavigationBar';
-import LocationBar from '../../components/LocationBar';
+import NavigationBar from '../../components/layout/NavigationBar';
+import LocationBar from '../../components/layout/LocationBar';
 import SubscribeTab from './SubscribeTab';
 import KeywordTab from './KeywordTab';
-import { COLORS, STORAGE_KEYS } from '../../constants/appConstants';
-
-const AppContainer = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background-color: ${COLORS.WHITE};
-  font-family: 'Pretendard Variable';
-`;
-
-const MainContentContaioner = styled.div`
-  display: flex;
-  width: 100%;
-  overflow-x: hidden;
-  align-items: center;
-  flex-direction: column;
-  padding: 0 0 80px 0;
-`;
-
-const TemporaryContaioner = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  background-color: ${COLORS.WHITE};
-  height: 100vh;
-`;
-
-const StyledLink = styled(Link)`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  background-color: ${(props) => props.bgcolor};
-  border-radius: 0.5rem;
-  border: 1px solid gray;
-  width: 6rem;
-  height: 1.4rem;
-  color: ${(props) => props.color};
-  font-size: 0.8rem;
-  text-decoration: none;
-  margin: 0 1rem 0 1rem;
-`;
-
-const TabContainer = styled.div`
-  display: flex;
-  width: 100%;
-`;
-
-const Tab = styled.div`
-  flex: 1;
-  padding: 10px 20px;
-  cursor: pointer;
-  text-align: center;
-  border-bottom: ${(props) =>
-    props.active ? `2px solid ${COLORS.BLACK}` : `1px solid ${COLORS.BORDER_GARY}`};
-  color: ${(props) => (props.active ? COLORS.BLACK : COLORS.DARK_GRAY_TEXT)};
-  font-weight: ${(props) => (props.active ? 'bold' : 'normal')};
-  transition: background-color 0.3s ease;
-  position: relative;
-`;
-
-const Badge = styled.div`
-  position: absolute;
-  top: 0;
-  right: 20px;
-  width: 8px;
-  height: 8px;
-  background-color: red;
-  border-radius: 50%;
-`;
-
-const SubscribeContainer = styled.div`
-  width: 100%;
-`;
-
-const GuideMessage = styled.div`
-  width: 100%;
-  padding: 12px;
-  background-color: #f0f8ff;
-  font-size: 13px;
-  color: ${COLORS.BLUE_BRIGHT};
-  text-align: center;
-  font-weight: 600;
-  line-height: 1.5; /* 줄 간격 확보 */
-  word-break: keep-all; /* 단어 단위로 줄바꿈 */
-  white-space: normal; /* 강제 줄바꿈 허용 */
-
-  @media (max-width: 375px) {  // iPhone SE 같은 작은 화면 대응
-    font-size: 12px;
-    padding: 8px;
-  }
-
-  @media (max-width: 320px) {  // 더 작은 화면일 때
-    font-size: 11px;
-    padding: 6px;
-  }
-`;
+import { STORAGE_KEYS } from '../../constants/appConstants';
 
 export default function SubscribePage() {
   const location = useLocation();
   const { subscribeItems, subscribedKeywords, fetchSubscribedKeywords } = useSubscriptionStore();
   const [activeTab, setActiveTab] = useState(
-    location.state?.activeTab || 'subscribe',
+    location.state?.activeTab || sessionStorage.getItem('subscribe_active_tab') || 'subscribe',
   );
   const [showGuide, setShowGuide] = useState(false);
 
   const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
-  // 구독 아이템/키워드 변화 감지해 showGuide 판단
   useEffect(() => {
-    if (activeTab === 'subscribe') {
-      setShowGuide(subscribeItems.length === 0);
-    } else if (activeTab === 'keyword') {
-      setShowGuide(subscribedKeywords.length === 0);
-    }
+    sessionStorage.setItem('subscribe_active_tab', activeTab);
+    if (activeTab === 'subscribe') setShowGuide(subscribeItems.length === 0);
+    else if (activeTab === 'keyword') setShowGuide(subscribedKeywords.length === 0);
   }, [subscribeItems, subscribedKeywords, activeTab]);
 
   useEffect(() => {
-    fetchSubscribedKeywords(); // 여기에서 가져와야 키워드 알림 탭의 뱃지를 보여줄 수 있음
+    fetchSubscribedKeywords();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getGuideMessage = (activeTab) => {
-    if (activeTab === 'subscribe') {
+  const getGuideMessage = (tab) => {
+    if (tab === 'subscribe')
       return (
         <>
-          아직 구독한 항목이 없습니다.
-          <br />
+          아직 구독한 항목이 없습니다.<br />
           아래의 <strong>⚙️ 구독 설정</strong>에서 관심있는 공지를 구독해보세요!
         </>
       );
-    } else if (activeTab === 'keyword') {
+    if (tab === 'keyword')
       return (
         <>
-          아직 구독한 키워드가 없습니다.
-          <br />
+          아직 구독한 키워드가 없습니다.<br />
           아래의 <strong>🔔 키워드 설정</strong>에서 관심있는 키워드를 구독해보세요!
         </>
       );
-    } else {
-      // 기본 메시지 (탭 선택 전이거나, 예외 상황 대비)
-      return (
-        <>
-          아직 구독한 항목이 없습니다.
-          <br />
-          아래의 톱니바퀴/종 모양의 <strong>'설정'</strong>에서 관심있는 공지를 구독해보세요!
-        </>
-      );
-    }
+    return (
+      <>
+        아직 구독한 항목이 없습니다.<br />
+        아래의 톱니바퀴/종 모양의 <strong>'설정'</strong>에서 관심있는 공지를 구독해보세요!
+      </>
+    );
   };
 
   return (
-    <AppContainer>
+    <div className="flex items-center flex-col bg-[#F9FAFB] min-h-screen">
       {accessToken ? (
-        <MainContentContaioner>
+        <div className="flex w-full overflow-x-hidden items-center flex-col pb-20">
           <LocationBar location="구독" />
-          {showGuide && (
-            <GuideMessage>
-              {getGuideMessage(activeTab)}
-            </GuideMessage>
-          )}
-          <TabContainer>
-              <Tab active={activeTab === 'subscribe'} 
-                onClick={() => setActiveTab('subscribe')}>
-                구독 알림
-                {subscribeItems.some((item) => !item.isRead) && <Badge />}
-              </Tab>
 
-              <Tab active={activeTab === 'keyword'} 
-                onClick={() => setActiveTab('keyword')}>
-                키워드 알림
-                {subscribedKeywords.some((item) => !item.isRead) && <Badge />}
-              </Tab>
-          </TabContainer>
+          {showGuide && (
+            <div className="w-full px-5 py-3 bg-[#EBF4FE] text-sm text-[#3182F6] text-center font-medium leading-relaxed break-keep">
+              {getGuideMessage(activeTab)}
+            </div>
+          )}
+
+          <div className="flex w-full bg-white px-4 py-2.5 border-b border-[#F0F2F5]">
+            <div className="flex w-full bg-[#F2F4F6] rounded-xl p-1 gap-1">
+              {[
+                { key: 'subscribe', label: '구독 알림' },
+                { key: 'keyword', label: '키워드 알림' },
+              ].map(({ key, label }) => (
+                <button
+                  key={key}
+                  className={`relative flex-1 py-2 text-center text-sm font-semibold border-none cursor-pointer transition-all rounded-lg ${
+                    activeTab === key
+                      ? 'bg-white text-[#191F28] shadow-sm'
+                      : 'bg-transparent text-[#B0B8C1] hover:text-[#6B7684]'
+                  }`}
+                  onClick={() => setActiveTab(key)}
+                >
+                  {label}
+                  {key === 'subscribe' && subscribeItems.some((item) => !item.isRead) && (
+                    <div className="absolute top-1.5 right-3 w-1.5 h-1.5 bg-[#F04452] rounded-full" />
+                  )}
+                  {key === 'keyword' && subscribedKeywords.some((item) => !item.isRead) && (
+                    <div className="absolute top-1.5 right-3 w-1.5 h-1.5 bg-[#F04452] rounded-full" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {activeTab === 'subscribe' && (
-            <SubscribeContainer>
+            <div className="w-full">
               <SubscribeTab showGuide={showGuide} />
-            </SubscribeContainer>
+            </div>
           )}
           {activeTab === 'keyword' && (
-            <SubscribeContainer>
+            <div className="w-full">
               <KeywordTab showGuide={showGuide} />
-            </SubscribeContainer>
+            </div>
           )}
-        </MainContentContaioner>
+        </div>
       ) : (
-        <TemporaryContaioner>
-          <p>로그인이 필요한 서비스입니다</p>
-          <StyledLink bgcolor={'white'} color={'black'} to="/login">
+        <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+          <p className="text-[#6B7684] text-sm m-0">로그인이 필요한 서비스입니다</p>
+          <Link
+            to="/login"
+            className="flex items-center justify-center bg-[#3182F6] hover:bg-[#1B6EE8] rounded-xl px-6 py-3 text-white text-sm font-semibold no-underline transition-colors"
+          >
             로그인
-          </StyledLink>
-        </TemporaryContaioner>
+          </Link>
+        </div>
       )}
       <NavigationBar />
-    </AppContainer>
+    </div>
   );
 }

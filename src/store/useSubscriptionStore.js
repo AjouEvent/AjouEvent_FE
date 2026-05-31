@@ -82,7 +82,7 @@ const useSubscriptionStore = create((set, get) => ({
   updateSubscribedTabRead: async () => {
     try {
       const response = await getSubscribedTabReadStatus();
-      set({ isSubscribedTabRead: response.data.subscribedTabRead });
+      set({ isSubscribedTabRead: response.data.isSubscribedTabRead });
     } catch (error) {
       console.error('Error updating isSubscribedTabRead:', error);
     }
@@ -102,7 +102,7 @@ const useSubscriptionStore = create((set, get) => ({
     try {
       const response = await getSubscribedTabReadStatus();
       set({
-        isSubscribedTabRead: response.data.subscribedTabRead,
+        isSubscribedTabRead: response.data.isSubscribedTabRead,
       });
     } catch (error) {
       console.error('Error fetching read status', error);
