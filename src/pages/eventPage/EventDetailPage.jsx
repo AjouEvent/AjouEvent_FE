@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import CalendarModal from '../../components/CalendarModal';
 import TabBar from '../../components/layout/TabBar';
 import { toast } from 'sonner';
@@ -7,6 +7,7 @@ import EventBanner from './EventBanner';
 import ImageModal from './ImageModal';
 import { STORAGE_KEYS } from '../../constants/appConstants';
 import { getEventDetail, getAuthEventDetail, likeEvent, unlikeEvent } from '../../services/api/event';
+import { clickNotification } from '../../services/api/notification';
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -84,11 +85,21 @@ function EventDetailSkeleton() {
 
 export default function EventDetailPage() {
   const { id } = useParams();
+  const location = useLocation();
   const [event, setEvent] = useState(null);
   const [content, setContent] = useState([]);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const { notificationId } = location.state || {};
+    if (notificationId) {
+      clickNotification(notificationId).catch((err) =>
+        console.error('Error marking notification as read:', err)
+      );
+    }
+  }, [location.state]);
 
   useEffect(() => {
     const fetchEvent = async () => {
