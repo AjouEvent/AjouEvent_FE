@@ -1,8 +1,6 @@
 import React from 'react';
 import TabBar from '../../components/layout/TabBar';
 
-const APP_VERSION = '2.0.0';
-
 const phases = [
   {
     id: 'p0',
@@ -78,78 +76,70 @@ const phases = [
   },
 ];
 
-const TYPE_DOT = {
-  BE:    'bg-[#1D4ED8]',
-  FE:    'bg-[#3B82F6]',
-  Infra: 'bg-[#93C5FD]',
+const TYPE_COLOR = {
+  BE:    'text-blue-700',
+  FE:    'text-blue-500',
+  Infra: 'text-blue-400',
 };
 
-const TYPE_TAG = {
-  BE:    'bg-[#EFF6FF] text-[#1E40AF]',
-  FE:    'bg-[#DBEAFE] text-[#1D4ED8]',
-  Infra: 'bg-[#E0EEFF] text-[#3B82F6]',
+const TYPE_DOT = {
+  BE:    'bg-blue-700',
+  FE:    'bg-blue-500',
+  Infra: 'bg-blue-300',
 };
 
 const VersionPage = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-white pb-10">
+    <div className="flex flex-col min-h-screen bg-white pb-16">
       <TabBar Title="버전 & 히스토리" />
 
-      <div className="px-10 pt-5 pb-4 border-b border-[#F0F5FF]">
-        <p className="text-[#93C5FD] text-xs m-0 mb-1">현재 버전</p>
-        <p className="text-[#1E3A8A] text-2xl font-bold m-0">v{APP_VERSION}</p>
-        <div className="flex gap-4 mt-3">
-          {[{ label: 'BE', cls: 'bg-[#1D4ED8]' }, { label: 'FE', cls: 'bg-[#60A5FA]' }, { label: 'Infra', cls: 'bg-[#BFDBFE]' }].map(({ label, cls }) => (
-            <div key={label} className="flex items-center gap-1.5">
-              <span className={`w-2 h-2 rounded-full flex-shrink-0 ${cls}`} />
-              <span className="text-[#93C5FD] text-[11px]">{label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="px-10 pt-5">
+      {/* Timeline */}
+      <div className="px-6 pt-6">
         <div className="relative">
-          <div className="absolute left-[9px] top-2 bottom-2 w-0.5 bg-[#DBEAFE]" />
+          <div className="absolute left-[7px] top-2 bottom-2 w-px bg-gray-100" />
 
           {phases.map((phase, pi) => (
             <React.Fragment key={phase.id}>
-              <div className={`flex items-start gap-4 ${pi > 0 ? 'mt-7' : ''}`}>
-                <div className="relative z-10 flex-shrink-0 mt-0.5">
-                  <div className="w-5 h-5 rounded-full bg-[#3182F6] shadow-md shadow-blue-100 flex items-center justify-center">
+              {/* Phase header */}
+              <div className={`flex items-start gap-4 ${pi > 0 ? 'mt-8' : ''}`}>
+                <div className="relative z-10 flex-shrink-0 mt-1">
+                  <div className={`w-3.5 h-3.5 rounded-full border-2 ${phase.isActive ? 'border-blue-500 bg-blue-500' : 'border-gray-300 bg-white'}`}>
                     {phase.isActive && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                      <span className="absolute inset-0 rounded-full bg-blue-400 animate-ping opacity-50" />
                     )}
                   </div>
                 </div>
-                <div className="flex-1 min-w-0 pb-2">
+                <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-[#EFF6FF] text-[#3182F6] flex-shrink-0">
-                        {phase.badge}
-                      </span>
-                      <span className="text-[#1E3A8A] text-sm font-bold truncate">{phase.title}</span>
+                      {phase.badge && (
+                        <span className="text-[11px] font-medium px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 flex-shrink-0">
+                          {phase.badge}
+                        </span>
+                      )}
+                      <span className="text-sm font-semibold text-gray-800 truncate">{phase.title}</span>
                     </div>
-                    <span className="text-[#93C5FD] text-[11px] flex-shrink-0">{phase.date}</span>
+                    <span className="text-[11px] text-gray-400 flex-shrink-0">{phase.date}</span>
                   </div>
-                  <p className="text-[#93C5FD] text-xs m-0 mt-0.5 pl-0.5">{phase.subtitle}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{phase.subtitle}</p>
                 </div>
               </div>
 
+              {/* Events */}
               {phase.events.map((ev, ei) => (
-                <div key={ei} className="flex items-start gap-4 mt-3.5">
-                  <div className="relative z-10 flex-shrink-0 flex justify-center w-5 mt-1.5">
-                    <div className={`w-2 h-2 rounded-full border-2 border-white ${TYPE_DOT[ev.type]}`} />
+                <div key={ei} className="flex items-start gap-4 mt-3">
+                  <div className="relative z-10 flex-shrink-0 flex justify-center w-3.5 mt-1.5">
+                    <div className={`w-1.5 h-1.5 rounded-full ${TYPE_DOT[ev.type]}`} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-start gap-1.5 flex-wrap">
-                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md flex-shrink-0 leading-tight ${TYPE_TAG[ev.type]}`}>
+                    <div className="flex items-baseline gap-1.5 flex-wrap">
+                      <span className={`text-[11px] font-medium flex-shrink-0 ${TYPE_COLOR[ev.type]}`}>
                         {ev.type}
                       </span>
-                      <span className="text-[#1E3A8A] text-[13px] leading-snug">{ev.label}</span>
+                      <span className="text-[13px] text-gray-700 leading-snug">{ev.label}</span>
                     </div>
                     {ev.sub && (
-                      <p className="text-[#788088] text-xs mt-0.5 mb-0 leading-relaxed">{ev.sub}</p>
+                      <p className="text-[11px] text-gray-400 mt-0.5 leading-relaxed">{ev.sub}</p>
                     )}
                   </div>
                 </div>
