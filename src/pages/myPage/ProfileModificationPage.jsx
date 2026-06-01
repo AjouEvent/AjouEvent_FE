@@ -47,7 +47,7 @@ export default function ProfileModificationPage() {
   return (
     <div className="flex flex-col items-center justify-start bg-white h-screen overflow-x-hidden">
       <TabBar Title="회원정보 수정" onBack={arrowBackClicked} />
-      <div className="flex flex-col w-full max-w-[600px] bg-white px-5 pt-4">
+      <div className="flex flex-col w-full bg-white px-5 pt-4">
 
         <h3 className="text-[#191F28] text-base font-bold tracking-tight mb-4">로그인 정보</h3>
 
