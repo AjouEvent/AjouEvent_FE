@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { Heart } from 'lucide-react';
 import { likeEvent, unlikeEvent } from '../services/api/event';
-import { clickNotification } from '../services/api/notification';
 
 function Stat({ iconSrc, value, altText }) {
   return (
@@ -50,7 +49,7 @@ const EventCard = ({
   star,
   // notification-specific props
   imageUrl,
-  read,
+  isRead: initialIsRead,
   topicName,
   keywordName,
   notifiedAt,
@@ -58,6 +57,7 @@ const EventCard = ({
 }) => {
   const [cardStar, setCardStar] = useState(star);
   const [likes, setLikes] = useState(likesCount);
+  const [isRead, setIsRead] = useState(initialIsRead);
   const navigate = useNavigate();
 
   const isNotification = notifiedAt !== undefined;
@@ -87,10 +87,8 @@ const EventCard = ({
       const trimmedUrl = clickUrl.startsWith(baseUrl)
         ? clickUrl.replace(baseUrl, '')
         : clickUrl;
-      clickNotification(id).catch((err) =>
-        console.error('Error clicking notification:', err)
-      );
-      navigate(`/${trimmedUrl}`);
+      setIsRead(true);
+      navigate(`/${trimmedUrl}`, { state: { notificationId: id } });
     } else {
       navigate(`/event/${id}`);
     }
@@ -103,7 +101,7 @@ const EventCard = ({
       <div
         onClick={handleCardClick}
         className={`relative flex items-start gap-3.5 w-full cursor-pointer px-5 py-4 border-b border-[#F5F6F8] hover:bg-[#FAFBFC] active:bg-[#F5F6F8] transition-colors ${
-          read ? 'bg-white' : 'bg-[#FAFCFF]'
+          isRead ? 'bg-white' : 'bg-[#EEF5FF]'
         }`}
       >
         <div className="shrink-0">
@@ -131,7 +129,7 @@ const EventCard = ({
             </div>
           </div>
           <div
-            className={`text-[14px] font-semibold leading-snug overflow-hidden ${read ? 'text-[#333D4B]' : 'text-[#191F28]'}`}
+            className={`text-[14px] font-semibold leading-snug overflow-hidden ${isRead ? 'text-[#333D4B]' : 'text-[#191F28]'}`}
             style={{
               display: '-webkit-box',
               WebkitLineClamp: 2,
