@@ -11,22 +11,22 @@ import { getEventsByCategory } from '../../services/api/event';
 
 export default function SearchEventPage() {
   const {
-    savedKeyword,
-    setSavedKeyword,
+    savedKeywordSearch,
+    setSavedKeywordSearch,
     savedOption1,
     setSavedOption1,
     savedOption2,
     setSavedOption2,
   } = useUIStore((state) => ({
-    savedKeyword: state.savedKeyword,
-    setSavedKeyword: state.setSavedKeyword,
+    savedKeywordSearch: state.savedKeywordSearch,
+    setSavedKeywordSearch: state.setSavedKeywordSearch,
     savedOption1: state.savedOption1,
     setSavedOption1: state.setSavedOption1,
     savedOption2: state.savedOption2,
     setSavedOption2: state.setSavedOption2,
   }));
 
-  const [keyword, setKeyword] = useState(savedKeyword);
+  const [keyword, setKeyword] = useState(savedKeywordSearch);
   const [option1, setOption1] = useState(savedOption1);
   const [option2, setOption2] = useState(savedOption2);
   const [events, setEvents] = useState([]);
@@ -102,7 +102,7 @@ export default function SearchEventPage() {
             setKeyword={setKeyword}
             setPage={setPage}
             setEvents={setEvents}
-            setSavedKeyword={setSavedKeyword}
+            setSavedKeyword={setSavedKeywordSearch}
             setHasMore={setHasMore}
           />
         </div>

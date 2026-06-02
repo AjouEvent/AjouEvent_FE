@@ -1,164 +1,260 @@
 import React from 'react';
 import TabBar from '../../components/layout/TabBar';
 
-const APP_VERSION = '2.0.0';
-
 const phases = [
   {
-    id: 'p0',
+    id: 'phase0',
+    version: 'Phase 0',
     title: '프로젝트 시작',
-    subtitle: '서비스 기획 & 기반 구축',
-    date: '2024 이반',
-    events: [
-      { type: 'BE', label: 'Spring Boot 기반 백엔드 초기 세팅', sub: 'REST API 설계, 기본 도메인 구조 수립' },
-      { type: 'FE', label: 'React + JavaScript 프로젝트 초기화', sub: '공지사항 목록 조회 UI 구현, Styled Components 도입' },
-      { type: 'Infra', label: 'AWS EC2 + CodeDeploy 배포 파이프라인 구성', sub: 'appspec.yml, 배포 스크립트 작성' },
-      { type: 'BE', label: '아주대학교 공지사항 크롤링 로직 구현', sub: '학교 홈페이지, 단과대, 학과별 게시판 수집' },
+    period: '2024 초반',
+    isCurrent: false,
+    categories: [
+      {
+        label: 'Backend',
+        items: [
+          'Spring Boot 기반 백엔드 초기 세팅 (Java, Gradle)',
+          'REST API 설계 및 기본 도메인 구조 수립',
+          '아주대학교 공지사항 크롤링 로직 구현 (학교 홈페이지, 단과대, 학과별 게시판 수집)',
+        ],
+      },
+      {
+        label: 'Frontend',
+        items: [
+          'React + JavaScript 프로젝트 초기화',
+          '공지사항 목록 조회 UI 구현, Styled Components 도입',
+        ],
+      },
+      {
+        label: 'Infra',
+        items: [
+          'AWS EC2 + CodeDeploy 기반 배포 파이프라인 구성',
+          'appspec.yml 및 배포 스크립트 작성',
+        ],
+      },
     ],
   },
   {
-    id: 'p1',
-    badge: 'V1',
+    id: 'phase1',
+    version: 'V1',
     title: '핵심 기능 완성',
-    subtitle: '구독 · 알림 · 캘린더',
-    date: '2024 중반 ~ 하반',
-    events: [
-      { type: 'BE', label: 'FCM 푸시 알림 시스템 구현', sub: 'FCM 토큰 등록·관리, 키워드/카테고리별 알림 발송' },
-      { type: 'FE', label: 'PWA 지원 및 백그라운드 알림 구현', sub: 'Service Worker + manifest.json, iOS Safari 대응' },
-      { type: 'BE', label: '토픽·키워드 구독 API 구현', sub: '일반/장학/취업 등 카테고리별 구독 기능' },
-      { type: 'FE', label: '구독 페이지 & 마이페이지 구현', sub: 'Zustand 상태 관리, 무한 스크롤 도입 → 초기 로딩 40% 감소' },
-      { type: 'BE', label: '구글 캘린더 연동 API 구현', sub: '공지 일정 원클릭 캘린더 저장 기능' },
-      { type: 'BE', label: 'Redis 캐싱 도입', sub: '인기 게시글 주간 랭킹, 배너 캐싱' },
-      { type: 'Infra', label: 'GitHub Actions CI/CD 파이프라인 구축', sub: 'FE: Vercel, BE: EC2 자동 배포' },
+    period: '2024 중반 ~ 후반',
+    isCurrent: false,
+    categories: [
+      {
+        label: 'Backend',
+        items: [
+          'FCM 푸시 알림 시스템 구현 — FCM 토큰 등록·관리, 키워드/카테고리별 알림 발송',
+          '토픽·키워드 구독 API 구현 — 일반/장학/학사/취업 등 카테고리별 구독',
+          '구글 캘린더 연동 API 구현 — 공지 일정 원클릭 캘린더 저장',
+          'Redis 캐싱 도입 — 인기 게시글·배너 캐싱, 조회수 기반 주간 랭킹 집계',
+        ],
+      },
+      {
+        label: 'Frontend',
+        items: [
+          'PWA 지원 및 백그라운드 푸시 알림 구현 — Service Worker + manifest.json, iOS Safari PWA 대응',
+          '구독 페이지 및 마이페이지 구현',
+          'Zustand 전역 상태 관리 도입',
+          'Intersection Observer 기반 무한 스크롤 도입으로 초기 로딩 속도 40% 개선',
+        ],
+      },
+      {
+        label: 'Infra',
+        items: [
+          'GitHub Actions CI/CD 파이프라인 구축',
+          'Frontend: Vercel, Backend: EC2 자동 배포',
+        ],
+      },
     ],
   },
   {
-    id: 'p15',
-    badge: 'V1.5',
-    title: '아키텍처 개선',
-    subtitle: '코드 품질 & 안정성 향상',
-    date: '2025 이반 ~ 중반',
-    events: [
-      { type: 'BE', label: 'CQS 패턴 적용 리팩터링', sub: '명령-조회 분리로 코드 가독성 및 유지보수성 향상' },
-      { type: 'BE', label: 'Redis Cache Fallback 구조 적용', sub: 'Redis 다운 시 DB 폴백 로직, 배너 현재화 패턴 적용' },
-      { type: 'BE', label: 'FCM 토큰 만료 처리 및 유효성 검사 분리', sub: '단일 책임 원칙 강화' },
-      { type: 'FE', label: 'ESLint + Prettier 도입 및 Dead Code 정리', sub: '빈 핸들러·주석 코드 제거, 코드 스타일 일관화' },
-      { type: 'FE', label: 'BE-FE API 스펙 동기화', sub: '배너 삭제 API 변경에 따른 호출 경로 수정' },
+    id: 'phase1_5',
+    version: 'V1.5',
+    title: '아키텍처 개선 & 코드 품질 향상',
+    period: '2025 초반 ~ 중반',
+    isCurrent: false,
+    categories: [
+      {
+        label: 'Backend',
+        items: [
+          'CQS(Command Query Separation) 패턴 적용 리팩토링 — 게시글·토픽·키워드·토큰 관련 명령-조회 분리',
+          '게시글 조회수 증가 로직 책임 분리 — 단일 책임 원칙 강화',
+          'FCM 토큰 만료 처리 및 유효성 검사 로직 역할 분리',
+          'Redis 장애 대응 — Cache Fallback 구조 적용 (Redis 다운 시 DB 폴백), 배너 파사드 패턴 적용',
+        ],
+      },
+      {
+        label: 'Frontend',
+        items: [
+          'ESLint + Prettier 코딩 컨벤션 도입',
+          'Dead Code 정리 — 빈 핸들러 함수, 불필요한 코드 제거',
+          '배너 삭제 API 변경에 따른 호출 경로 수정 (BE-FE API 스펙 동기화)',
+        ],
+      },
     ],
   },
   {
-    id: 'p2',
-    badge: 'V2',
+    id: 'phase2',
+    version: 'V2',
     title: '전면 리아키텍처',
-    subtitle: '모니터링 · 테스트 · 인프라',
-    date: '2025 하반기 ~ 2026',
-    events: [
-      { type: 'BE', label: 'V2 아키텍처 전면 재설계', sub: 'Controller → Orchestrator → Service → Repository 계층 구조' },
-      { type: 'Infra', label: 'Docker + Docker Compose 컨테이너화', sub: 'Dockerfile, docker-compose.yml, 환경별 분리 구성' },
-      { type: 'Infra', label: 'Prometheus + Grafana 모니터링 도입', sub: '실시간 서비스 지표 대시보드 구축' },
-      { type: 'BE', label: 'ArchUnit 레이어 의존 규칙 테스트 도입', sub: '단방향 의존성 규칙 자동 검증' },
-      { type: 'BE', label: 'Playwright 기반 E2E 크롤링 스크립트 도입', sub: '크롤링 안정성 및 유지보수성 향상' },
-      { type: 'FE', label: 'Playwright E2E 테스트 환경 구성', sub: 'e2e 디렉터리, playwright.config.js 추가' },
-      { type: 'FE', label: 'UI 전반 리팩터링 & GA4 연동', sub: '이미지 렌더링 최적화, 좋아요 태그 커스텀화' },
+    period: '2025 하반기 ~ 2026',
+    isCurrent: false,
+    categories: [
+      {
+        label: 'Backend',
+        items: [
+          '새 레포지토리 생성 및 V2 아키텍처 재설계 — Controller → Orchestrator → Service → Repository 계층 구조 정립',
+          'ArchUnit 도입으로 레이어 의존 규칙 자동 검증 (단방향 의존성 강제)',
+          'Playwright 기반 E2E 크롤링 스크립트 도입 — 크롤링 안정성 향상',
+          'Redis 캐시 적용 범위 확대 — 인기 게시글·타입별 게시글·배너 전반',
+        ],
+      },
+      {
+        label: 'Frontend',
+        items: [
+          'Playwright E2E 테스트 환경 구성',
+          '이미지 렌더링 최적화 및 UI 전반 리팩토링',
+          '좋아요 토글 로직을 useEventLike 커스텀 훅으로 추출',
+          'GA4(Google Analytics 4) 연동 POC 진행',
+        ],
+      },
+      {
+        label: 'Infra',
+        items: [
+          'Docker + Docker Compose 컨테이너화 — Dockerfile, docker-compose.yml, 로컬 환경 분리 구성',
+          'Prometheus + Grafana 모니터링 스택 도입',
+        ],
+      },
     ],
   },
   {
-    id: 'wip',
-    badge: '진행 중',
-    title: 'V1 → V2 마이그레이션',
-    subtitle: '완성화 & 테스트 확대',
-    date: '2026 ~',
-    isActive: true,
-    events: [
-      { type: 'BE', label: 'V1 데이터 마이그레이션', sub: 'V2 스키마 정합성 보완 및 기존 사용자 데이터 이관' },
-      { type: 'BE', label: 'Database 인덱스 재구성 & Schema 업데이트', sub: '쿼리 성능 최적화' },
-      { type: 'Infra', label: '배포 워크플로우 수동 실행 트리거 추가', sub: 'GitHub Actions workflow_dispatch 지원' },
-      { type: 'FE', label: '프론트엔드 테스트 코드 단계적 도입', sub: '단위 테스트 환경 세팅, Playwright E2E 확대' },
+    id: 'current',
+    version: 'Now',
+    title: 'V1 → V2 마이그레이션 & 안정화',
+    period: '2026 ~',
+    isCurrent: true,
+    categories: [
+      {
+        label: 'Backend',
+        items: [
+          'V1 데이터 마이그레이션 — V2 스키마 정합성 보완 및 기존 사용자 데이터 이관 준비',
+          'Database 인덱스 재구성 및 Schema 업데이트 — 쿼리 성능 최적화',
+        ],
+      },
+      {
+        label: 'Frontend',
+        items: [
+          '단위 테스트 환경 세팅 및 Playwright E2E 테스트 단계적 확대',
+        ],
+      },
+      {
+        label: 'Infra',
+        items: [
+          'GitHub Actions 배포 워크플로우에 수동 실행 트리거(workflow_dispatch) 추가',
+        ],
+      },
     ],
   },
 ];
 
-const TYPE_DOT = {
-  BE:    'bg-[#1D4ED8]',
-  FE:    'bg-[#3B82F6]',
-  Infra: 'bg-[#93C5FD]',
-};
-
-const TYPE_TAG = {
-  BE:    'bg-[#EFF6FF] text-[#1E40AF]',
-  FE:    'bg-[#DBEAFE] text-[#1D4ED8]',
-  Infra: 'bg-[#E0EEFF] text-[#3B82F6]',
+const categoryConfig = {
+  Backend: {
+    badge: 'bg-[#EBF4FE] text-[#3182F6]',
+    bullet: 'bg-[#3182F6]',
+  },
+  Frontend: {
+    badge: 'bg-[#E6FBF6] text-[#00B493]',
+    bullet: 'bg-[#00B493]',
+  },
+  Infra: {
+    badge: 'bg-[#FEF3E2] text-[#E07A12]',
+    bullet: 'bg-[#E07A12]',
+  },
 };
 
 const VersionPage = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-[#F0F5FF] pb-20">
+    <div className="flex flex-col min-h-screen bg-white pb-10">
       <TabBar Title="버전 & 히스토리" />
 
-      <div className="mx-4 mt-4 rounded-2xl px-5 py-5 bg-[#3182F6] overflow-hidden relative">
-        <div className="absolute right-[-20px] top-[-20px] w-32 h-32 rounded-full bg-white opacity-5" />
-        <div className="absolute right-[30px] bottom-[-30px] w-44 h-44 rounded-full bg-white opacity-5" />
-        <p className="text-blue-200 text-xs m-0 mb-1 relative z-10">현재 버전</p>
-        <p className="text-white text-2xl font-bold m-0 relative z-10">v{APP_VERSION}</p>
-        <div className="flex gap-3 mt-3 relative z-10">
-          {[{ label: 'BE', cls: 'bg-[#1D4ED8]' }, { label: 'FE', cls: 'bg-[#60A5FA]' }, { label: 'Infra', cls: 'bg-[#BFDBFE]' }].map(({ label, cls }) => (
-            <div key={label} className="flex items-center gap-1.5">
-              <span className={`w-2 h-2 rounded-full flex-shrink-0 ${cls}`} />
-              <span className="text-blue-200 text-[11px]">{label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="mx-4 mt-3 bg-white rounded-2xl border border-[#DBEAFE] px-5 py-5">
-        <div className="relative">
-          <div className="absolute left-[9px] top-2 bottom-2 w-0.5 bg-[#DBEAFE]" />
-
-          {phases.map((phase, pi) => (
-            <React.Fragment key={phase.id}>
-              <div className={`flex items-start gap-4 ${pi > 0 ? 'mt-7' : ''}`}>
-                <div className="relative z-10 flex-shrink-0 mt-0.5">
-                  <div className="w-5 h-5 rounded-full bg-[#3182F6] border-[3px] border-white shadow-md shadow-blue-100 flex items-center justify-center">
-                    {phase.isActive && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                    )}
-                  </div>
+      <div className="px-5 pt-5 bg-white">
+        {phases.map((phase, index) => {
+          const isLast = index === phases.length - 1;
+          const config = categoryConfig;
+          return (
+            <div key={phase.id} className="flex gap-3">
+              <div className="flex flex-col items-center flex-shrink-0 w-5">
+                <div
+                  className={`relative z-10 w-4 h-4 rounded-full mt-3.5 flex-shrink-0 ${
+                    phase.isCurrent
+                      ? 'bg-[#3182F6]'
+                      : 'bg-white border-2 border-[#C5CDD6]'
+                  }`}
+                >
+                  {phase.isCurrent && (
+                    <span className="absolute inset-0 rounded-full bg-[#3182F6] animate-ping opacity-40" />
+                  )}
                 </div>
-                <div className="flex-1 min-w-0 pb-2 border-b border-[#EBF3FF]">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-[#EFF6FF] text-[#3182F6] flex-shrink-0">
-                        {phase.badge}
-                      </span>
-                      <span className="text-[#1E3A8A] text-sm font-bold truncate">{phase.title}</span>
-                    </div>
-                    <span className="text-[#93C5FD] text-[11px] flex-shrink-0">{phase.date}</span>
-                  </div>
-                  <p className="text-[#93C5FD] text-xs m-0 mt-0.5 pl-0.5">{phase.subtitle}</p>
-                </div>
+                {!isLast && <div className="w-px flex-1 bg-[#E5E8EB] mt-1.5" />}
               </div>
 
-              {phase.events.map((ev, ei) => (
-                <div key={ei} className="flex items-start gap-4 mt-3.5">
-                  <div className="relative z-10 flex-shrink-0 flex justify-center w-5 mt-1.5">
-                    <div className={`w-2 h-2 rounded-full border-2 border-white ${TYPE_DOT[ev.type]}`} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start gap-1.5 flex-wrap">
-                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md flex-shrink-0 leading-tight ${TYPE_TAG[ev.type]}`}>
-                        {ev.type}
+              <div className={`flex-1 ${!isLast ? 'pb-4' : ''}`}>
+                <div className="bg-white overflow-hidden">
+                  <div className={`px-4 pt-3 pb-2.5 rounded-md ${phase.isCurrent ? 'bg-[#EBF4FE]' : ''}`}>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span
+                        className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                          phase.isCurrent
+                            ? 'bg-[#3182F6] text-white'
+                            : 'bg-[#E5E8EB] text-[#6B7684]'
+                        }`}
+                      >
+                        {phase.version}
                       </span>
-                      <span className="text-[#1E3A8A] text-[13px] leading-snug">{ev.label}</span>
+                      <span
+                        className={`text-[14px] font-semibold tracking-tight ${
+                          phase.isCurrent ? 'text-[#3182F6]' : 'text-[#191F28]'
+                        }`}
+                      >
+                        {phase.title}
+                      </span>
                     </div>
-                    {ev.sub && (
-                      <p className="text-[#788088] text-xs mt-0.5 mb-0 leading-relaxed">{ev.sub}</p>
-                    )}
+                    <p className="text-[11px] text-[#B0B8C1] font-medium">{phase.period}</p>
+                  </div>
+
+                  <div className="border-t border-[#F0F2F5]" />
+
+                  <div>
+                    {phase.categories.map((cat) => {
+                      const catConfig = config[cat.label] || config.Backend;
+                      return (
+                        <div key={cat.label} className="px-4 py-3">
+                          <span
+                            className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-2 ${catConfig.badge}`}
+                          >
+                            {cat.label}
+                          </span>
+                          <ul className="space-y-1.5">
+                            {cat.items.map((item, i) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <div
+                                  className={`w-1.5 h-1.5 rounded-full mt-[5px] flex-shrink-0 ${catConfig.bullet}`}
+                                />
+                                <span className="text-[12px] text-[#333D4B] leading-relaxed">
+                                  {item}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
-              ))}
-            </React.Fragment>
-          ))}
-        </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

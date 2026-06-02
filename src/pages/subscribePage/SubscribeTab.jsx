@@ -7,12 +7,12 @@ import SearchBar from '../../components/layout/SearchBar';
 import { LIMITS } from '../../constants/appConstants';
 
 export default function SubscribeTab({ showGuide }) {
-  const { savedKeyword, setSavedKeyword } = useUIStore((state) => ({
-    savedKeyword: state.savedKeyword,
-    setSavedKeyword: state.setSavedKeyword,
+  const { savedKeywordSubscribe, setSavedKeywordSubscribe } = useUIStore((state) => ({
+    savedKeywordSubscribe: state.savedKeywordSubscribe,
+    setSavedKeywordSubscribe: state.setSavedKeywordSubscribe,
   }));
 
-  const [keyword, setKeyword] = useState(savedKeyword);
+  const [keyword, setKeyword] = useState(savedKeywordSubscribe);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
@@ -76,7 +76,7 @@ export default function SubscribeTab({ showGuide }) {
         setKeyword={setKeyword}
         setPage={setPage}
         setEvents={setEvents}
-        setSavedKeyword={setSavedKeyword}
+        setSavedKeyword={setSavedKeywordSubscribe}
         setHasMore={setHasMore}
         fetchData={fetchData}
       />

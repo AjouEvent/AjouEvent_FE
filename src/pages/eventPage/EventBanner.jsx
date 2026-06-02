@@ -24,31 +24,24 @@ export default function EventBanner({ images, onImageClick }) {
     <div className="flex flex-col bg-white w-full h-full min-h-0">
       <div
         className="relative w-full flex-1 overflow-hidden min-h-0"
+        style={{ WebkitTransform: 'translateZ(0)' }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <div
-          className="flex h-full transition-transform duration-300 ease-in-out"
-          style={{
-            width: `${images.length * 100}%`,
-            transform: `translateX(-${(index * 100) / images.length}%)`,
-          }}
-        >
-          {images.map((src, idx) => (
-            <div
-              key={idx}
-              className="h-full flex-shrink-0"
-              style={{ width: `${100 / images.length}%` }}
-            >
-              <img
-                src={src}
-                alt={`Slide ${idx + 1}`}
-                className="w-full h-full object-contain cursor-pointer"
-                onClick={() => onImageClick(idx)}
-              />
-            </div>
-          ))}
-        </div>
+        {images.map((src, idx) => (
+          <div
+            key={idx}
+            className="absolute inset-0 transition-transform duration-300 ease-in-out"
+            style={{ transform: `translateX(${(idx - index) * 100}%)` }}
+          >
+            <img
+              src={src}
+              alt={`Slide ${idx + 1}`}
+              className="w-full h-full object-contain cursor-pointer"
+              onClick={() => onImageClick(idx)}
+            />
+          </div>
+        ))}
 
         {images.length > 1 && (
           <>

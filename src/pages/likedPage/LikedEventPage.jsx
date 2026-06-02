@@ -9,11 +9,11 @@ import { LIMITS, STORAGE_KEYS } from '../../constants/appConstants';
 import { getLikedEvents } from '../../services/api/event';
 
 export default function LikedEventPage() {
-  const { savedKeyword, setSavedKeyword } = useUIStore((state) => ({
-    savedKeyword: state.savedKeyword,
-    setSavedKeyword: state.setSavedKeyword,
+  const { savedKeywordLiked, setSavedKeywordLiked } = useUIStore((state) => ({
+    savedKeywordLiked: state.savedKeywordLiked,
+    setSavedKeywordLiked: state.setSavedKeywordLiked,
   }));
-  const [keyword, setKeyword] = useState(savedKeyword);
+  const [keyword, setKeyword] = useState(savedKeywordLiked);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -67,7 +67,7 @@ export default function LikedEventPage() {
               setKeyword={setKeyword}
               setPage={setPage}
               setEvents={setEvents}
-              setSavedKeyword={setSavedKeyword}
+              setSavedKeyword={setSavedKeywordLiked}
               setHasMore={setHasMore}
               fetchData={fetchData}
             />
