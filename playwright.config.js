@@ -4,13 +4,17 @@ export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 1,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: process.env.CI
+    ? [['json', { outputFile: 'results.json' }], ['html']]
+    : 'html',
 
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
+    video: 'on',
+    screenshot: 'only-on-failure',
     // PWA 모바일 기준
     ...devices['iPhone 12'],
   },
