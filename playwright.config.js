@@ -22,16 +22,13 @@ export default defineConfig({
   projects: [
     {
       name: 'mobile-chrome',
-      use: {
-        ...devices['Pixel 5'],
-      },
+      use: { ...devices['Pixel 5'] },
     },
-    {
+    // webkit(Safari)은 로컬에서만 실행 — CI runner에서 설치 비용이 큼
+    ...(!process.env.CI ? [{
       name: 'mobile-safari',
-      use: {
-        ...devices['iPhone 12'],
-      },
-    },
+      use: { ...devices['iPhone 12'] },
+    }] : []),
   ],
 
   // E2E 테스트 전에 dev server 자동 시작
