@@ -54,7 +54,16 @@ export default function HomePage() {
       try {
         const response = await getBannerImages();
         const data = response.data;
-        setBannerImages(Array.isArray(data) ? data : []);
+        const images = Array.isArray(data) ? data : [];
+        setBannerImages(images);
+
+        if (images.length > 0 && images[0].imgUrl) {
+          const link = document.createElement('link');
+          link.rel = 'preload';
+          link.as = 'image';
+          link.href = images[0].imgUrl;
+          document.head.appendChild(link);
+        }
       } catch (error) {
         console.error('Error fetching banner images:', error);
       } finally {
