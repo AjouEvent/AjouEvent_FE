@@ -62,6 +62,7 @@ export default function HomePage() {
           link.rel = 'preload';
           link.as = 'image';
           link.href = images[0].imgUrl;
+          link.fetchPriority = 'high';
           document.head.appendChild(link);
         }
       } catch (error) {
