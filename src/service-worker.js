@@ -11,7 +11,7 @@ import { clientsClaim } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
-import { StaleWhileRevalidate } from 'workbox-strategies';
+import { StaleWhileRevalidate, CacheFirst } from 'workbox-strategies';
 import { LIMITS } from './constants/appConstants';
 
 clientsClaim();
@@ -58,6 +58,22 @@ registerRoute(
       // Ensure that once this runtime cache reaches a maximum size the
       // least-recently used images are removed.
       new ExpirationPlugin({ maxEntries: LIMITS.MAX_CACHE_ENTRIES }),
+    ],
+  })
+);
+
+// Cache cross-origin images (e.g., banner images from ajou.ac.kr)
+registerRoute(
+  ({ url }) =>
+    url.origin !== self.location.origin &&
+    /\.(png|jpe?g|webp|gif|avif)$/i.test(url.pathname),
+  new CacheFirst({
+    cacheName: 'cross-origin-images',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 24 * 60 * 60, // 1일
+      }),
     ],
   })
 );

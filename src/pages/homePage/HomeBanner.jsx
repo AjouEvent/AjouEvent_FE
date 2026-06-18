@@ -67,6 +67,8 @@ export default function HomeBanner({ images }) {
                 src={image.imgUrl}
                 alt={`Slide ${idx + 1}`}
                 className="w-full h-full object-cover"
+                fetchpriority={idx === 0 ? 'high' : 'low'}
+                loading={idx === 0 ? 'eager' : 'lazy'}
               />
             </div>
           ))}
