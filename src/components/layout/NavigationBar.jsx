@@ -114,7 +114,7 @@ function NavigationBar() {
           copyDescription="AjouEvent는 앱설치 없이 홈화면에 추가를 통해 사용할 수 있습니다."
           copyShareStep="하단 메뉴에서 '공유' 아이콘을 눌러주세요."
           copyAddToHomeScreenStep="아래의 '홈 화면에 추가' 버튼을 눌러주세요."
-          appIconPath="https://www.ajou.ac.kr/_res/ajou/kr/img/intro/img-symbol.png"
+          appIconPath={`${process.env.PUBLIC_URL}/logo196.png`}
           isShown={shouldShowPWAPrompt}
         />
       )}
