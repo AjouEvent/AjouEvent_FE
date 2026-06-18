@@ -37,14 +37,14 @@
 
 ## 🛠️ 기술 스택 (Tech Stack)
 
-| 분류             | 기술                                                                                                                           |
-| :--------------- | :----------------------------------------------------------------------------------------------------------------------------- |
-| **Framework**    | ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)                                     |
-| **Language**     | ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=JavaScript&logoColor=black)                       |
-| **Notification** | ![Firebase](https://img.shields.io/badge/Firebase_FCM-FFCA28?style=flat&logo=firebase&logoColor=black) (Cloud Messaging)       |
-| **State Mgt**    | <img src="https://img.shields.io/badge/zustand-orange?style=for-the-badge&logo=zustand&logoColor=white">                       |
-| **Styling**      | ![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=flat&logo=styled-components&logoColor=white) |
-| **Deploy**       | ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=Vercel&logoColor=white) (or AWS Amplify)                  |
+| 분류             | 기술                                                                                                                                                                                                                  |
+| :--------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Framework**    | ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)                                                                                                                            |
+| **Language**     | ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=JavaScript&logoColor=black)                                                                                                              |
+| **Notification** | ![Firebase](https://img.shields.io/badge/Firebase_FCM-FFCA28?style=flat&logo=firebase&logoColor=black) (Cloud Messaging)                                                                                              |
+| **State Mgt**    | ![Zustand](https://img.shields.io/badge/Zustand-orange?style=flat&logo=zustand&logoColor=white)                                                                                                                       |
+| **Styling**      | ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat&logo=tailwind-css&logoColor=white) ![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-000000?style=flat&logo=shadcnui&logoColor=white) |
+| **Deploy**       | ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=Vercel&logoColor=white) (or AWS Amplify)                                                                                                         |
 
 <br/>
 
