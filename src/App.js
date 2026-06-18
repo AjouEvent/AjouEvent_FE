@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RouteChangeTracker from './RouteChangeTracker';
 import { Analytics } from '@vercel/analytics/react';
@@ -8,23 +8,23 @@ import ConfirmDialog from './components/ConfirmDialog';
 import useNotificationStore from "./store/useNotificationStore";
 import useSubscriptionStore from "./store/useSubscriptionStore";
 
-import HomePage from './pages/homePage/HomePage';
-import SearchEventPage from './pages/searchPage/SearchEventPage';
-import LoginPage from './pages/loginPage/LoginPage';
-import MyPage from './pages/myPage/MyPage';
-import LikedEventPage from './pages/likedPage/LikedEventPage';
-import SubscribePage from './pages/subscribePage/SubscribePage';
-import KeywordSubscribePage from './pages/subscribePage/KeywordSubscribePage';
-import LoginSuccess from './pages/loginPage/LoginSuccess';
-import GuidePage from './pages/GuidePage';
-import ProfileModificationPage from './pages/myPage/ProfileModificationPage';
-import DeleteAccountPage from './pages/myPage/DeleteAccountPage';
-import RegisterMemberInfoPage from './pages/signupPage/RegisterMemberInfoPage';
-import PrivacyAgreementPage from './pages/signupPage/PrivacyAgreementPage';
-import NotificationPage from './pages/notificationPage/NotificationPage';
-import EventDetailPage from "./pages/eventPage/EventDetailPage";
-import VersionPage from "./pages/myPage/VersionPage";
-import FAQPage from "./pages/myPage/FAQPage";
+const HomePage = lazy(() => import('./pages/homePage/HomePage'));
+const SearchEventPage = lazy(() => import('./pages/searchPage/SearchEventPage'));
+const LoginPage = lazy(() => import('./pages/loginPage/LoginPage'));
+const MyPage = lazy(() => import('./pages/myPage/MyPage'));
+const LikedEventPage = lazy(() => import('./pages/likedPage/LikedEventPage'));
+const SubscribePage = lazy(() => import('./pages/subscribePage/SubscribePage'));
+const KeywordSubscribePage = lazy(() => import('./pages/subscribePage/KeywordSubscribePage'));
+const LoginSuccess = lazy(() => import('./pages/loginPage/LoginSuccess'));
+const GuidePage = lazy(() => import('./pages/GuidePage'));
+const ProfileModificationPage = lazy(() => import('./pages/myPage/ProfileModificationPage'));
+const DeleteAccountPage = lazy(() => import('./pages/myPage/DeleteAccountPage'));
+const RegisterMemberInfoPage = lazy(() => import('./pages/signupPage/RegisterMemberInfoPage'));
+const PrivacyAgreementPage = lazy(() => import('./pages/signupPage/PrivacyAgreementPage'));
+const NotificationPage = lazy(() => import('./pages/notificationPage/NotificationPage'));
+const EventDetailPage = lazy(() => import("./pages/eventPage/EventDetailPage"));
+const VersionPage = lazy(() => import("./pages/myPage/VersionPage"));
+const FAQPage = lazy(() => import("./pages/myPage/FAQPage"));
 
 const ROUTER = createBrowserRouter([
   {
@@ -141,9 +141,11 @@ function App() {
 
   return (
     <div className="App">
-      <RouterProvider router={ROUTER}>
-        <RouteChangeTracker />
-      </RouterProvider>
+      <Suspense fallback={null}>
+        <RouterProvider router={ROUTER}>
+          <RouteChangeTracker />
+        </RouterProvider>
+      </Suspense>
       <Analytics />
       <Toaster position="top-center" richColors />
       <ConfirmDialog />
