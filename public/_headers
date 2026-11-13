@@ -1,0 +1,10 @@
+# Cloudflare Pages 응답 헤더
+# 빌드 결과의 해시가 붙은 정적 파일은 내용이 바뀌면 파일명이 바뀌므로 1년 캐시한다 (Vercel 시절 #130 설정 이전)
+/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 서비스 워커와 진입 HTML 은 항상 최신을 받도록 매번 재검증한다
+/firebase-messaging-sw.js
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
